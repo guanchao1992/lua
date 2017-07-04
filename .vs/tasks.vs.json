@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "任务-Lua",
+      "appliesTo": "Lua/Lua.sln",
+      "type": "command"
+    },
+    {
+      "taskName": "任务-obj",
+      "appliesTo": "Lua/obj/",
+      "type": "command"
+    }
+  ]
+}
