@@ -8,14 +8,18 @@ extern "C" {
 }
 #include "../MyLua/ToLua.h"
 
+#include "test.hpp"
+#include <iostream>
 
 
+/*
 void RegFunction(lua_State*L, const char*name, lua_CFunction func)
 {
 	if (!name) return;
 	lua_pushstring(L, name);
 	lua_pushcclosure(L, func, 0);
 }
+*/
 
 
  int main()
@@ -42,7 +46,14 @@ void RegFunction(lua_State*L, const char*name, lua_CFunction func)
 
 	//lua_RegisterCFunc(L, "testfunc",func);
 
-	luaL_dostring(L, "testfunc('10')");
+	//RegFunction(L, "testfunc2", [](lua_State * L, const char*str, int num) {}, "123121",123321);
+
+	const char* str = "testfunc2";
+	RegFunction(L, "testfunc2", (void*) [](lua_State * L,const char*str,int num){
+		std::cout << "string£º" << str << std::endl;
+		std::cout << "num£º" << num << std::endl;
+		return 0; }, str, 123321);
+	luaL_dostring(L, "testfunc2('stringstring',100)");
 
 	CTOLuaAdd(1,2);
 	lua_close(L);
