@@ -7,8 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua-5.3.4", "Lua-5.3.4\Lua-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{BD158740-1021-42D4-AED9-4771D7297F5C}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7840D834-781E-4B84-8FAF-6B0954625A75} = {7840D834-781E-4B84-8FAF-6B0954625A75}
 		{C08DC357-BE9B-4F63-8697-7859D3B20B05} = {C08DC357-BE9B-4F63-8697-7859D3B20B05}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLua", "MyLua\MyLua.vcxproj", "{7840D834-781E-4B84-8FAF-6B0954625A75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +37,18 @@ Global
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x64.Build.0 = Release|x64
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x86.ActiveCfg = Release|Win32
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x86.Build.0 = Release|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x64.ActiveCfg = Debug|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x64.Build.0 = Debug|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x64.Deploy.0 = Debug|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x86.ActiveCfg = Debug|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x86.Build.0 = Debug|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Debug|x86.Deploy.0 = Debug|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x64.ActiveCfg = Release|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x64.Build.0 = Release|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x64.Deploy.0 = Release|x64
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x86.ActiveCfg = Release|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x86.Build.0 = Release|Win32
+		{7840D834-781E-4B84-8FAF-6B0954625A75}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

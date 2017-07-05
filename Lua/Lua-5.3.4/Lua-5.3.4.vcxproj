@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)run\obj\$(Configuration)\</IntDir>
-    <TargetName>$(TargetName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)run\lib\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)run\lib\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)run\obj\$(Configuration)\</IntDir>
-    <TargetName>lua</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
