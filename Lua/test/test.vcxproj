@@ -70,14 +70,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)run\obj\$(Configuration)\</IntDir>
-    <IncludePath>E:\gitproject\Lua\Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)run\$(Configuration)\</OutDir>
-    <LibraryPath>E:\gitproject\Lua\run\Debug;$(SolutionDir)run\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)run\obj\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)run\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
