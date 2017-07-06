@@ -8,6 +8,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+
 template<class T1,class T2>
 int lua_function(lua_State * L,T1 t1,T2 t2)
 {
@@ -15,28 +16,14 @@ int lua_function(lua_State * L,T1 t1,T2 t2)
 	return 0;
 }
 
-
-int funcA(lua_State * L, const char*str, int num)
+template<class FUNC>
+FUNC getRegLua_CFunc(FUNC)
 {
-
+	return FUNC;
 }
 
-
-/*
-	²ÎÊý
-	TFunc : int Func(lua_State * L,T1 t1,T2 t2)
-*/
-template<class TFunc,class T1,class T2>
-void RegFunction(lua_State * L, const char * name,void* func, T1 t1,T2 t2)
+int funcA(lua_State * L)
 {
-	if (!name) return;
-	typedef int (FuncType)(lua_State * L, T1 t1, T2 t2);
-
-	std::function<int(lua_State * L, T1 t1, T2 t2)> funcA = (std::function<int(lua_State * L, T1 t1, T2 t2)>)func;
-
-	lua_pushstring(L, name);
-	lua_pushcclosure(L, std::bind(funcA, t1, t2), 0);
-
-	lua_pushvalue(L, -1);
-	lua_setglobal(L, name);
+	return 0;
 }
+

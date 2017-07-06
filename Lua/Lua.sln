@@ -8,6 +8,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLua", "MyLua\MyLua.vcxproj", "{7840D834-781E-4B84-8FAF-6B0954625A75}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{BD158740-1021-42D4-AED9-4771D7297F5C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7840D834-781E-4B84-8FAF-6B0954625A75} = {7840D834-781E-4B84-8FAF-6B0954625A75}
+		{C08DC357-BE9B-4F63-8697-7859D3B20B05} = {C08DC357-BE9B-4F63-8697-7859D3B20B05}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

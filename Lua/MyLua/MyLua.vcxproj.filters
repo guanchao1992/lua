@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ToLua.h">
+    <ClInclude Include="CToLua.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ToLua.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

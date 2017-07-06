@@ -73,13 +73,13 @@
     <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)run\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)run\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)run\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)run\$(Platform)\$(Configuration)\</OutDir>
@@ -135,7 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ToLua.h" />
+    <ClInclude Include="CToLua.hpp" />
+    <ClInclude Include="ToLua.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ToLua.cpp" />
