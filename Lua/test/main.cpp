@@ -7,74 +7,32 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "test.hpp"
 #include <iostream>
-#include "../MyLua/ToLua.hpp"
-
 using namespace std;
+#include "../MyLua/ctolua.h"
 
-/*
-void RegFunction(lua_State*L, const char*name, lua_CFunction func)
+#include "../MyTool/tool.h"
+int main()
 {
-	if (!name) return;
-	lua_pushstring(L, name);
-	lua_pushcclosure(L, func, 0);
-}
-*/
+	initLog();
+	LOG_D("========== = 12332131dvfsdivgfj");
+	LOG_F_T("========== = 12332131dvfsdivgfj");
+	//LogLog::getLogLog()->debug(LOG4CPLUS_TEXT("This is a Debug statement..."));
+	auto logger = Logger::getInstance(LOG4CPLUS_TEXT("log"));
+	LOG4CPLUS_DEBUG(logger, LOG4CPLUS_C_STR_TO_TSTRING("This is a Debug statement..."));
 
-
- int main()
-{
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 	lua_checkstack(L, 10);
 
-	luaL_Reg lr;
-	lr.name = "testfunc";
-	lr.func = [](lua_State*L)->int {
-		const char* ret = lua_tostring(L,1);
-		printf("----------------- func  %s\n" ,ret);
-		return 0;
-	};
-	lua_pushstring(L, lr.name);
-	lua_pushcclosure(L, lr.func,0);
-	lua_pushvalue(L, -1);  /* copy of module */
-	lua_setglobal(L, lr.name);  /* _G[modname] = module */
-	lua_pop(L, 1);
+	RegLuaFunctionStart(L, "testF");
+	cout << "--------------" << lua_get<int>(L, 1) << endl;
+	RegLuaFunctionEnd();
+	
+	luaL_dostring(L, "testF(1231231)");
 
-	//luaL_requiref(L, lr.name, lr.func, false);
-	//lua_pop(L, 1);  /* remove lib */
-
-	//lua_RegisterCFunc(L, "testfunc",func);
-
-	//RegFunction(L, "testfunc2", [](lua_State * L, const char*str, int num) {}, "123121",123321);
-
-	//RegLua_CFunc<>;
-
-	auto func = [](lua_State* L) {
-		const char* ret = lua_tostring(L,1);
-		int num = lua_tonumber(L,2);
-
-		return 1;
-	};// std::bind([](lua_State *L, const char*, int) {}, placeholders::_1, "123", 123);
-
-	const char* str = "testfunc2";
-	RegFunction(L, str, func,str);
-
-	cout << typeid(int).name() << endl
-		<< typeid(unsigned).name() << endl
-		<< typeid(long).name() << endl
-		<< typeid(long long).name() << endl
-		<< typeid(unsigned long).name() << endl
-		<< typeid(char).name() << endl
-		<< typeid(unsigned char).name() << endl
-		<< typeid(float).name() << endl
-		<< typeid(double).name() << endl
-		<< typeid(string).name() << endl
-		<< typeid(type_info).name() << endl;
-	//luaL_dostring(L, "testfunc2('stringstring',100)");
-
-	CTOLuaAdd(1,2);
+	//lua_call();
+	
 	lua_close(L);
 	system("pause");
 	return 0;

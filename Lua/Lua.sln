@@ -6,12 +6,18 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua-5.3.4", "Lua-5.3.4\Lua-5.3.4.vcxproj", "{C08DC357-BE9B-4F63-8697-7859D3B20B05}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLua", "MyLua\MyLua.vcxproj", "{7840D834-781E-4B84-8FAF-6B0954625A75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C08DC357-BE9B-4F63-8697-7859D3B20B05} = {C08DC357-BE9B-4F63-8697-7859D3B20B05}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{BD158740-1021-42D4-AED9-4771D7297F5C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7840D834-781E-4B84-8FAF-6B0954625A75} = {7840D834-781E-4B84-8FAF-6B0954625A75}
 		{C08DC357-BE9B-4F63-8697-7859D3B20B05} = {C08DC357-BE9B-4F63-8697-7859D3B20B05}
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF} = {1EB103A3-13ED-4A92-8A62-694BD381C3AF}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyTool", "MyTool\MyTool.vcxproj", "{1EB103A3-13ED-4A92-8A62-694BD381C3AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +59,14 @@ Global
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x86.ActiveCfg = Release|Win32
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x86.Build.0 = Release|Win32
 		{BD158740-1021-42D4-AED9-4771D7297F5C}.Release|x86.Deploy.0 = Release|Win32
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Debug|x64.ActiveCfg = Debug|x64
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Debug|x64.Build.0 = Debug|x64
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Debug|x86.ActiveCfg = Debug|Win32
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Debug|x86.Build.0 = Debug|Win32
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Release|x64.ActiveCfg = Release|x64
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Release|x64.Build.0 = Release|x64
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Release|x86.ActiveCfg = Release|Win32
+		{1EB103A3-13ED-4A92-8A62-694BD381C3AF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

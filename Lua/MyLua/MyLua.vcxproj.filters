@@ -15,15 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CToLua.hpp">
+    <ClInclude Include="lua_get.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ToLua.hpp">
+    <ClInclude Include="ctolua.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="luatoc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ToLua.cpp">
+    <ClCompile Include="ctolua.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

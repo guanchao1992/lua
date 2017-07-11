@@ -11,3 +11,10 @@
 /Lua/run/Debug/MyLua.exp
 *.obj
 /Lua/obj/
+*.ipch
+/log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Solution.VC.db-wal
+/log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Solution.VC.db-shm
+/log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Solution.VC.db
+/log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Browse.VC.opendb
+/log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Browse.VC.db
+*.tlog
