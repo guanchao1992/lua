@@ -12,28 +12,36 @@ using namespace std;
 #include "../MyLua/ctolua.h"
 
 #include "../MyTool/tool.h"
+
+int test_regFunc(lua_State * L)
+{
+	LOG_D_F(_T("register ctolua function <testF>"));
+	RegLuaFunctionStart(L, "testF");
+	cout << "--------------" << lua_get<int>(L, 1) << endl;
+	RegLuaFunctionEnd();
+
+	luaL_dostring(L, "testF(1231231)");
+	return 1;
+}
+
+void initLua(lua_State*L)
+{
+
+}
+
 int main()
 {
-	initLog();
-	LOG_D("========== = 12332131dvfsdivgfj");
-	LOG_F_T("========== = 12332131dvfsdivgfj");
-	//LogLog::getLogLog()->debug(LOG4CPLUS_TEXT("This is a Debug statement..."));
-	auto logger = Logger::getInstance(LOG4CPLUS_TEXT("log"));
-	LOG4CPLUS_DEBUG(logger, LOG4CPLUS_C_STR_TO_TSTRING("This is a Debug statement..."));
+	log_init();
+	LOG_D_F(_T("ÖÐÎÄ.main start and init log sure."));
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 	lua_checkstack(L, 10);
 
-	RegLuaFunctionStart(L, "testF");
-	cout << "--------------" << lua_get<int>(L, 1) << endl;
-	RegLuaFunctionEnd();
-	
-	luaL_dostring(L, "testF(1231231)");
+	test_regFunc(L);
 
-	//lua_call();
-	
 	lua_close(L);
+	log_close();
 	system("pause");
 	return 0;
 }

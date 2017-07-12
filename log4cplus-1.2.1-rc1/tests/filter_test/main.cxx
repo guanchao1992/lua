@@ -27,14 +27,19 @@ printDebug()
 log4cplus::tstring
 getPropertiesFileArgument (int argc, char * argv[])
 {
-    if (argc >= 2)
-    {
-        char const * arg = argv[1];
-        log4cplus::tstring file = LOG4CPLUS_C_STR_TO_TSTRING (arg);
-        log4cplus::helpers::FileInfo fi;
-        if (getFileInfo (&fi, file) == 0)
-            return file;
-    }
+	char const * arg = NULL;
+	if (argc >= 2)
+	{
+		arg = argv[1];
+	}
+	else
+	{
+		arg = "log.log";
+	}
+	log4cplus::tstring file = LOG4CPLUS_C_STR_TO_TSTRING(arg);
+	log4cplus::helpers::FileInfo fi;
+	if (getFileInfo(&fi, file) == 0)
+		return file;
 
     return LOG4CPLUS_TEXT ("log4cplus.properties");
 }
@@ -60,5 +65,6 @@ main(int argc, char * argv[])
     }
 
     tcout << "Exiting main()..." << endl;
+	system("pause");
     return 0;
 }

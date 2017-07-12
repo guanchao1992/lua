@@ -8,7 +8,7 @@
 *.pdb
 *.ilk
 *.exp
-/Lua/run/Debug/MyLua.exp
+/Lua/run/
 *.obj
 /Lua/obj/
 *.ipch
@@ -18,3 +18,7 @@
 /log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Browse.VC.opendb
 /log4cplus-1.2.1-rc1/msvc10/.vs/log4cplus/v15/Browse.VC.db
 *.tlog
+/log4cplus-1.2.1-rc1/msvc10/Win32
+/log4cplus-1.2.1-rc1/msvc10/tests/logs
+/log4cplus-1.2.1-rc1/msvc10/tests/a/b/c/d
+/Lua/test/log

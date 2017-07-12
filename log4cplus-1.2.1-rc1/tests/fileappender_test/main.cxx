@@ -18,8 +18,26 @@ main()
     log4cplus::initialize ();
     helpers::LogLog::getLogLog()->setInternalDebugging(true);
     SharedFileAppenderPtr append_1(
-        new RollingFileAppender(LOG4CPLUS_TEXT("a/b/c/d/Test.log"), 5*1024, 5,
-            false, true));
+        new DailyRollingFileAppender(LOG4CPLUS_TEXT("a/b/c/d/Test"),
+			LOG4CPLUS_TEXT(".log"), MINUTELY,true,10,true));
+	//new RollingFileAppender()
+	/*
+		RollingFileAppender(const log4cplus::tstring& filename,
+			long maxFileSize = 10 * 1024 * 1024, // 10 MB
+			int maxBackupIndex = 1,
+			bool immediateFlush = true,
+			bool createDirs = false);
+*/
+	//new TimeBasedRollingFileAppender();
+	/*
+	const tstring& filename_,
+		const tstring& filenamePattern_,
+		int maxHistory_,
+		bool cleanHistoryOnStart_,
+		bool immediateFlush_,
+		bool createDirs_,
+		bool rollOnClose_)
+*/
     append_1->setName(LOG4CPLUS_TEXT("First"));
     append_1->setLayout( std::auto_ptr<Layout>(new TTCCLayout()) );
     append_1->getloc();
@@ -65,5 +83,6 @@ main()
 
     log4cplus::Logger::shutdown();
 
+	system("pause");
     return 0;
 }

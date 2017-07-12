@@ -37,6 +37,7 @@
 #include <fstream>
 #include <locale>
 #include <memory>
+#include <tchar.h>
 
 
 namespace log4cplus
@@ -102,7 +103,7 @@ namespace log4cplus
      * \sa spi::getLocaleFactoryRegistry()
      * </dd>
      *
-     * <dt><tt>CreateDirs</tt></dt>
+     * <dt><tt>CreateDirs</tt></dt>suffix = log4cplus::tstring("")
      * <dd>Set this property to <tt>true</tt> if you want to create
      * missing directories in path leading to log file and lock file.
      * </dd>
@@ -123,6 +124,7 @@ namespace log4cplus
     protected:
       // Ctors
         FileAppenderBase(const log4cplus::tstring& filename,
+						 const log4cplus::tstring& suffix = log4cplus::tstring(_T(".log")),
                          std::ios_base::openmode mode = std::ios_base::trunc,
                          bool immediateFlush = true,
                          bool createDirs = false);
@@ -173,6 +175,7 @@ namespace log4cplus
 
         log4cplus::tofstream out;
         log4cplus::tstring filename;
+		log4cplus::tstring suffix;
         log4cplus::tstring localeName;
         log4cplus::tstring lockFileName;
         std::ios_base::openmode fileOpenMode;
@@ -196,6 +199,7 @@ namespace log4cplus
     public:
       // Ctors
         FileAppender(const log4cplus::tstring& filename,
+					 const log4cplus::tstring& suffix =  log4cplus::tstring(_T(".log")),
                      std::ios_base::openmode mode = std::ios_base::trunc,
                      bool immediateFlush = true,
                      bool createDirs = false);
@@ -237,6 +241,7 @@ namespace log4cplus
     public:
       // Ctors
         RollingFileAppender(const log4cplus::tstring& filename,
+							const log4cplus::tstring suffix =  log4cplus::tstring(_T(".log")),
                             long maxFileSize = 10*1024*1024, // 10 MB
                             int maxBackupIndex = 1,
                             bool immediateFlush = true,
@@ -306,6 +311,7 @@ namespace log4cplus
     public:
       // Ctors
         DailyRollingFileAppender(const log4cplus::tstring& filename,
+								 const log4cplus::tstring& suffix =  log4cplus::tstring(_T(".log")),
                                  DailyRollingFileSchedule schedule = DAILY,
                                  bool immediateFlush = true,
                                  int maxBackupIndex = 10,
@@ -380,6 +386,7 @@ namespace log4cplus
     public:
       // Ctors
         TimeBasedRollingFileAppender(const tstring& filename = LOG4CPLUS_TEXT(""),
+									 const log4cplus::tstring& suffix =  log4cplus::tstring(_T(".log")),
                                      const tstring& filenamePattern = LOG4CPLUS_TEXT("%d.log"),
                                      int maxHistory = 10,
                                      bool cleanHistoryOnStart = false,

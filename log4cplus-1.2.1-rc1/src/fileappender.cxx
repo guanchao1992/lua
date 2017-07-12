@@ -153,13 +153,13 @@ loglog_opening_result (helpers::LogLog & loglog,
 
 static
 void
-rolloverFiles(const tstring& filename, unsigned int maxBackupIndex)
+rolloverFiles(const tstring& filename,const tstring& suffix, unsigned int maxBackupIndex)
 {
     helpers::LogLog * loglog = helpers::LogLog::getLogLog();
 
     // Delete the oldest file
     tostringstream buffer;
-    buffer << filename << LOG4CPLUS_TEXT(".") << maxBackupIndex;
+    buffer << filename << LOG4CPLUS_TEXT(".") << maxBackupIndex << suffix;
     long ret = file_remove (buffer.str ());
 
     tostringstream source_oss;
@@ -171,8 +171,8 @@ rolloverFiles(const tstring& filename, unsigned int maxBackupIndex)
         source_oss.str(LOG4CPLUS_TEXT(""));
         target_oss.str(LOG4CPLUS_TEXT(""));
 
-        source_oss << filename << LOG4CPLUS_TEXT(".") << i;
-        target_oss << filename << LOG4CPLUS_TEXT(".") << (i+1);
+        source_oss << filename << LOG4CPLUS_TEXT(".") << i << suffix;
+        target_oss << filename << LOG4CPLUS_TEXT(".") << (i+1) << suffix;
 
         tstring const source (source_oss.str ());
         tstring const target (target_oss.str ());
@@ -219,7 +219,7 @@ catch (std::runtime_error const &)
 // FileAppenderBase ctors and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
-FileAppenderBase::FileAppenderBase(const tstring& filename_,
+FileAppenderBase::FileAppenderBase(const tstring& filename_, const log4cplus::tstring &suffix_,
     std::ios_base::openmode mode_, bool immediateFlush_, bool createDirs_)
     : immediateFlush(immediateFlush_)
     , createDirs (createDirs_)
@@ -227,6 +227,7 @@ FileAppenderBase::FileAppenderBase(const tstring& filename_,
     , bufferSize (0)
     , buffer (0)
     , filename(filename_)
+	, suffix(suffix_)
     , localeName (LOG4CPLUS_TEXT ("DEFAULT"))
     , fileOpenMode(mode_)
 { }
@@ -267,7 +268,7 @@ FileAppenderBase::init()
             return;
         }
 
-        lockFileName = filename;
+        lockFileName = filename + suffix;
         lockFileName += LOG4CPLUS_TEXT(".lock");
     }
 
@@ -343,7 +344,7 @@ FileAppenderBase::append(const spi::InternalLoggingEvent& event)
     if(!out.good()) {
         if(!reopen()) {
             getErrorHandler()->error(  LOG4CPLUS_TEXT("file is not open: ")
-                                     + filename);
+                                     + filename + suffix);
             return;
         }
         // Resets the error handler to make it
@@ -365,15 +366,16 @@ void
 FileAppenderBase::open(std::ios_base::openmode mode)
 {
     if (createDirs)
-        internal::make_dirs (filename);
+        internal::make_dirs (filename + suffix);
+	tstring target = filename + suffix;
 
-    out.open(LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(filename).c_str(), mode);
+    out.open(LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(target).c_str(), mode);
 
     if(!out.good()) {
-        getErrorHandler()->error(LOG4CPLUS_TEXT("Unable to open file: ") + filename);
+        getErrorHandler()->error(LOG4CPLUS_TEXT("Unable to open file: ") + target);
         return;
     }
-    helpers::getLogLog().debug(LOG4CPLUS_TEXT("Just opened file: ") + filename);
+    helpers::getLogLog().debug(LOG4CPLUS_TEXT("Just opened file: ") + target);
 }
 
 bool
@@ -417,10 +419,11 @@ FileAppenderBase::reopen()
 
 FileAppender::FileAppender(
     const tstring& filename_,
-    std::ios_base::openmode mode_,
+	const log4cplus::tstring& suffix_,
+	std::ios_base::openmode mode_,
     bool immediateFlush_,
     bool createDirs_)
-    : FileAppenderBase(filename_, mode_, immediateFlush_, createDirs_)
+    : FileAppenderBase(filename_, suffix_,mode_, immediateFlush_, createDirs_)
 {
     init();
 }
@@ -459,10 +462,10 @@ FileAppender::init()
 // RollingFileAppender ctors and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
-RollingFileAppender::RollingFileAppender(const tstring& filename_,
+RollingFileAppender::RollingFileAppender(const tstring& filename_, const log4cplus::tstring suffix_,
     long maxFileSize_, int maxBackupIndex_, bool immediateFlush_,
     bool createDirs_)
-    : FileAppender(filename_, std::ios_base::app, immediateFlush_, createDirs_)
+    : FileAppender(filename_, suffix_, std::ios_base::app, immediateFlush_, createDirs_)
 {
     init(maxFileSize_, maxBackupIndex_);
 }
@@ -577,7 +580,7 @@ RollingFileAppender::rollover(bool alreadyLocked)
         // process can rollover the file before us.
 
         helpers::FileInfo fi;
-        if (getFileInfo (&fi, filename) == -1
+        if (getFileInfo (&fi, filename + suffix) == -1
             || fi.size < maxFileSize)
         {
             // The file has already been rolled by another
@@ -585,7 +588,7 @@ RollingFileAppender::rollover(bool alreadyLocked)
 
             // Open it up again.
             open (std::ios_base::out | std::ios_base::ate | std::ios_base::app);
-            loglog_opening_result (loglog, out, filename);
+            loglog_opening_result (loglog, out, filename + suffix);
 
             return;
         }
@@ -594,7 +597,7 @@ RollingFileAppender::rollover(bool alreadyLocked)
     // If maxBackups <= 0, then there is no file renaming to be done.
     if (maxBackupIndex > 0)
     {
-        rolloverFiles(filename, maxBackupIndex);
+        rolloverFiles(filename , suffix, maxBackupIndex);
 
         // Rename fileName to fileName.1
         tstring target = filename + LOG4CPLUS_TEXT(".1");
@@ -609,11 +612,11 @@ RollingFileAppender::rollover(bool alreadyLocked)
 
         loglog.debug (
             LOG4CPLUS_TEXT("Renaming file ")
-            + filename
-            + LOG4CPLUS_TEXT(" to ")
+			+ filename + suffix
+			+ LOG4CPLUS_TEXT(" to ")
             + target);
-        ret = file_rename (filename, target);
-        loglog_renaming_result (loglog, filename, target, ret);
+        ret = file_rename (filename + suffix, target);
+        loglog_renaming_result (loglog, filename + suffix, target, ret);
     }
     else
     {
@@ -622,7 +625,7 @@ RollingFileAppender::rollover(bool alreadyLocked)
 
     // Open it up again in truncation mode
     open(std::ios::out | std::ios::trunc);
-    loglog_opening_result (loglog, out, filename);
+    loglog_opening_result (loglog, out, filename + suffix);
 }
 
 
@@ -631,10 +634,10 @@ RollingFileAppender::rollover(bool alreadyLocked)
 ///////////////////////////////////////////////////////////////////////////////
 
 DailyRollingFileAppender::DailyRollingFileAppender(
-    const tstring& filename_, DailyRollingFileSchedule schedule_,
+	const tstring& filename_, const log4cplus::tstring& suffix_, DailyRollingFileSchedule schedule_,
     bool immediateFlush_, int maxBackupIndex_, bool createDirs_,
     bool rollOnClose_, const tstring& datePattern_)
-    : FileAppender(filename_, std::ios_base::app, immediateFlush_, createDirs_)
+    : FileAppender(filename_, suffix_,std::ios_base::app, immediateFlush_, createDirs_)
     , maxBackupIndex(maxBackupIndex_), rollOnClose(rollOnClose_)
     , datePattern(datePattern_)
 {
@@ -857,13 +860,13 @@ DailyRollingFileAppender::rollover(bool alreadyLocked)
     // don't overwrite any of those previous files.
     // E.g. if "log.2009-11-07.1" already exists we rename it
     // to "log.2009-11-07.2", etc.
-    rolloverFiles(scheduledFilename, maxBackupIndex);
+    rolloverFiles(scheduledFilename,suffix, maxBackupIndex);
 
     // Do not overwriet the newest file either, e.g. if "log.2009-11-07"
     // already exists rename it to "log.2009-11-07.1"
     tostringstream backup_target_oss;
-    backup_target_oss << scheduledFilename << LOG4CPLUS_TEXT(".") << 1;
-    tstring backupTarget = backup_target_oss.str();
+	backup_target_oss << scheduledFilename << LOG4CPLUS_TEXT(".") << 1 << suffix;
+	tstring backupTarget = backup_target_oss.str();
 
     helpers::LogLog & loglog = helpers::getLogLog();
     long ret;
@@ -875,28 +878,28 @@ DailyRollingFileAppender::rollover(bool alreadyLocked)
 #endif
 
     // Rename e.g. "log.2009-11-07" to "log.2009-11-07.1".
-    ret = file_rename (scheduledFilename, backupTarget);
-    loglog_renaming_result (loglog, scheduledFilename, backupTarget, ret);
+	ret = file_rename(scheduledFilename + suffix, backupTarget);
+	loglog_renaming_result(loglog, scheduledFilename + suffix, backupTarget, ret);
 
 #if defined (_WIN32)
     // Try to remove the target first. It seems it is not
     // possible to rename over existing file, e.g. "log.2009-11-07".
-    ret = file_remove (scheduledFilename);
+	ret = file_remove(scheduledFilename + suffix);
 #endif
 
     // Rename filename to scheduledFilename,
     // e.g. rename "log" to "log.2009-11-07".
     loglog.debug(
         LOG4CPLUS_TEXT("Renaming file ")
-        + filename
+        + filename + suffix
         + LOG4CPLUS_TEXT(" to ")
-        + scheduledFilename);
-    ret = file_rename (filename, scheduledFilename);
-    loglog_renaming_result (loglog, filename, scheduledFilename, ret);
+		+ scheduledFilename + suffix);
+	ret = file_rename(filename + suffix, scheduledFilename + suffix);
+	loglog_renaming_result(loglog, filename + suffix, scheduledFilename + suffix, ret);
 
     // Open a new file, e.g. "log".
     open(std::ios::out | std::ios::trunc);
-    loglog_opening_result (loglog, out, filename);
+	loglog_opening_result(loglog, out, filename + suffix);
 
     // Calculate the next rollover time
     log4cplus::helpers::Time now = Time::gettimeofday();
@@ -1010,7 +1013,7 @@ DailyRollingFileAppender::getFilename(const Time& t) const
         pattern = datePattern.c_str();
 
     tstring result (filename);
-    result += LOG4CPLUS_TEXT(".");
+    result += LOG4CPLUS_TEXT("-");
     result += t.getFormattedTime(pattern, false);
     return result;
 }
@@ -1198,13 +1201,14 @@ preprocessFilenamePattern(const tstring& pattern, DailyRollingFileSchedule& sche
 
 TimeBasedRollingFileAppender::TimeBasedRollingFileAppender(
     const tstring& filename_,
+	const log4cplus::tstring& suffix_,
     const tstring& filenamePattern_,
     int maxHistory_,
     bool cleanHistoryOnStart_,
     bool immediateFlush_,
     bool createDirs_,
     bool rollOnClose_)
-    : FileAppenderBase(filename_, std::ios_base::app, immediateFlush_, createDirs_)
+    : FileAppenderBase(filename_,suffix_,std::ios_base::app, immediateFlush_, createDirs_)
     , filenamePattern(filenamePattern_)
     , schedule(DAILY)
     , maxHistory(maxHistory_)
@@ -1279,6 +1283,7 @@ TimeBasedRollingFileAppender::open(std::ios_base::openmode mode)
 
     if (createDirs)
         internal::make_dirs (currentFilename);
+	currentFilename = currentFilename + suffix;
 
     out.open(LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(currentFilename).c_str(), mode);
     if(!out.good())
@@ -1333,11 +1338,11 @@ TimeBasedRollingFileAppender::rollover(bool alreadyLocked)
 
         loglog.debug(
             LOG4CPLUS_TEXT("Renaming file ")
-            + filename
+            + filename + suffix
             + LOG4CPLUS_TEXT(" to ")
             + scheduledFilename);
-        ret = file_rename (filename, scheduledFilename);
-        loglog_renaming_result (loglog, filename, scheduledFilename, ret);
+        ret = file_rename (filename + suffix, scheduledFilename);
+        loglog_renaming_result (loglog, filename + suffix, scheduledFilename, ret);
     }
 
     Time now = Time::gettimeofday();
