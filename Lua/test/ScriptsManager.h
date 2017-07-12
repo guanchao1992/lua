@@ -7,6 +7,7 @@ extern "C" {
 }
 
 #include "Singleton.h"
+#include <string>
 
 //Ω≈±æπ‹¿Ì
 class ScriptsManager
@@ -19,9 +20,13 @@ public:
 	~ScriptsManager();
 public:
 	void Init();
-	lua_State*	getLuaState() { return m_luaState; }
+	lua_State*		getLuaState() { return m_luaState; }
+	void			setScriptsPath(const std::string& path);
+	const std::string&	getScriptsPath() { return m_rootPath; }
+	void			doFile(const std::string&file);
 private:
 	lua_State*	m_luaState;
+	std::string		m_rootPath;
 };
 
 inline lua_State*GetLuaState() 

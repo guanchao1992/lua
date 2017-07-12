@@ -11,7 +11,7 @@ using namespace std;
 
 int test_regFunc()
 {
-	LOG_D_F(_T("register ctolua function <testF>"));
+	LOG_D_F("main","register ctolua function <testF>");
 	lua_State*L = GetLuaState();
 	RegLuaFunctionStart(L, "testF");
 	cout << "--------------" << lua_get<int>(GetLuaState(), 1) << endl;
@@ -23,15 +23,15 @@ int test_regFunc()
 
 void Init()
 {
-	ScriptsManager::getInstance()->Init();
 	log_init();
+	ScriptsManager::getInstance()->Init();
 }
 
 int main()
 {
 	Init();
 
-	LOG_D_F(_T("中文.main start and init log sure."));
+	LOG_D_F("main","中文.main start and init log sure.");
 
 	test_regFunc();
 

@@ -153,6 +153,7 @@
     <ClCompile Include="Singleton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="test.h" />

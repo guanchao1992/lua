@@ -2,8 +2,8 @@
 #include "atlbase.h"
 #include "atlstr.h"
 
-extern "C" DLL_SAMPLE_API const TCHAR* STR_NULL = _T("");
-extern "C" DLL_SAMPLE_API const TCHAR* STR_LOOP = _T("loop");
+extern "C" DLL_SAMPLE_API const char* STR_NULL = _T("");
+extern "C" DLL_SAMPLE_API const char* STR_LOOP = _T("loop");
 
 extern "C" DLL_SAMPLE_API void log_init()
 {
@@ -23,50 +23,73 @@ extern "C" DLL_SAMPLE_API void log_close()
 	log4cplus::Logger::shutdown();
 }
 
-extern "C" DLL_SAMPLE_API void log_debug(const TCHAR*str)
+static char format_outbuf[5][1024];
+static unsigned int outbufnum = 0;
+
+#define FORMAT_OUTBUF(); \
+	va_list args;\
+	int n; \
+	++outbufnum; \
+	char * outbuf = format_outbuf[outbufnum % 5]; \
+	va_start(args, format); \
+	n = vsnprintf(outbuf, 1024, format, args); \
+	va_end(args);
+
+
+extern "C" DLL_SAMPLE_API void log_debug(const char*format, ...)
 {
-	LogLog::getLogLog()->debug(LOG4CPLUS_C_STR_TO_TSTRING(str));
-	OutputDebugString(str);
+	FORMAT_OUTBUF();
+	LogLog::getLogLog()->debug(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_warn(const TCHAR*str)
+extern "C" DLL_SAMPLE_API void log_warn(const char*format, ...)
 {
-	LogLog::getLogLog()->warn(LOG4CPLUS_C_STR_TO_TSTRING(str));
-	OutputDebugString(str);
+	FORMAT_OUTBUF();
+	LogLog::getLogLog()->warn(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_error(const TCHAR*str)
+extern "C" DLL_SAMPLE_API void log_error(const char*format, ...)
 {
-	LogLog::getLogLog()->error(LOG4CPLUS_C_STR_TO_TSTRING(str));
-	OutputDebugString(str);
+	FORMAT_OUTBUF();
+	LogLog::getLogLog()->error(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_debug_f(const TCHAR*str, const TCHAR*file)
+extern "C" DLL_SAMPLE_API void log_debug_f(const char*loop, const char*format, ...)
 {
-	NDCContextCreator _context(file);
-	LOG4CPLUS_DEBUG(Logger::getRoot(), str);
+	FORMAT_OUTBUF();
+	NDCContextCreator _context(loop);
+	LOG4CPLUS_DEBUG(Logger::getRoot(), outbuf);
+	LogLog::getLogLog()->debug(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_info_f(const TCHAR*str, const TCHAR*file)
+extern "C" DLL_SAMPLE_API void log_info_f(const char*loop, const char*format, ...)
 {
-	NDCContextCreator _context(file);
-	LOG4CPLUS_INFO(Logger::getRoot(), str);
+	FORMAT_OUTBUF();
+	NDCContextCreator _context(loop);
+	LOG4CPLUS_INFO(Logger::getRoot(), outbuf);
+	LogLog::getLogLog()->debug(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_warn_f(const TCHAR*str, const TCHAR*file)
+extern "C" DLL_SAMPLE_API void log_warn_f(const char*loop, const char*format, ...)
 {
-	NDCContextCreator _context(file);
-	LOG4CPLUS_WARN(Logger::getRoot(), str);
+	FORMAT_OUTBUF();
+	NDCContextCreator _context(loop);
+	LOG4CPLUS_WARN(Logger::getRoot(), outbuf);
+	LogLog::getLogLog()->debug(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_error_f(const TCHAR*str, const TCHAR*file)
+extern "C" DLL_SAMPLE_API void log_error_f(const char*loop, const char*format, ...)
 {
-	NDCContextCreator _context(file);
-	LOG4CPLUS_ERROR(Logger::getRoot(), str);
+	FORMAT_OUTBUF();
+	NDCContextCreator _context(loop);
+	LOG4CPLUS_ERROR(Logger::getRoot(), outbuf);
+	LogLog::getLogLog()->debug(outbuf);
 }
 
-extern "C" DLL_SAMPLE_API void log_fatal_f(const TCHAR*str, const TCHAR*file)
+extern "C" DLL_SAMPLE_API void log_fatal_f(const char*loop, const char*format, ...)
 {
-	NDCContextCreator _context(file);
-	LOG4CPLUS_FATAL(Logger::getRoot(), str);
+	FORMAT_OUTBUF();
+	NDCContextCreator _context(loop);
+	LOG4CPLUS_FATAL(Logger::getRoot(), outbuf);
+	LogLog::getLogLog()->debug(outbuf);
 }
