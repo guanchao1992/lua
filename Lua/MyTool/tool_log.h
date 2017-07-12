@@ -19,8 +19,8 @@ using namespace log4cplus::helpers;
 #define DLL_SAMPLE_API __declspec(dllimport)
 #endif
 
-const TCHAR* STR_NULL = _T("");
-const TCHAR* STR_LOOP = _T("loop");
+extern "C" DLL_SAMPLE_API const TCHAR* STR_NULL;
+extern "C" DLL_SAMPLE_API const TCHAR* STR_LOOP;
 
 extern "C" DLL_SAMPLE_API void log_init();
 extern "C" DLL_SAMPLE_API void log_close();

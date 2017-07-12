@@ -1,6 +1,9 @@
-#include "tool.h"
+#include "tool_log.h"
 #include "atlbase.h"
 #include "atlstr.h"
+
+extern "C" DLL_SAMPLE_API const TCHAR* STR_NULL = _T("");
+extern "C" DLL_SAMPLE_API const TCHAR* STR_LOOP = _T("loop");
 
 extern "C" DLL_SAMPLE_API void log_init()
 {
