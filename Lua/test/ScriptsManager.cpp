@@ -151,7 +151,6 @@ static void RegisterClass(lua_State* L)
 		// 注册所有方法
 		lua_pushstring(L, lua_Foo_functions[i].name);
 		lua_pushcclosure(L, lua_Foo_functions[i].method, 0);
-		PrintLuaStack(L, "000000");
 		lua_settable(L, -3);
 
 		/*

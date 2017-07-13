@@ -8,7 +8,6 @@
 *.pdb
 *.ilk
 *.exp
-/Lua/run/
 *.obj
 /Lua/obj/
 *.ipch
@@ -19,3 +18,4 @@
 /log4cplus-1.2.1-rc1/msvc10/tests/a
 /Lua/test/log
 
+/Lua/run/Win32/Debug/log
