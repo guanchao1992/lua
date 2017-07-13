@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include <iostream>
 using namespace std;
 #include "../MyLua/ctolua.h"
@@ -16,7 +15,6 @@ int test_regFunc()
 	RegLuaFunctionStart(L, "testF");
 	cout << "--------------" << lua_get<int>(GetLuaState(), 1) << endl;
 	RegLuaFunctionEnd();
-
 	luaL_dostring(GetLuaState(), "testF(1231231)");
 	return 1;
 }

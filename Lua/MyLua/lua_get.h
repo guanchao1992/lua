@@ -7,14 +7,15 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+
 template<typename T>
-T lua_get(lua_State*L, int idx)
+inline T lua_get(lua_State*L, int idx)
 {
 	return ;
 }
 
 template<>
-const char*lua_get<const char*>(lua_State*L, int idx)
+inline const char*lua_get<const char*>(lua_State*L, int idx)
 {
 	if (lua_isstring(L,idx))
 	{
@@ -24,7 +25,7 @@ const char*lua_get<const char*>(lua_State*L, int idx)
 }
 
 template<>
-int lua_get<int>(lua_State*L, int idx)
+inline int lua_get<int>(lua_State*L, int idx)
 {
 	if (lua_isinteger(L,idx))
 	{
@@ -34,7 +35,7 @@ int lua_get<int>(lua_State*L, int idx)
 }
 
 template<>
-unsigned int lua_get<unsigned int>(lua_State*L, int idx)
+inline unsigned int lua_get<unsigned int>(lua_State*L, int idx)
 {
 	if (lua_isinteger(L,idx))
 	{
@@ -44,7 +45,7 @@ unsigned int lua_get<unsigned int>(lua_State*L, int idx)
 }
 
 template<>
-double lua_get<double>(lua_State*L, int idx)
+inline double lua_get<double>(lua_State*L, int idx)
 {
 	if (lua_isnumber(L,idx))
 	{

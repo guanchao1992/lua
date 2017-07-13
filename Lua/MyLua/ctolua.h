@@ -4,6 +4,12 @@
 #include <map>
 #include <iostream>
 #include <functional>
+
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 #include "lua_get.h"
 
 #ifdef DLL_SAMPLE_EXPORTS
@@ -17,15 +23,8 @@ extern "C" DLL_SAMPLE_API int _stdcall CTOLuaAdd(int a,int b);
 
 #define MaxValue_NUM	255
 
-void RegFunction(lua_State * L, const char * name, lua_CFunction func)
-{
-	if (!name) return;
-
-	lua_pushstring(L, name);
-	lua_pushcclosure(L, func, 0);
-	lua_pushvalue(L, -1);
-	lua_setglobal(L, name);
-}
+extern "C" DLL_SAMPLE_API void RegFunction(lua_State * L, const char * name, lua_CFunction func);
+extern "C" DLL_SAMPLE_API void PrintLuaStack(lua_State * L, const char*sign);
 
 #define RegLuaFunctionStart(L,name);	RegFunction(L,name,[](lua_State * L){
 #define RegLuaFunctionEnd(); return 0;});
