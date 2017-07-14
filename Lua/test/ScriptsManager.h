@@ -53,15 +53,15 @@ public:
 };
 
 
-class Foo
+class Foo1
 {
 public:
-	Foo(int value)
+	Foo1(int value)
 	{
 		_value = value;
 		printf("Foo Constructor!\n");
 	}
-	~Foo()
+	~Foo1()
 	{
 		printf("Foo Destructor!\n");
 	}

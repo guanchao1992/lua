@@ -7,6 +7,7 @@ using namespace std;
 #include "../MyTool/tool_log.h"
 
 #include "ScriptsManager.h"
+#include "test.h"
 
 int test_regFunc()
 {
@@ -28,6 +29,9 @@ void Init()
 int main()
 {
 	Init();
+
+	register_all_moonton(GetLuaState());
+	ScriptsManager::getInstance()->doFile("init.lua");
 
 	LOG_D_F("main","жпнд.main start and init log sure.");
 
