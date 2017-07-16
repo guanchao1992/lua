@@ -169,6 +169,12 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_Unicode|x64'">$(ProjectName)UD</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_Unicode|x64'">$(ProjectName)U</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\_run\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\_run\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

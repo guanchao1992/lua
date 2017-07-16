@@ -173,6 +173,12 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_Unicode|x64'">$(ProjectName)UD</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_Unicode|x64'">$(ProjectName)U</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\_run\lib\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\_run\lib\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>LOG4CPLUS_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>

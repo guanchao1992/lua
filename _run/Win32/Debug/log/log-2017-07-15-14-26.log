@@ -1,0 +1,3 @@
+53 [21808] DEBUG root <ScriptsManager> - dofile '..\..\Data\scripts\init.lua' error.errno 1.
+53 [21808] DEBUG root <main> - жпнд.main start and init log sure.
+53 [21808] DEBUG root <main> - register ctolua function <testF>
