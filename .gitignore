@@ -17,5 +17,5 @@
 /log4cplus-1.2.1-rc1/msvc10/tests/logs
 /log4cplus-1.2.1-rc1/msvc10/tests/a
 /Lua/test/log
-
 /Lua/run/Win32/Debug/log
+*.log

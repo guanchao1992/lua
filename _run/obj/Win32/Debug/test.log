@@ -1,3 +1,9 @@
-﻿d:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: 中间目录(D:\gitproject\gitLua\Lua\..\_run\obj\Win32\Debug\)包含从另一个项目(Lua-5.3.4.vcxproj, MyLua.vcxproj, MyTool.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
-  test.vcxproj -> D:\gitproject\gitLua\Lua\..\_run\Win32\Debug\test.exe
-  test.vcxproj -> D:\gitproject\gitLua\Lua\..\_run\Win32\Debug\test.pdb (Partial PDB)
+﻿  ScriptsManager.cpp
+e:\gitproject\gitlua\lua\mylua\lua_get.h(32): warning C4244: “return”: 从“lua_Integer”转换到“int”，可能丢失数据
+e:\gitproject\gitlua\lua\test\scriptsmanager.cpp(97): warning C4244: “=”: 从“lua_Number”转换到“int”，可能丢失数据
+e:\gitproject\gitlua\lua\test\scriptsmanager.cpp(142): warning C4018: “<”: 有符号/无符号不匹配
+  正在生成代码...
+  正在跳过...(未检测到相关更改)
+  main.cpp
+  test.vcxproj -> E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\test.exe
+  test.vcxproj -> E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\test.pdb (Partial PDB)

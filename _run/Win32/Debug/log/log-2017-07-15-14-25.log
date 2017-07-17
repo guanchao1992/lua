@@ -1,3 +1,0 @@
-415 [6468] DEBUG root <ScriptsManager> - dofile '..\..\Data\scripts\init.lua' error.errno 1.
-415 [6468] DEBUG root <main> - жпнд.main start and init log sure.
-415 [6468] DEBUG root <main> - register ctolua function <testF>
