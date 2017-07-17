@@ -148,12 +148,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScriptsManager.cpp" />
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="Singleton.h" />

@@ -30,4 +30,6 @@ extern "C" DLL_SAMPLE_API void PrintLuaStack(lua_State * L, const char*sign);
 #define RegLuaFunctionEnd(); return 0;});
 
 
+extern "C" DLL_SAMPLE_API void RegisterClass(lua_State* L);
+
 #endif // !__CToLua_H__

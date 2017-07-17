@@ -8,6 +8,7 @@ using namespace std;
 
 #include "ScriptsManager.h"
 #include "test.h"
+#include "ClassToLua.h"
 
 int test_regFunc()
 {
@@ -31,7 +32,8 @@ int main()
 	Init();
 
 //	register_all_moonton(GetLuaState());
-	RegisterClass(GetLuaState());
+//	RegisterClass(GetLuaState());
+	regAllClass();
 	ScriptsManager::getInstance()->doFile("init.lua");
 
 	LOG_D_F("main","жпнд.main start and init log sure.");
