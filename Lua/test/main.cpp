@@ -31,6 +31,7 @@ int main()
 	Init();
 
 //	register_all_moonton(GetLuaState());
+	RegisterClass(GetLuaState());
 	ScriptsManager::getInstance()->doFile("init.lua");
 
 	LOG_D_F("main","жпнд.main start and init log sure.");

@@ -53,21 +53,21 @@ public:
 };
 
 
-class Foo1
+class Foo
 {
 public:
-	Foo1(int value)
+	Foo(int value)
 	{
 		_value = value;
-		printf("Foo Constructor!\n");
+		printf("Foo Constructor! value=%d\n", _value);
 	}
-	~Foo1()
+	~Foo()
 	{
-		printf("Foo Destructor!\n");
+		printf("Foo Destructor! value=%d\n", _value);
 	}
 	int add(int a, int b)
 	{
-		printf("Foo add!\n");
+		printf("Foo add! value=%d\n", _value);
 		return  a + b;
 	}
 	void setV(int value)
@@ -81,3 +81,5 @@ public:
 	}
 	int _value;
 };
+
+void RegisterClass(lua_State* L);

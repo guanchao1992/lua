@@ -5,7 +5,6 @@
 
 SingletonClaseCpp(ScriptsManager);
 
-static void RegisterClass(lua_State* L);
 
 ScriptsManager::ScriptsManager()
 {
@@ -27,7 +26,6 @@ void ScriptsManager::Init()
 	path.append("\\scripts\\");
 	setScriptsPath(path);
 
-	//RegisterClass(L);
 }
 
 void ScriptsManager::setScriptsPath(const std::string& path)
@@ -51,13 +49,11 @@ typedef struct
 	lua_CFunction	method;
 } LUA_METHOD;
 
-LUA_METHOD lua_Foo1_functions[] = { 
+LUA_METHOD lua_Foo_functions[] = { 
 	{ "add",
 	[](lua_State*L) {
-		int i = (int)lua_tonumber(L, lua_upvalueindex(1));
-		lua_pushnumber(L, 0);
 		lua_gettable(L, 1);
-		Foo1** obj = (Foo1**)luaL_checkudata(L, -1, "Foo");
+		Foo** obj = (Foo**)luaL_checkudata(L, 1, "Foo");
 		lua_remove(L, -1);
 		int num =(*obj)->add(lua_get<int>(L, 1), lua_get<int>(L, 2));
 		lua_pushnumber(L,num);
@@ -67,7 +63,7 @@ LUA_METHOD lua_Foo1_functions[] = {
 		int i = (int)lua_tonumber(L, lua_upvalueindex(1));
 		lua_pushnumber(L, 0);
 		lua_gettable(L, 1);
-		Foo1** obj = (Foo1**)luaL_checkudata(L, -1, "Foo");
+		Foo** obj = (Foo**)luaL_checkudata(L, 1, "Foo");
 		lua_remove(L, -1);
 		(*obj)->setV(lua_get<int>(L, 1));
 		return 1; }},
@@ -76,7 +72,7 @@ LUA_METHOD lua_Foo1_functions[] = {
 		int i = (int)lua_tonumber(L, lua_upvalueindex(1));
 		lua_pushnumber(L, 0);
 		lua_gettable(L, 1);
-		Foo1** obj = (Foo1**)luaL_checkudata(L, -1, "Foo");
+		Foo** obj = (Foo**)luaL_checkudata(L, 1, "Foo");
 		lua_remove(L, -1);
 		(*obj)->getV();
 		return 1; } },
@@ -84,7 +80,7 @@ LUA_METHOD lua_Foo1_functions[] = {
 
 static int gc_obj(lua_State* L)
 {
-	Foo1** obj = (Foo1**)luaL_checkudata(L, -1, "Foo");
+	Foo** obj = (Foo**)luaL_checkudata(L, -1, "Foo");
 	delete (*obj);
 	return 0;
 }
@@ -100,58 +96,56 @@ static int constructor(lua_State*L)
 	}
 	value = lua_tonumber(L, -1);
 	lua_pop(L, -1);
-	Foo1*obj = new Foo1(value);
+	Foo*obj = new Foo(value);
 	// 2. 新建一个表 tt = {}
-	lua_newtable(L);
-	Foo1**a = (Foo1**)lua_newuserdata(L, sizeof(Foo1*));
+	//lua_newtable(L);
+	Foo**a = (Foo**)lua_newuserdata(L, sizeof(Foo*));
 	*a = obj;
+	PrintLuaStack(L, "3.1");
 	//4
 	luaL_getmetatable(L, "Foo");
-	lua_pushvalue(L, -1);
-	lua_setmetatable(L, -3);
+	lua_setmetatable(L, -2);
+
 	// 5. tt[0] = userdata
+	/*
 	lua_insert(L, -2);
 	lua_pushnumber(L, 0);
 	lua_insert(L, -2);
 	lua_settable(L, -4);
+*/
+
 	//6
+	/*
 	lua_pushstring(L, "method");
 	lua_gettable(L, -2);
 	lua_setmetatable(L, -3);
 	lua_pop(L, 1);
-	PrintLuaStack(L, "end");
+*/
 	return 1;
 }
 
-static void RegisterClass(lua_State* L)
+void RegisterClass(lua_State* L)
 {
 	lua_pushcfunction(L, constructor);
-	lua_setglobal(L, "Foo");
+	lua_setglobal(L, "newFoo");
 
 	luaL_newmetatable(L, "Foo");
+
 	lua_pushstring(L, "__gc");
 	lua_pushcfunction(L, &gc_obj);
-	lua_settable(L, -3);	//这里的table是新建的表"Foo"，Foo[__gc]=gc_obj
+	lua_settable(L, -3);
 
+	lua_pushstring(L, "__index");
+	lua_newtable(L);
 
-	unsigned num = sizeof(lua_Foo1_functions) / sizeof(*lua_Foo1_functions);
+	unsigned num = sizeof(lua_Foo_functions) / sizeof(*lua_Foo_functions);
 	for (int i = 0; i < num; ++i)
 	{
 		// 注册所有方法
-		lua_pushstring(L, lua_Foo1_functions[i].name);
-		lua_pushcclosure(L, lua_Foo1_functions[i].method, 0);
+		lua_pushstring(L, lua_Foo_functions[i].name);
+		lua_pushcfunction(L, lua_Foo_functions[i].method);
 		lua_settable(L, -3);
-
-		/*
-		lua_pushstring(L, name);
-		lua_pushcclosure(L, func, 0);
-		lua_pushvalue(L, -1);
-		lua_setglobal(L, name);
-*/
 	}
-
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, -2);
 	lua_settable(L, -3);	
-
+	//lua_setglobal(L,"Foo");
 }
