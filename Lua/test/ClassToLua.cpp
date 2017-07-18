@@ -1,6 +1,6 @@
 #include "ClassToLua.h"
 #include "ScriptsManager.h"
-#include "lua_get.h"
+#include "base\lua_get.h"
 
 template<class T>
 const char*getClassName()
@@ -206,14 +206,7 @@ CToLuaFunc_Get(P1,1);CToLuaFunc_Get(P2,2);CToLuaFunc_Get(P3,3);CToLuaFunc_Get(P4
 lua_pop(L,-1);\
 CToLuaFunc_Run(Func,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10);\
 CToLuaFunc_End
-typedef std::map<const char*, lua_CFunction> MapClassFunc;
-MapClassFunc s_Foo_luafuncs;
-void register_lua_Foo_func()
-{
-	s_Foo_luafuncs["add"] = CToLuaFunc_2_r(Foo, add, int, int,int);
-	s_Foo_luafuncs["setV"] = CToLuaFunc_1(Foo, setV,int);
-	s_Foo_luafuncs["getV"] = CToLuaFunc_0_r(Foo, getV,int);
-}
+
 
 void ctolua_registerclass_func(lua_State*L, const MapClassFunc& mapFunc)
 {
@@ -251,9 +244,16 @@ void ctolua_registerclass(lua_State* L, const MapClassFunc& mapFunc)
 	lua_pop(L, -1);
 }
 
+MapClassFunc s_Foo_luafuncs;
+void register_lua_Foo_func()
+{
+	s_Foo_luafuncs["add"] = CToLuaFunc_2_r(Foo, add, int, int, int);
+	s_Foo_luafuncs["setV"] = CToLuaFunc_1(Foo, setV, int);
+	s_Foo_luafuncs["getV"] = CToLuaFunc_0_r(Foo, getV, int);
+}
+
 void regAllClass()
 {
-	
 	register_lua_Foo_func();
 	ctolua_registerclass<Foo>(GetLuaState(), s_Foo_luafuncs);
 }

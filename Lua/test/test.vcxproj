@@ -102,7 +102,7 @@
       </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -127,7 +127,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>MyTool.lib;Lua-5.3.4.lib;MyLua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>MyTool.lib;log4cplus.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -148,19 +148,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
+    <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScriptsManager.cpp" />
-    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="VideoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClassToLua.h" />
+    <ClInclude Include="base\lua_get.h" />
+    <ClInclude Include="base\Singleton.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="lua_get.h" />
+    <ClInclude Include="GameApp.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ScriptsManager.h" />
-    <ClInclude Include="Singleton.h" />
     <ClInclude Include="test.h" />
+    <ClInclude Include="VideoManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

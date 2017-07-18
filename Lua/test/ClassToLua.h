@@ -1,8 +1,11 @@
 #pragma once
 #include "..\MyLua\ctolua.h"
 #include "..\MyTool\tool_log.h"
-#include "lua_get.h"
+#include "base/lua_get.h"
 
+typedef std::map<const char*, lua_CFunction> MapClassFunc;
+
+//这是一个测试用的类
 class Foo
 {
 public:
