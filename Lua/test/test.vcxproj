@@ -71,13 +71,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\_run\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\_run\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="lua_get.h" />
     <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="test.h" />

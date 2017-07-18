@@ -9,7 +9,7 @@ extern "C" {
 #include "Singleton.h"
 #include <string>
 #include "..\MyTool\tool_log.h"
-#include "..\MyLua\lua_get.h"
+#include "lua_get.h"
 
 //Ω≈±æπ‹¿Ì
 class ScriptsManager

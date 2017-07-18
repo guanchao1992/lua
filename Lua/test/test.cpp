@@ -1,5 +1,4 @@
 #include "test.h"
-#include "..\MyLua\lua_get.h"
 #include <string.h>
 #include "..\MyLua\ctolua.h"
 

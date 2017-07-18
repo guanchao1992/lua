@@ -1,5 +1,0 @@
-﻿LINK : warning LNK4075: 忽略“/INCREMENTAL”(由于“/OPT:REF”规范)
-ctolua.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/OPT:ICF”规范)
-    正在创建库 E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\MyLua.lib 和对象 E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\MyLua.exp
-  MyLua.vcxproj -> E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\MyLua.dll
-  MyLua.vcxproj -> E:\gitproject\gitLua\Lua\..\_run\Win32\Debug\MyLua.pdb (Partial PDB)

@@ -10,7 +10,6 @@ extern "C" {
 #include "lualib.h"
 #include "lauxlib.h"
 }
-#include "lua_get.h"
 
 #ifdef DLL_SAMPLE_EXPORTS
 #define DLL_SAMPLE_API __declspec(dllexport)

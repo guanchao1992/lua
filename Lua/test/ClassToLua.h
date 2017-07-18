@@ -1,7 +1,7 @@
 #pragma once
 #include "..\MyLua\ctolua.h"
-#include "..\MyLua\lua_get.h"
 #include "..\MyTool\tool_log.h"
+#include "lua_get.h"
 
 class Foo
 {
@@ -27,6 +27,7 @@ public:
 	}
 	int getV()
 	{
+		printf("Foo getV!\n");
 		return _value;
 	}
 	int _value;

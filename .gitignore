@@ -19,3 +19,5 @@
 /Lua/test/log
 /Lua/run/Win32/Debug/log
 *.log
+*.filters
+*.idb

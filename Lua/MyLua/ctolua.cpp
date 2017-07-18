@@ -1,6 +1,5 @@
 #include "ctolua.h"
 #include <string.h>
-#include "lua_get.h"
 #include <assert.h>
 
 extern "C" DLL_SAMPLE_API int _stdcall CTOLuaAdd(int a, int b)

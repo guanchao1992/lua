@@ -54,4 +54,54 @@ inline double lua_get<double>(lua_State*L, int idx)
 	return 0;
 }
 
+template<>
+inline bool lua_get<bool>(lua_State*L, int idx)
+{
+	if (lua_isboolean(L, idx))
+	{
+		return lua_toboolean(L, idx);
+	}
+	return false;
+}
+
+
+
+
+
+
+template<typename T>
+inline void lua_push(lua_State*L, T t)
+{
+}
+
+template<>
+inline void lua_push<const char*>(lua_State*L, const char* t)
+{
+	lua_pushstring(L, t);
+}
+
+template<>
+inline void lua_push<int>(lua_State*L, int t)
+{
+	lua_pushinteger(L, t);
+}
+
+template<>
+inline void lua_push<unsigned int>(lua_State*L,unsigned int t)
+{
+	lua_pushinteger(L, t);
+}
+
+template<>
+inline void lua_push<double>(lua_State*L, double t)
+{
+	lua_pushnumber(L, t);
+}
+
+template<>
+inline void lua_push<bool>(lua_State*L, bool t)
+{
+	lua_toboolean(L, t);
+}
+
 #endif
