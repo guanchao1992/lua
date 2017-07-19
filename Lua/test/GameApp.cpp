@@ -3,6 +3,7 @@
 #include "..\MyLua\ctolua.h"
 #include "ScriptsManager.h"
 #include "ClassToLua.h"
+#include "VideoManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
