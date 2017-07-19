@@ -18,6 +18,27 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\lua_get.h" />
+    <ClInclude Include="base\Singleton.h" />
+    <ClInclude Include="ClassToLua.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="GameApp.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ScriptsManager.h" />
+    <ClInclude Include="test.h" />
+    <ClInclude Include="VideoManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\Singleton.cpp" />
+    <ClCompile Include="ClassToLua.cpp" />
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ScriptsManager.cpp" />
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="VideoManager.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BD158740-1021-42D4-AED9-4771D7297F5C}</ProjectGuid>
@@ -147,25 +168,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="base\Singleton.cpp" />
-    <ClCompile Include="ClassToLua.cpp" />
-    <ClCompile Include="GameApp.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ScriptsManager.cpp" />
-    <ClCompile Include="test.cpp" />
-    <ClCompile Include="VideoManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="base\lua_get.h" />
-    <ClInclude Include="base\Singleton.h" />
-    <ClInclude Include="config.h" />
-    <ClInclude Include="GameApp.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="ScriptsManager.h" />
-    <ClInclude Include="test.h" />
-    <ClInclude Include="VideoManager.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <D3Dcompiler.h>
+#include <stdio.h>
+#include "config.h"
+//#include "d3dx11effect.h"
 
 using namespace DirectX;
 //--------------------------------------------------------------------------------------
@@ -17,9 +20,12 @@ ID3D11DeviceContext*    g_pImmediateContext = nullptr;
 IDXGISwapChain*         g_pSwapChain = nullptr;
 //IDXGISwapChain1*        g_pSwapChain1 = nullptr;
 ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
+ID3D11VertexShader*		g_pVertexShader = nullptr;
+ID3D11PixelShader*		g_pPixelShader = nullptr;
 
 ID3D11Buffer*			g_pVertexBuffer = nullptr;
 ID3D11InputLayout*		g_pVertexLayout = nullptr;
+
 
 SingletonClaseCpp(VideoManager);
 
@@ -106,39 +112,6 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	if (FAILED(hr))
 		return hr;
 
-	/*
-	// Create swap chain
-	IDXGIFactory2* dxgiFactory2 = nullptr;
-	hr = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
-	if (dxgiFactory2)
-	{
-		// DirectX 11.1 or later
-		hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&g_pd3dDevice1));
-		if (SUCCEEDED(hr))
-		{
-			(void)g_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&g_pImmediateContext1));
-		}
-
-		DXGI_SWAP_CHAIN_DESC1 sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.Width = width;
-		sd.Height = height;
-		sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		sd.SampleDesc.Count = 1;
-		sd.SampleDesc.Quality = 0;
-		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		sd.BufferCount = 1;
-
-		hr = dxgiFactory2->CreateSwapChainForHwnd(g_pd3dDevice, hWnd, &sd, nullptr, nullptr, &g_pSwapChain1);
-		if (SUCCEEDED(hr))
-		{
-			hr = g_pSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain));
-		}
-
-		dxgiFactory2->Release();
-	}
-	else
-*/
 	{
 		// DirectX 11.0 systems
 		DXGI_SWAP_CHAIN_DESC sd;
@@ -189,57 +162,24 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	g_pImmediateContext->RSSetViewports(1, &vp);
 
+	LoadContent();
 
 	return S_OK;
 }
 
-
-//--------------------------------------------------------------------------------------
-// Clean up the objects we've created
-//--------------------------------------------------------------------------------------
-void VideoManager::CleanupDevice()
-{
-	if (g_pImmediateContext) g_pImmediateContext->ClearState();
-
-	if (g_pRenderTargetView) g_pRenderTargetView->Release();
-	//if (g_pSwapChain1) g_pSwapChain1->Release();
-	if (g_pSwapChain) g_pSwapChain->Release();
-	//if (g_pImmediateContext1) g_pImmediateContext1->Release();
-	if (g_pImmediateContext) g_pImmediateContext->Release();
-	//if (g_pd3dDevice1) g_pd3dDevice1->Release();
-	if (g_pd3dDevice) g_pd3dDevice->Release();
-}
-
-//--------------------------------------------------------------------------------------
-// Render the frame
-//--------------------------------------------------------------------------------------
-void VideoManager::Render()
-{
-	// Just clear the backbuffer
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::LightGray);
-
-	testDraw();
-
-	g_pSwapChain->Present(0, 0);
-}
 
 struct SimpleVertex
 {
 	XMFLOAT3 Pos;  // Position
 };
 
-void VideoManager::testDraw()
+void VideoManager::LoadContent()
 {
 	ID3DBlob* pVSBlob = NULL;
 	ID3DBlob* pErrorBlob = NULL;
 
-	//D3DCreateBlob(10,&pVSBlob);
-	//bool compileResult = CompileD3DShader("SolidGreenColor.fx", "VS_Main", "vs_4_0", &vsBuffer);
-
-	//CompileD3DShader
-
 	HRESULT result = 0;
-	result = D3DCompileFromFile(L"..\\..\\Data\\hlsl\\VertexShader.hlsl", NULL, NULL, "main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
+	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "VS_Main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
 	if (FAILED(result))
 	{
 		if (pErrorBlob != 0)
@@ -258,12 +198,41 @@ void VideoManager::testDraw()
 	UINT numElements = ARRAYSIZE(layout);
 
 	// Create the input layout
-	if (FAILED(g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-		pVSBlob->GetBufferSize(), &g_pVertexLayout)))
-		return ;
-	// Set the input layout
+	result = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &g_pVertexLayout);
+	if (FAILED(result)) 
+	{
+		return;
+	}
 	g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
+	
+	result = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+	if (FAILED(result))
+	{
+		return;
+	}
+	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
 
+	pVSBlob->Release();
+	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "PS_Main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
+	if (FAILED(result))
+	{
+		if (pErrorBlob != 0)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+		}
+		return;
+	}
+
+	result = g_pd3dDevice->CreatePixelShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pPixelShader);
+	if (FAILED(result))
+	{
+		return;
+	}
+	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+
+
+	pVSBlob->Release();
 
 	// Create vertex buffer
 	SimpleVertex vertices[] =
@@ -282,12 +251,47 @@ void VideoManager::testDraw()
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
 	InitData.pSysMem = vertices;
-	if (FAILED(g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer)))
-		return ;
 
-	// Set vertex buffer
+	result = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+	if (FAILED(result))
+	{
+		return;
+	}
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
+	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+
+
+//--------------------------------------------------------------------------------------
+// Clean up the objects we've created
+//--------------------------------------------------------------------------------------
+void VideoManager::CleanupDevice()
+{
+	if (g_pImmediateContext) g_pImmediateContext->ClearState();
+
+	if (g_pRenderTargetView) g_pRenderTargetView->Release();
+	if (g_pSwapChain) g_pSwapChain->Release();
+	if (g_pImmediateContext) g_pImmediateContext->Release();
+	if (g_pd3dDevice) g_pd3dDevice->Release();
+
+}
+
+//--------------------------------------------------------------------------------------
+// Render the frame
+//--------------------------------------------------------------------------------------
+void VideoManager::Render()
+{
+	// Just clear the backbuffer
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::LightGray);
+
+	//g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
+	//g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+
+	g_pImmediateContext->Draw(3, 0);
+	//ÂíÉÏÊä³ö
+	g_pSwapChain->Present(0, 0);
 }

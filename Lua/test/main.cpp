@@ -19,6 +19,7 @@
 #include "GameApp.h"
 #include <tchar.h>
 #include "VideoManager.h"
+#include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 
 using namespace DirectX;
 
@@ -65,6 +66,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		{
 			VideoManager::getInstance()->Render();
 			GameApp::getInstance()->RenderUI();
+			Sleep(100);
 		}
 	}
 

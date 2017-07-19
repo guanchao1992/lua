@@ -22,8 +22,7 @@ void ScriptsManager::Init()
 	luaL_openlibs(L);
 	lua_checkstack(L, 10);
 
-	std::string path = Data_Path;
-	path.append("\\scripts\\");
+	std::string path = getAccuratePath("scripts\\");
 	setScriptsPath(path);
 
 }
