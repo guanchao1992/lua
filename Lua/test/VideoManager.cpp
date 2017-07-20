@@ -170,7 +170,7 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 
 struct SimpleVertex
 {
-	XMFLOAT3 Pos;  // Position
+	XMFLOAT4 Pos;  // Position
 };
 
 void VideoManager::LoadContent()
@@ -237,14 +237,15 @@ void VideoManager::LoadContent()
 	// Create vertex buffer
 	SimpleVertex vertices[] =
 	{
-		XMFLOAT3(0.0f, 0.5f, 0.5f),
-		XMFLOAT3(0.5f, -0.5f, 0.5f),
-		XMFLOAT3(-0.5f, -0.5f, 0.5f),
+		XMFLOAT4(0.0f, 0.0f, 0.5f,0.1f),
+		XMFLOAT4(1.0f, 0.0f, 0.5f,1.0f),
+		XMFLOAT4(0.5f, -0.5f, 0.5f,0.5f),
+		XMFLOAT4(-0.7f, -0.7f, 0.5f,0.1f),
 	};
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 3;
+	bd.ByteWidth = sizeof(SimpleVertex) * 4;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
@@ -286,12 +287,13 @@ void VideoManager::CleanupDevice()
 void VideoManager::Render()
 {
 	// Just clear the backbuffer
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::LightGray);
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::Black);
 
 	//g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
 	//g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
 
 	g_pImmediateContext->Draw(3, 0);
+	g_pImmediateContext->Draw(3, 1);
 	//ÂíÉÏÊä³ö
 	g_pSwapChain->Present(0, 0);
 }

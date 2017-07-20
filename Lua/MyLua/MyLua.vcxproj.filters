@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lua_get.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ctolua.h">
       <Filter>头文件</Filter>
     </ClInclude>
