@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base\Singleton.h"
+#include "config.h"
 #include <wtypes.h>
 
 class GameApp
@@ -11,9 +12,10 @@ private:
 public:
 	~GameApp();
 public:
-	void Init();
+	HRESULT Init(HWND hWnd);
 	void Close();
-	void RenderUI();
+	void Render();
+	Position2D pos2fPos(HWND hWnd,LONG_PTR lParam);
 	LRESULT WndProc(HWND hWnd,UINT message, WPARAM wParam, LPARAM lParam);
 public:
 	static GameApp* theGameApp;

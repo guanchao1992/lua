@@ -42,6 +42,9 @@
     <ClCompile Include="config.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DrawManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -71,5 +74,30 @@
     <ClInclude Include="ClassToLua.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DrawManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Size.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Position3D.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Position2D.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="test.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="HullShader.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

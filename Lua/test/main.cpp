@@ -20,6 +20,7 @@
 #include <tchar.h>
 #include "VideoManager.h"
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
+#include <time.h>
 
 using namespace DirectX;
 
@@ -40,20 +41,21 @@ LRESULT CALLBACK  WndProc(HWND, UINT, WPARAM, LPARAM);
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-	GameApp::getInstance()->Init();
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
 
-	if (FAILED(VideoManager::getInstance()->InitDevice(g_hWnd)))
+	if (FAILED(GameApp::getInstance()->Init(g_hWnd)))
 	{
-		VideoManager::getInstance()->CleanupDevice();
 		return 0;
 	}
 
 	// Main message loop
+	clock_t lasttime = clock();
+	float intervaltime = 1000.f / 30;
+	float offInter = 0;
 	MSG msg = { 0 };
 	while (WM_QUIT != msg.message)
 	{
@@ -64,13 +66,22 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		}
 		else
 		{
-			VideoManager::getInstance()->Render();
-			GameApp::getInstance()->RenderUI();
-			Sleep(100);
+			//clock();
+			clock_t newtime = clock();
+			GameApp::getInstance()->Render();
+
+			//¹Ì¶¨Ö¡ÂÊ
+			float interval = newtime - lasttime;
+			if (interval < intervaltime)
+			{
+				float tempInterval = intervaltime + offInter - interval;
+				clock_t tempIntervalDWORD = tempInterval;
+				offInter = tempInterval - tempIntervalDWORD;
+				Sleep(tempIntervalDWORD);
+			}
+			lasttime = newtime;
 		}
 	}
-
-	VideoManager::getInstance()->CleanupDevice();
 	GameApp::getInstance()->Close();
 
 	return (int)msg.wParam;
@@ -101,7 +112,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 
 	// Create window
 	g_hInst = hInstance;
-	RECT rc = { 0, 0, 800, 600 };
+	RECT rc = { 0, 0, DEFAULT_VIEW_W, DEFAULT_VIEW_H };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	g_hWnd = CreateWindow(_T("TutorialWindowClass"), _T("Direct3D 11 Tutorial 1: Direct3D 11 Basics"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
