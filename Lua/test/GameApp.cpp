@@ -66,7 +66,7 @@ Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
 	UINT x = LOWORD(lParam);
 	UINT y = HIWORD(lParam);
 	const Size &size= VideoManager::getInstance()->getViewSize();
-	Position2D pos(x / size.getWidth() - 0.5f, y / size.getHeight() - 0.5f);
+	Position2D pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
 	return pos;
 }
 

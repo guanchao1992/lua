@@ -90,15 +90,18 @@ struct SimpleVertex
 
 void DrawManager::DrawOne(float x,float y)
 {
+	const Size& viewSize = VideoManager::getInstance()->getViewSize();
+	float fx = 50.f / viewSize.getWidth();
+	float fy = 50.f / viewSize.getHeight();
 	SimpleVertex vertices[] =
 	{
-		XMFLOAT3(0.2f + x, 0.2f + y, 0.5f),
-		XMFLOAT3(0.2f + x, 0.0f + y, 0.5f),
-		XMFLOAT3(0.0f + x, 0.0f + y, 0.5f),
+		XMFLOAT3(fx + x, fy + y, 0.5f),
+		XMFLOAT3(fx + x, -fy + y, 0.5f),
+		XMFLOAT3(-fx + x, -fy + y, 0.5f),
 
-		XMFLOAT3(0.2f + x, 0.2f + y, 0.5f),
-		XMFLOAT3(0.0f + x, 0.0f + y, 0.5f),
-		XMFLOAT3(0.0f + x, 0.2f + y, 0.5f),
+		XMFLOAT3(fx + x, fy + y, 0.5f),
+		XMFLOAT3(-fx + x, -fy + y, 0.5f),
+		XMFLOAT3(-fx + x, fy + y, 0.5f),
 	};
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -131,6 +134,6 @@ void DrawManager::RenderDraw()
 	for (auto it: m_vecDrawBuffer)
 	{
 		getD3DContext()->IASetVertexBuffers(0, 1, &it, &stride, &offset);
+		getD3DContext()->Draw(6, 0);
 	}
-	getD3DContext()->Draw(6, 0);
 }
