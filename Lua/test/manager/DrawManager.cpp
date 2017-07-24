@@ -6,11 +6,22 @@
 #include <windows.h>
 #include "VideoManager.h"
 #include "..\config.h"
+#include "..\draw\DrawLayout.h"
 
 using namespace DirectX;
 
+struct SimpleVertex
+{
+	XMFLOAT4 Pos;  // Position
+	XMFLOAT4 Color;  // Color
+};
+
 SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
+	:m_pDrawVertexShader(nullptr)
+	, m_pDrawPixelShader(nullptr)
+	, m_pDrawGeometryShader(nullptr)
+	, m_pDrawVertexLayout(nullptr)
 {
 }
 
@@ -39,7 +50,9 @@ void DrawManager::Init()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
+
 	UINT numElements = ARRAYSIZE(layout);
 
 	// Create the input layout
@@ -72,21 +85,23 @@ void DrawManager::Init()
 	{
 		return;
 	}
-
 	pVSBlob->Release();
+
+
 }
 
 void DrawManager::Cleanup()
 {
-	m_pDrawVertexShader->Release();
-	m_pDrawPixelShader->Release();
-	m_pDrawVertexLayout->Release();
+	if(m_pDrawVertexShader)
+		m_pDrawVertexShader->Release();
+	if (m_pDrawPixelShader)
+		m_pDrawPixelShader->Release();
+	if (m_pDrawGeometryShader)
+		m_pDrawGeometryShader->Release();
+	if (m_pDrawVertexLayout)
+		m_pDrawVertexLayout->Release();
 }
 
-struct SimpleVertex
-{
-	XMFLOAT3 Pos;  // Position
-};
 
 void DrawManager::DrawOne(float x,float y)
 {
@@ -95,19 +110,25 @@ void DrawManager::DrawOne(float x,float y)
 	float fy = 50.f / viewSize.getHeight();
 	SimpleVertex vertices[] =
 	{
-		XMFLOAT3(fx + x, fy + y, 0.5f),
-		XMFLOAT3(fx + x, -fy + y, 0.5f),
-		XMFLOAT3(-fx + x, -fy + y, 0.5f),
+		XMFLOAT4(fx + x, fy + y, 0.5f,0.3f),
+		XMFLOAT4(0.1f, 0.4f, 0.9f,0.3f),
+		XMFLOAT4(fx + x, -fy + y, 0.5f,0.5f),
+		XMFLOAT4(0.2f, 0.8f, 0.9f,0.3f),
+		XMFLOAT4(-fx + x, -fy + y, 0.5f,1.0f),
+		XMFLOAT4(0.5f, 0.1f, 0.9f,0.3f),
 
-		XMFLOAT3(fx + x, fy + y, 0.5f),
-		XMFLOAT3(-fx + x, -fy + y, 0.5f),
-		XMFLOAT3(-fx + x, fy + y, 0.5f),
+		XMFLOAT4(fx + x, fy + y, 0.5f,0.1f),
+		XMFLOAT4(0.2f, 0.1f, 0.3f,0.3f),
+		XMFLOAT4(-fx + x, -fy + y, 0.5f,0.5f),
+		XMFLOAT4(0.5f, 0.9f, 0.1f,0.3f),
+		XMFLOAT4(-fx + x, fy + y, 0.5f,0.2f),
+		XMFLOAT4(0.1f, 0.1f, 0.9f,0.3f),
 	};
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(SimpleVertex) * 6;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_STREAM_OUTPUT;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -129,6 +150,7 @@ void DrawManager::RenderDraw()
 	getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
 	getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
 
+
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	for (auto it: m_vecDrawBuffer)
@@ -136,4 +158,9 @@ void DrawManager::RenderDraw()
 		getD3DContext()->IASetVertexBuffers(0, 1, &it, &stride, &offset);
 		getD3DContext()->Draw(6, 0);
 	}
+}
+
+void DrawManager::addLayout(int order)
+{
+
 }

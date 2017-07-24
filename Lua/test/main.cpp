@@ -85,6 +85,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 				Sleep(tempIntervalDWORD);
 			}
 			lasttime = newtime;
+
+			if (newtime > 10000)
+			{
+				break;
+			}
 		}
 	}
 	GameApp::getInstance()->Close();

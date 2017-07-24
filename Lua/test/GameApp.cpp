@@ -63,7 +63,7 @@ void GameApp::Close()
 void GameApp::Render()
 {
 	VideoManager::getInstance()->Render();
-	DrawManager::getInstance()->RenderDraw();
+	//DrawManager::getInstance()->RenderDraw();
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -115,6 +115,7 @@ void GameApp::mouseEvent(const EventArgs*args)
 	if (e->mouseType == MouseEventArgs::LBMouseDown)
 	{
 		DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX(), e->viewPos.getPositionY());
+		DrawManager::getInstance()->RenderDraw();
 	}
 }
 

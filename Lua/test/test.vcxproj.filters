@@ -19,6 +19,9 @@
     <Filter Include="manager">
       <UniqueIdentifier>{0a5afff3-c9bb-4d22-8c57-b0587a5f028b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="draw">
+      <UniqueIdentifier>{3024a1d9-ea7e-450f-ae8f-007852a7465a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="manager\EventManager.cpp">
       <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\DrawLayout.cpp">
+      <Filter>draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,10 +104,11 @@
     <ClInclude Include="manager\EventManager.h">
       <Filter>manager</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="test.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
+    <ClInclude Include="draw\DrawLayout.h">
+      <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

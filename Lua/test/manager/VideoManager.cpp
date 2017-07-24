@@ -292,7 +292,7 @@ void VideoManager::CleanupDevice()
 void VideoManager::Render()
 {
 	// Just clear the backbuffer
-	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
+//	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
 
 	//m_pImmediateContext->PSSetShaderResources(0, 1, &colorMap_);
 	//m_pImmediateContext->PSSetSamplers(0, 1, &colorMapSampler_);
@@ -307,9 +307,7 @@ void VideoManager::Render()
 	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
 
-	m_pImmediateContext->Draw(6, 0);
-
-	DrawManager::getInstance()->RenderDraw();
+	//m_pImmediateContext->Draw(6, 0);
 
 	//ÂíÉÏÊä³ö
 	m_pSwapChain->Present(0, 0);
