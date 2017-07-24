@@ -1,10 +1,10 @@
 #include "GameApp.h"
 #include "..\MyTool\tool_log.h"
 #include "..\MyLua\ctolua.h"
-#include "ScriptsManager.h"
+#include "manager\ScriptsManager.h"
 #include "ClassToLua.h"
-#include "VideoManager.h"
-#include "DrawManager.h"
+#include "manager\VideoManager.h"
+#include "manager\DrawManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;

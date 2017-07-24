@@ -1,7 +1,7 @@
 #pragma once
-#include "base\Singleton.h"
+#include "..\base\Singleton.h"
 #include <windows.h>
-#include "config.h"
+#include "..\config.h"
 
 struct shaderData
 {

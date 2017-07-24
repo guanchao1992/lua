@@ -6,10 +6,10 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "base\Singleton.h"
+#include "..\base\Singleton.h"
 #include <string>
-#include "..\MyTool\tool_log.h"
-#include "base\lua_get.h"
+#include "..\..\MyTool\tool_log.h"
+#include "..\base\lua_get.h"
 
 //Ω≈±æπ‹¿Ì
 class ScriptsManager

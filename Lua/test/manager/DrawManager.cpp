@@ -1,11 +1,11 @@
 #include "DrawManager.h"
 #include <d3dcommon.h>
 #include <d3dcompiler.h>
-#include "config.h"
 #include <d3d11.h>
 #include <directxcolors.h>
 #include <windows.h>
 #include "VideoManager.h"
+#include "..\config.h"
 
 using namespace DirectX;
 

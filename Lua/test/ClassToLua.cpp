@@ -1,5 +1,5 @@
 #include "ClassToLua.h"
-#include "ScriptsManager.h"
+#include "manager\ScriptsManager.h"
 #include "base\lua_get.h"
 
 template<class T>

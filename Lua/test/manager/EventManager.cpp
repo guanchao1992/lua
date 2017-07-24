@@ -1,7 +1,7 @@
 #include "ScriptsManager.h"
-#include "../MyTool/tool_log.h"
-#include "config.h"
-#include "../MyLua/ctolua.h"
+#include "..\..\MyTool\tool_log.h"
+#include "..\config.h"
+#include "..\..\MyLua\ctolua.h"
 
 SingletonClaseCpp(ScriptsManager);
 

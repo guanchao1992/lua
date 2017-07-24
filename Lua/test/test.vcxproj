@@ -26,39 +26,27 @@
     <ClInclude Include="base\Size.h" />
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="DrawManager.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="manager\DrawManager.h" />
+    <ClInclude Include="manager\ScriptsManager.h" />
+    <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
-    <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="test.h" />
-    <ClInclude Include="VideoManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
-    <ClCompile Include="DrawManager.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ScriptsManager.cpp" />
+    <ClCompile Include="manager\DrawManager.cpp" />
+    <ClCompile Include="manager\ScriptsManager.cpp" />
+    <ClCompile Include="manager\VideoManager.cpp" />
     <ClCompile Include="test.cpp" />
-    <ClCompile Include="VideoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="HullShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

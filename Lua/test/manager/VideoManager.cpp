@@ -4,7 +4,7 @@
 #include <d3d11.h>
 #include <D3Dcompiler.h>
 #include <stdio.h>
-#include "config.h"
+#include "..\config.h"
 #include "DrawManager.h"
 //#include "d3dx11effect.h"
 

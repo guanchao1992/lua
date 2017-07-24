@@ -18,7 +18,7 @@
 #include "resource.h"
 #include "GameApp.h"
 #include <tchar.h>
-#include "VideoManager.h"
+#include "manager\VideoManager.h"
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 #include <time.h>
 

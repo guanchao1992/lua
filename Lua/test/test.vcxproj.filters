@@ -16,12 +16,12 @@
     <Filter Include="base">
       <UniqueIdentifier>{f12db539-522a-400b-9503-7e1c1ec51c1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="manager">
+      <UniqueIdentifier>{0a5afff3-c9bb-4d22-8c57-b0587a5f028b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptsManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test.cpp">
@@ -33,30 +33,27 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="VideoManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="base\Singleton.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="config.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DrawManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="manager\ScriptsManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\VideoManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\DrawManager.cpp">
+      <Filter>manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptsManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="GameApp.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="VideoManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="base\lua_get.h">
@@ -74,9 +71,6 @@
     <ClInclude Include="ClassToLua.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DrawManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="resource1.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -89,15 +83,19 @@
     <ClInclude Include="base\Position2D.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="manager\ScriptsManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\VideoManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\DrawManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="HullShader.hlsl">
-      <Filter>资源文件</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>
