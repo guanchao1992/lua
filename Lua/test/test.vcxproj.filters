@@ -48,6 +48,9 @@
     <ClCompile Include="manager\DrawManager.cpp">
       <Filter>manager</Filter>
     </ClCompile>
+    <ClCompile Include="manager\EventManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -90,6 +93,9 @@
       <Filter>manager</Filter>
     </ClInclude>
     <ClInclude Include="manager\DrawManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\EventManager.h">
       <Filter>manager</Filter>
     </ClInclude>
   </ItemGroup>

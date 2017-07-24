@@ -21,6 +21,7 @@
 #include "manager\VideoManager.h"
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 #include <time.h>
+#include "manager\EventManager.h"
 
 using namespace DirectX;
 
@@ -63,6 +64,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
+		else if (EventManager::getInstance()->runEvent())
+		{
+			//nothing
 		}
 		else
 		{

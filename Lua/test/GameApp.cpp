@@ -5,6 +5,7 @@
 #include "ClassToLua.h"
 #include "manager\VideoManager.h"
 #include "manager\DrawManager.h"
+#include "manager\EventManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -43,6 +44,10 @@ HRESULT GameApp::Init(HWND hWnd)
 	regAllClass();
 
 	ScriptsManager::getInstance()->doFile("init.lua");
+
+	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
+	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
+	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
 }
 
 void GameApp::Close()
@@ -78,23 +83,22 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_KEYDOWN:
-	{
-		UINT controlKey = LOWORD(lParam);
-		UINT virtualKey = HIWORD(lParam);
-		if (wParam == VK_A)
-		{
-			VideoManager::getInstance()->setViewSize(Size(1000,800));
-		}
-	}
+		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyDown, wParam, LOWORD(lParam), HIWORD(lParam)));
+		break;
+	case WM_KEYUP:
+		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
 		break;
 	case WM_LBUTTONDOWN:
-	{
-		UINT x = LOWORD(lParam);
-		UINT y = HIWORD(lParam);
-		GetWindowRect(hWnd, &rect);
-		Position2D pos = pos2fPos(hWnd, lParam);
-		DrawManager::getInstance()->DrawOne(pos.getPositionX(),pos.getPositionY());
-	}
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseDown));
+		break;
+	case WM_LBUTTONUP:
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseUp));
+		break;
+	case WM_RBUTTONDOWN:
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseDown));
+		break;
+	case WM_RBUTTONUP:
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseUp));
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -102,6 +106,23 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-
 	return 0;
+}
+
+void GameApp::mouseEvent(const EventArgs*args)
+{
+	MouseEventArgs * e = (MouseEventArgs *)args;
+	if (e->mouseType == MouseEventArgs::LBMouseDown)
+	{
+		DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX(), e->viewPos.getPositionY());
+	}
+}
+
+void GameApp::keyEvent(const EventArgs*args)
+{
+	KeyEventArgs * e = (KeyEventArgs*)args;
+	if (e->key == VK_A)
+	{
+		VideoManager::getInstance()->setViewSize(Size(1000, 800));
+	}
 }

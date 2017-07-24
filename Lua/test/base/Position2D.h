@@ -55,11 +55,6 @@ public:
 		return m_y;
 	}
 
-	inline float getPositionZ() const
-	{
-		return m_z;
-	}
-
 	inline Position2D operator-() const
 	{
 		return Position2D(-this->m_x, -this->m_y);
@@ -90,6 +85,5 @@ public:
 private:
 	float m_x;
 	float m_y;
-	float m_z;
 };
 

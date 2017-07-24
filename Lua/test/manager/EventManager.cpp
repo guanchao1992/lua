@@ -1,43 +1,90 @@
-#include "ScriptsManager.h"
+#include "EventManager.h"
 #include "..\..\MyTool\tool_log.h"
 #include "..\config.h"
 #include "..\..\MyLua\ctolua.h"
 
-SingletonClaseCpp(ScriptsManager);
+SingletonClaseCpp(EventManager);
 
 
-ScriptsManager::ScriptsManager()
+EventManager::EventManager()
 {
 }
 
 
-ScriptsManager::~ScriptsManager()
+EventManager::~EventManager()
 {
 }
 
-void ScriptsManager::Init()
+void EventManager::Init()
 {
-	lua_State *L = luaL_newstate();
-	m_luaState = L;
-	luaL_openlibs(L);
-	lua_checkstack(L, 10);
-
-	std::string path = getAccuratePath("scripts\\");
-	setScriptsPath(path);
 
 }
 
-void ScriptsManager::setScriptsPath(const std::string& path)
+void EventManager::regEvent(EventType type, const std::string&name, const EventFunc& function, int order)
 {
-	m_rootPath = path;
-}
+	clearEvent(type, name);
+	Events&evs = m_mapEvent[type];
+	Event newEv;
+	newEv.type = type;
+	newEv.name = name;
+	newEv.func = function;
+	newEv.order = order;
+	bool mark = false;
 
-void ScriptsManager::doFile(const std::string&file)
-{
-	std::string filePath = m_rootPath + file;
-	int error = luaL_dofile(getLuaState(),filePath.c_str());
-	if (error != 0)
+	for (auto it = evs.begin(); it != evs.end(); ++it)
 	{
-		LOG_D_F("ScriptsManager","dofile '%s' error.errno %d.",filePath.c_str(),error);
+		if (it->order >= order)
+		{
+			evs.insert(it, newEv);
+			mark = true;
+		}
 	}
+	if (!mark)
+	{
+		evs.push_back(newEv);
+	}
+}
+
+void EventManager::clearEvent(EventType type, const std::string&name)
+{
+	if (m_mapEvent.find(type) == m_mapEvent.end())
+		return;
+	Events& evs = m_mapEvent[type];
+	for (auto it = evs.begin(); it != evs.end(); ++it)
+	{
+		if (it->name == name)
+		{
+			evs.erase(it);
+			break;
+		}
+	}
+}
+
+void EventManager::clearAllEvent()
+{
+	m_mapEvent.clear();
+}
+
+void EventManager::fireEvent(EventArgs*args)
+{
+	m_listFireEvent.push_back(args);
+}
+
+bool EventManager::runEvent()
+{
+	if (m_listFireEvent.size() == 0)
+	{
+		return false;
+	}
+	for (auto fireEv : m_listFireEvent)
+	{
+		Events&evs = m_mapEvent[fireEv->type];
+		for (auto ev : evs)
+		{
+			ev.func(fireEv);
+		}
+		delete fireEv;
+	}
+	m_listFireEvent.clear();
+	return true;
 }
