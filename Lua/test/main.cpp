@@ -64,32 +64,28 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			continue;
 		}
-		else if (EventManager::getInstance()->runEvent())
+		if (EventManager::getInstance()->runEvent())
 		{
-			//nothing
+			continue;
 		}
-		else
+		clock_t newtime = clock();
+		GameApp::getInstance()->Update();
+		//固定帧率
+		float interval = newtime - lasttime;
+		if (interval < intervaltime)
 		{
-			//clock();
-			clock_t newtime = clock();
-			GameApp::getInstance()->Render();
+			float tempInterval = intervaltime + offInter - interval;
+			clock_t tempIntervalDWORD = tempInterval;
+			offInter = tempInterval - tempIntervalDWORD;
+			Sleep(tempIntervalDWORD);
+		}
+		lasttime = newtime;
 
-			//固定帧率
-			float interval = newtime - lasttime;
-			if (interval < intervaltime)
-			{
-				float tempInterval = intervaltime + offInter - interval;
-				clock_t tempIntervalDWORD = tempInterval;
-				offInter = tempInterval - tempIntervalDWORD;
-				Sleep(tempIntervalDWORD);
-			}
-			lasttime = newtime;
-
-			if (newtime > 10000)
-			{
-				break;
-			}
+		if (newtime > 10000)
+		{
+			//break;
 		}
 	}
 	GameApp::getInstance()->Close();

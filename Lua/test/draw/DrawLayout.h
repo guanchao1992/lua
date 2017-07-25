@@ -1,13 +1,23 @@
 #pragma once
-
+#include "..\base\Node.h"
 
 class ID3D11InputLayout;
-class DrawLayout
+class ID3D11VertexShader;
+class ID3D11PixelShader;
+
+//尽量不要单独创建
+class DrawLayout :public Node
 {
-	friend class DrawManager;
+	STATIC_NODE_CREATE(DrawLayout);
 private:
 	DrawLayout();
 public:
 	~DrawLayout();
 public:
+	bool	init();
+
+	void	render();
+private:
+	ID3D11InputLayout*					m_pDrawVertexLayout;
+	int									m_order;
 };

@@ -7,6 +7,9 @@
 #include "VideoManager.h"
 #include "..\config.h"
 #include "..\draw\DrawLayout.h"
+#include "ObjectManager.h"
+#include "..\draw\DrawNode.h"
+#include "..\base\NodeList.h"
 
 using namespace DirectX;
 
@@ -21,73 +24,35 @@ DrawManager::DrawManager()
 	:m_pDrawVertexShader(nullptr)
 	, m_pDrawPixelShader(nullptr)
 	, m_pDrawGeometryShader(nullptr)
-	, m_pDrawVertexLayout(nullptr)
+	//, m_pDrawVertexLayout(nullptr)
 {
+	m_listVertexLayout = NodeList::create();
+	m_listVertexLayout->retain();
 }
 
 DrawManager::~DrawManager()
 {
+	m_listVertexLayout->release();
 }
 
 void DrawManager::Init()
 {
-	ID3DBlob* pVSBlob = NULL;
-	ID3DBlob* pErrorBlob = NULL;
-
-	HRESULT result = 0;
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\drawManager.fx").c_str(), NULL, NULL, "VS_Main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
+	ID3DBlob *pVSBlob1 = loadID3DBlob(getAccuratePathW(L"fx\\drawManager.fx").c_str(), Blob_VS_Main, Blob_VS_Target);
+	ID3DBlob *pVSBlob2 = loadID3DBlob(getAccuratePathW(L"fx\\drawManager.fx").c_str(), Blob_PS_Main, Blob_PS_Target);
+	
+	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob1->GetBufferPointer(), pVSBlob1->GetBufferSize(), NULL, &m_pDrawVertexShader);
 	if (FAILED(result))
 	{
-		if (pErrorBlob != 0)
-		{
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-			pErrorBlob->Release();
-		}
 		return;
 	}
-
-	// Define the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	UINT numElements = ARRAYSIZE(layout);
-
-	// Create the input layout
-	result = getD3DDevice()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &m_pDrawVertexLayout);
+	result = getD3DDevice()->CreatePixelShader(pVSBlob2->GetBufferPointer(), pVSBlob2->GetBufferSize(), NULL, &m_pDrawPixelShader);
 	if (FAILED(result))
 	{
 		return;
 	}
 
-	result = getD3DDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pDrawVertexShader);
-	if (FAILED(result))
-	{
-		return;
-	}
-
-	pVSBlob->Release();
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\drawManager.fx").c_str(), NULL, NULL, "PS_Main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
-	if (FAILED(result))
-	{
-		if (pErrorBlob != 0)
-		{
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-			pErrorBlob->Release();
-		}
-		return;
-	}
-
-	result = getD3DDevice()->CreatePixelShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pDrawPixelShader);
-	if (FAILED(result))
-	{
-		return;
-	}
-	pVSBlob->Release();
-
-
+	DrawLayout *dl = createLayout(0);
+	addLayout(dl);
 }
 
 void DrawManager::Cleanup()
@@ -98,69 +63,76 @@ void DrawManager::Cleanup()
 		m_pDrawPixelShader->Release();
 	if (m_pDrawGeometryShader)
 		m_pDrawGeometryShader->Release();
-	if (m_pDrawVertexLayout)
-		m_pDrawVertexLayout->Release();
 }
 
+ID3DBlob* DrawManager::loadID3DBlob(const wchar_t*fxFile, const char*entryPoint, const char*target)
+{
+	ID3DBlob* pBlob = NULL;
+	ID3DBlob* pErrorBlob = NULL;
+
+	HRESULT result = 0;
+	result = D3DCompileFromFile(fxFile, NULL, NULL, entryPoint, target, D3DCOMPILE_DEBUG | D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pBlob, &pErrorBlob);
+	if (FAILED(result))
+	{
+		if (pErrorBlob != 0)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+		}
+		assert(1);
+		return nullptr;
+	}
+
+	m_mapID3DBlob[entryPoint] = pBlob;
+	return pBlob;
+}
+
+ID3DBlob* DrawManager::getID3DBlob(const char*entryPoint)
+{
+	if (m_mapID3DBlob.find(entryPoint) == m_mapID3DBlob.end())
+	{
+		return nullptr;
+	}
+	return m_mapID3DBlob[entryPoint];
+}
 
 void DrawManager::DrawOne(float x,float y)
 {
-	const Size& viewSize = VideoManager::getInstance()->getViewSize();
-	float fx = 50.f / viewSize.getWidth();
-	float fy = 50.f / viewSize.getHeight();
-	SimpleVertex vertices[] =
+	DrawLayout*layout = getLayout(0);
+	if (layout)
 	{
-		XMFLOAT4(fx + x, fy + y, 0.5f,0.3f),
-		XMFLOAT4(0.1f, 0.4f, 0.9f,0.3f),
-		XMFLOAT4(fx + x, -fy + y, 0.5f,0.5f),
-		XMFLOAT4(0.2f, 0.8f, 0.9f,0.3f),
-		XMFLOAT4(-fx + x, -fy + y, 0.5f,1.0f),
-		XMFLOAT4(0.5f, 0.1f, 0.9f,0.3f),
-
-		XMFLOAT4(fx + x, fy + y, 0.5f,0.1f),
-		XMFLOAT4(0.2f, 0.1f, 0.3f,0.3f),
-		XMFLOAT4(-fx + x, -fy + y, 0.5f,0.5f),
-		XMFLOAT4(0.5f, 0.9f, 0.1f,0.3f),
-		XMFLOAT4(-fx + x, fy + y, 0.5f,0.2f),
-		XMFLOAT4(0.1f, 0.1f, 0.9f,0.3f),
-	};
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 6;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_STREAM_OUTPUT;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-
-	ID3D11Buffer *pVertexBuffer = nullptr;
-	HRESULT result = getD3DDevice()->CreateBuffer(&bd, &InitData, &pVertexBuffer);
-	if (FAILED(result))
-	{
-		return;
+		DrawNode*dn = DrawNode::create();
+		layout->addChild(dn);
+		dn->DrawOne(x, y);
 	}
-	m_vecDrawBuffer.push_back(pVertexBuffer);
 }
 
 void DrawManager::RenderDraw()
 {
-	getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
+	//getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
 	getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
 	getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
 
-
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	for (auto it: m_vecDrawBuffer)
+	for (auto it : m_listVertexLayout->getListNode())
 	{
-		getD3DContext()->IASetVertexBuffers(0, 1, &it, &stride, &offset);
-		getD3DContext()->Draw(6, 0);
+		DrawLayout*layout = (DrawLayout*)it;
+		layout->render();
 	}
 }
 
-void DrawManager::addLayout(int order)
+DrawLayout* DrawManager::createLayout(int order)
 {
+	DrawLayout* layout = DrawLayout::create();
+	layout->setOrder(order);
+	return layout;
+}
 
+void DrawManager::addLayout(DrawLayout*layout)
+{
+	m_listVertexLayout->PushBack(layout);
+}
+
+DrawLayout* DrawManager::getLayout(int index)
+{
+	return dynamic_cast<DrawLayout*>(m_listVertexLayout->getNodeAtIndex(index));
 }

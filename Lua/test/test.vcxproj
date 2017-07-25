@@ -20,32 +20,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\lua_get.h" />
+    <ClInclude Include="base\Node.h" />
     <ClInclude Include="base\Position2D.h" />
     <ClInclude Include="base\Position3D.h" />
+    <ClInclude Include="base\Ref.h" />
+    <ClInclude Include="base\NodeList.h" />
     <ClInclude Include="base\Singleton.h" />
     <ClInclude Include="base\Size.h" />
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="draw\DrawLayout.h" />
+    <ClInclude Include="draw\DrawNode.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="manager\DrawManager.h" />
     <ClInclude Include="manager\EventManager.h" />
+    <ClInclude Include="manager\ObjectManager.h" />
     <ClInclude Include="manager\ScriptsManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
-    <ClInclude Include="resource2.h" />
     <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="base\Node.cpp" />
+    <ClCompile Include="base\Ref.cpp" />
+    <ClCompile Include="base\NodeList.cpp" />
     <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="draw\DrawLayout.cpp" />
+    <ClCompile Include="draw\DrawNode.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager\DrawManager.cpp" />
     <ClCompile Include="manager\EventManager.cpp" />
+    <ClCompile Include="manager\ObjectManager.cpp" />
     <ClCompile Include="manager\ScriptsManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
     <ClCompile Include="test.cpp" />

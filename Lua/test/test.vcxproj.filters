@@ -57,6 +57,21 @@
     <ClCompile Include="draw\DrawLayout.cpp">
       <Filter>draw</Filter>
     </ClCompile>
+    <ClCompile Include="base\Ref.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\ObjectManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="base\Node.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\NodeList.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\DrawNode.cpp">
+      <Filter>draw</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -78,9 +93,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClassToLua.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="resource1.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="base\Size.h">
@@ -107,8 +119,20 @@
     <ClInclude Include="draw\DrawLayout.h">
       <Filter>draw</Filter>
     </ClInclude>
-    <ClInclude Include="resource2.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="base\Ref.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\ObjectManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Node.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\NodeList.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\DrawNode.h">
+      <Filter>draw</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

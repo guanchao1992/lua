@@ -32,12 +32,10 @@ public:
 public:
 	HRESULT InitDevice(HWND hWnd);
 	void CleanupDevice();
-
-	void LoadContent();
 	struct shaderData *GetShaderByteCode(const char *compiledShader, SIZE_T &outlen);
 
-	void Render();
-	void RenderUI();
+	void ClearTargetView();
+	void Present();
 	
 	void setViewSize(Size size);
 	Size getViewSize();
@@ -46,11 +44,6 @@ private:
 	ID3D11DeviceContext*    m_pImmediateContext;
 	IDXGISwapChain*         m_pSwapChain;
 	ID3D11RenderTargetView* m_pRenderTargetView;
-	ID3D11VertexShader*		m_pVertexShader;
-	ID3D11PixelShader*		m_pPixelShader;
-
-	ID3D11Buffer*			m_pVertexBuffer;
-	ID3D11InputLayout*		m_pVertexLayout;
 
 	Size					m_viewSize;
 	HWND					m_hWnd;

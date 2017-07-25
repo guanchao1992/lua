@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "..\config.h"
 #include "DrawManager.h"
+#include <d3dcommon.h>
 //#include "d3dx11effect.h"
 
 using namespace DirectX;
@@ -32,10 +33,6 @@ VideoManager::VideoManager()
 	, m_pImmediateContext(nullptr)
 	, m_pSwapChain(nullptr)
 	, m_pRenderTargetView(nullptr)
-	, m_pVertexShader(nullptr)
-	, m_pPixelShader(nullptr)
-	, m_pVertexBuffer(nullptr)
-	, m_pVertexLayout(nullptr)
 	, m_viewSize(DEFAULT_VIEW_W, DEFAULT_VIEW_H)
 {
 }
@@ -173,104 +170,8 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
-	LoadContent();
-
 	return S_OK;
 }
-
-
-struct SimpleVertex
-{
-	XMFLOAT3 Pos;  // Position
-};
-
-void VideoManager::LoadContent()
-{
-	ID3DBlob* pVSBlob = NULL;
-	ID3DBlob* pErrorBlob = NULL;
-
-	HRESULT result = 0;
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "VS_Main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
-	if (FAILED(result))
-	{
-		if (pErrorBlob != 0)
-		{
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-			pErrorBlob->Release();
-		}
-		return;
-	}
-
-	// Define the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	UINT numElements = ARRAYSIZE(layout);
-
-	// Create the input layout
-	result = m_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &m_pVertexLayout);
-	if (FAILED(result)) 
-	{
-		return;
-	}
-	
-	result = m_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pVertexShader);
-	if (FAILED(result))
-	{
-		return;
-	}
-	pVSBlob->Release();
-
-
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "PS_Main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
-	if (FAILED(result))
-	{
-		if (pErrorBlob != 0)
-		{
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-			pErrorBlob->Release();
-		}
-		return;
-	}
-
-	result = m_pd3dDevice->CreatePixelShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_pPixelShader);
-	if (FAILED(result))
-	{
-		return;
-	}
-	pVSBlob->Release();
-
-	// Create vertex buffer
-	SimpleVertex vertices[] =
-	{
-		XMFLOAT3(0.7f, 0.7f, 0.5f),
-		XMFLOAT3(0.7f, 0.0f, 0.5f),
-		XMFLOAT3(0.0f, 0.7f, 0.5f),
-
-		XMFLOAT3(-0.7f, -0.7f, 0.5f),
-		XMFLOAT3(-0.7f, 0.0f, 0.5f),
-		XMFLOAT3(0.0f, -0.7f, 0.5f),
-	};
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 6;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-
-	result = m_pd3dDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer);
-	if (FAILED(result))
-	{
-		return;
-	}
-}
-
-
 
 //--------------------------------------------------------------------------------------
 // Clean up the objects we've created
@@ -286,29 +187,14 @@ void VideoManager::CleanupDevice()
 
 }
 
-//--------------------------------------------------------------------------------------
-// Render the frame
-//--------------------------------------------------------------------------------------
-void VideoManager::Render()
+void VideoManager::ClearTargetView()
 {
 	// Just clear the backbuffer
-//	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
+	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::White);
+}
 
-	//m_pImmediateContext->PSSetShaderResources(0, 1, &colorMap_);
-	//m_pImmediateContext->PSSetSamplers(0, 1, &colorMapSampler_);
-
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-
-	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
-	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
-	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
-
-	//m_pImmediateContext->Draw(6, 0);
-
+void VideoManager::Present()
+{
 	//ÂíÉÏÊä³ö
 	m_pSwapChain->Present(0, 0);
 }

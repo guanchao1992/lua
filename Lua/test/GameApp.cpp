@@ -6,6 +6,7 @@
 #include "manager\VideoManager.h"
 #include "manager\DrawManager.h"
 #include "manager\EventManager.h"
+#include "manager\ObjectManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -62,8 +63,15 @@ void GameApp::Close()
 
 void GameApp::Render()
 {
-	VideoManager::getInstance()->Render();
-	//DrawManager::getInstance()->RenderDraw();
+	VideoManager::getInstance()->ClearTargetView();
+	DrawManager::getInstance()->RenderDraw();
+	VideoManager::getInstance()->Present();
+}
+
+void GameApp::Update()
+{
+	ObjectManager::getInstance()->checkDelete();
+	Render();
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
