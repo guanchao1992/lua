@@ -16,5 +16,4 @@ public:
 	void checkDelete();
 private:
 	std::list<Ref*>			m_listRef;
-	std::list<Ref*>			m_listTempDeleteRef;
 };

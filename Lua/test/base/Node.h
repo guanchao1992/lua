@@ -8,7 +8,7 @@ class Node : public Ref
 protected:
 	Node();
 public:
-	~Node();
+	virtual ~Node();
 public:
 	STATIC_NODE_CREATE(Node);
 	bool		init() { return true; };

@@ -56,8 +56,10 @@ void GameApp::Close()
 	lua_close(GetLuaState());
 
 	DrawManager::getInstance()->Cleanup();
-	VideoManager::getInstance()->CleanupDevice();
 
+	//最后检查一次引用计数
+	ObjectManager::getInstance()->checkDelete();
+	VideoManager::getInstance()->CleanupDevice();
 	log_close();
 }
 
@@ -70,6 +72,8 @@ void GameApp::Render()
 
 void GameApp::Update()
 {
+	//DrawManager::getInstance()->DrawOne((rand() % 100 - 50) / 50.0f, (rand() % 100 - 50) / 50.0f);
+
 	ObjectManager::getInstance()->checkDelete();
 	Render();
 }
@@ -122,8 +126,10 @@ void GameApp::mouseEvent(const EventArgs*args)
 	MouseEventArgs * e = (MouseEventArgs *)args;
 	if (e->mouseType == MouseEventArgs::LBMouseDown)
 	{
-		DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX(), e->viewPos.getPositionY());
-		DrawManager::getInstance()->RenderDraw();
+		for (int i = 0; i < 10; i++)
+		{
+			DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX() + (rand() % 100 - 50) / 100.0f, e->viewPos.getPositionY() + (rand() % 100 - 50) / 100.0f);
+		}
 	}
 }
 

@@ -8,7 +8,7 @@ class NodeList : public Ref
 protected:
 	NodeList();
 public:
-	~NodeList();
+	virtual ~NodeList();
 public:
 	STATIC_NODE_CREATE(NodeList);
 	bool		init() { return true; };

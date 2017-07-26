@@ -12,7 +12,7 @@ class Ref
 protected:
 	Ref();
 public:
-	~Ref();
+	virtual ~Ref();
 public:
 	virtual void retain();
 	virtual void release();

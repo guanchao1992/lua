@@ -12,7 +12,7 @@ class DrawLayout :public Node
 private:
 	DrawLayout();
 public:
-	~DrawLayout();
+	virtual ~DrawLayout();
 public:
 	bool	init();
 

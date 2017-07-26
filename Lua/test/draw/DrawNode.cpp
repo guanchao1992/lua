@@ -24,14 +24,11 @@ DrawNode::DrawNode()
 
 DrawNode::~DrawNode()
 {
+	clear();
 }
 
 bool DrawNode::init()
 {
-	/*
-	DrawOne(0.3, 0.5);
-	DrawOne(0.1, 0.0);
-*/
 	return true;
 }
 
@@ -54,8 +51,8 @@ void DrawNode::render()
 void DrawNode::DrawOne(float x, float y)
 {
 	const Size& viewSize = VideoManager::getInstance()->getViewSize();
-	float fx = 50.f / viewSize.getWidth();
-	float fy = 50.f / viewSize.getHeight();
+	float fx = 1.f / viewSize.getWidth();
+	float fy = 1.f / viewSize.getHeight();
 	SimpleVertex vertices[] =
 	{
 		XMFLOAT4(fx + x, fy + y, 0.5f,0.3f),
@@ -92,3 +89,11 @@ void DrawNode::DrawOne(float x, float y)
 	m_vecDrawBuffer.push_back(pVertexBuffer);
 }
 
+void DrawNode::clear()
+{
+	for (auto it : m_vecDrawBuffer)
+	{
+		it->Release();
+	}
+	m_vecDrawBuffer.clear();
+}

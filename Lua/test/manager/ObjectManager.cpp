@@ -13,8 +13,6 @@ ObjectManager::~ObjectManager()
 {
 }
 
-
-
 void ObjectManager::autoRelease(Ref * ref)
 {
 	m_listRef.push_back(ref);
@@ -26,8 +24,7 @@ void ObjectManager::checkDelete()
 	{
 		if ((*it)->m_countReference == 1)
 		{
-			m_listTempDeleteRef.push_back(*it);
-			delete (*it);
+			(*it)->release();
 			it = m_listRef.erase(it);
 		}
 		else
@@ -35,11 +32,4 @@ void ObjectManager::checkDelete()
 			++it;
 		}
 	}
-	/*
-	for (auto it : m_listTempDeleteRef)
-	{
-		it->release();
-	}
-*/
-	m_listTempDeleteRef.clear();
 }

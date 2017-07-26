@@ -183,6 +183,17 @@ void VideoManager::CleanupDevice()
 	if (m_pRenderTargetView) m_pRenderTargetView->Release();
 	if (m_pSwapChain) m_pSwapChain->Release();
 	if (m_pImmediateContext) m_pImmediateContext->Release();
+
+#if defined(DEBUG) || defined(_DEBUG)  
+	ID3D11Debug *d3dDebug;
+	HRESULT hr = m_pd3dDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3dDebug));
+	if (SUCCEEDED(hr))
+	{
+		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+	}
+	if (d3dDebug != nullptr)            d3dDebug->Release();
+#endif  
+
 	if (m_pd3dDevice) m_pd3dDevice->Release();
 
 }

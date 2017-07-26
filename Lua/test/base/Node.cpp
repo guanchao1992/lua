@@ -16,6 +16,7 @@ Node::Node()
 
 Node::~Node()
 {
+	removeAllChild();
 	m_listChildren->release();
 }
 
@@ -29,7 +30,6 @@ void Node::addChild(Node*node, int order)
 	if (node)
 	{
 		node->setParent(this);
-		node->retain();
 		node->m_order = order;
 		m_listChildren->PushBack(node);
 	}

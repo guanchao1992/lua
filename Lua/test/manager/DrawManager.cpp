@@ -53,10 +53,12 @@ void DrawManager::Init()
 
 	DrawLayout *dl = createLayout(0);
 	addLayout(dl);
+	dl->addChild(DrawNode::create());
 }
 
 void DrawManager::Cleanup()
 {
+	m_listVertexLayout->Clear();
 	if(m_pDrawVertexShader)
 		m_pDrawVertexShader->Release();
 	if (m_pDrawPixelShader)
