@@ -21,3 +21,11 @@
 *.log
 *.filters
 *.idb
+/_run/Win32/Debug/test2d.exe
+/_run/Win32/Debug/MyTool.lib
+/_run/Win32/Debug/MyTool.dll
+/_run/Win32/Debug/MyLua.lib
+/_run/Win32/Debug/MyLua.dll
+/_run/Win32/Debug/Lua-5.3.4.lib
+/_run/Win32/Debug/log4cplusD.lib
+/_run/Win32/Debug/log4cplusD.dll
