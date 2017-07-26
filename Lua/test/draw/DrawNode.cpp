@@ -6,6 +6,7 @@
 #include <directxcolors.h>
 #include "..\base\Size.h"
 #include "..\manager\VideoManager.h"
+#include "..\base\NodeList.h"
 
 using namespace DirectX;
 
@@ -43,6 +44,10 @@ void DrawNode::render()
 	{
 		getD3DContext()->IASetVertexBuffers(0, 1, &it, &stride, &offset);
 		getD3DContext()->Draw(6, 0);
+	}
+	for (Node* it : getChildren()->getListNode())
+	{
+		it->render();
 	}
 }
 
