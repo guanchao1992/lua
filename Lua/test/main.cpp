@@ -22,6 +22,7 @@
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 #include <time.h>
 #include "manager\EventManager.h"
+#include "manager\GameTime.h"
 
 using namespace DirectX;
 
@@ -54,8 +55,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 
 	// Main message loop
-	clock_t lasttime = clock();
-	float intervaltime = 1000.f / 30;
+	DWORD lasttime = timeGetTime();
+	GameTime::getInstance()->setGameStartTime(lasttime / 1000.f);
+	GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
+	int numFPS = 60;
+	float intervaltime = 1000.f / 60;
 	float offInter = 0;
 	MSG msg = { 0 };
 	while (WM_QUIT != msg.message)
@@ -66,20 +70,20 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 			DispatchMessage(&msg);
 			continue;
 		}
-		if (EventManager::getInstance()->runEvent())
-		{
-			continue;
-		}
-		clock_t newtime = clock();
-		GameApp::getInstance()->Update();
-		//固定帧率
-		float interval = newtime - lasttime;
-		if (interval < intervaltime)
+		EventManager::getInstance()->runEvent();
+
+		DWORD newtime = timeGetTime();
+		float interval = newtime - lasttime;	//执行上面的代码所耗费时间
+
+		//if (interval < intervaltime)
+		
+		int temp = interval * numFPS;
+		if (temp < 1000)
 		{
 			float tempInterval = intervaltime + offInter - interval;
-			clock_t tempIntervalDWORD = tempInterval;
+			DWORD tempIntervalDWORD = tempInterval;
 			offInter = tempInterval - tempIntervalDWORD;
-			Sleep(tempIntervalDWORD);
+			Sleep(tempIntervalDWORD * 2);
 		}
 		lasttime = newtime;
 
@@ -87,6 +91,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		{
 			//break;
 		}
+		GameApp::getInstance()->Render();
+
+		GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
 	}
 	GameApp::getInstance()->Close();
 	return (int)msg.wParam;

@@ -219,8 +219,6 @@ void VideoManager::setViewSize(Size size)
 	}
 	SetWindowPos(m_hWnd, NULL, 0, 0, size.getWidth(), size.getHeight(), SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOREDRAW);
 	m_viewSize = size;
-
-	GameApp::getInstance()->Update();
 }
 
 Size VideoManager::getViewSize()

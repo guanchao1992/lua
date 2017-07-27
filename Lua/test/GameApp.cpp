@@ -7,6 +7,7 @@
 #include "manager\DrawManager.h"
 #include "manager\EventManager.h"
 #include "manager\ObjectManager.h"
+#include "manager\GameTime.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -50,6 +51,11 @@ HRESULT GameApp::Init(HWND hWnd)
 	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
+
+
+	GameTime::getInstance()->addTimer(0, 1.0f, [](float t) {
+		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
+	});
 }
 
 void GameApp::Close()
@@ -71,12 +77,18 @@ void GameApp::Render()
 	VideoManager::getInstance()->Present();
 }
 
-void GameApp::Update()
-{
-	//DrawManager::getInstance()->DrawOne((rand() % 100 - 50) / 50.0f, (rand() % 100 - 50) / 50.0f);
+static int rectnum = 0;
+static int maxnum = 100;
 
+static int nfps = 0;
+static int ifps = 0;
+static clock_t t0 = 0;
+static clock_t t1 = 0;
+static clock_t t2 = 0;
+
+void GameApp::Update(float t)
+{
 	ObjectManager::getInstance()->checkDelete();
-	Render();
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -137,5 +149,9 @@ void GameApp::keyEvent(const EventArgs*args)
 	if (e->key == VK_A)
 	{
 		VideoManager::getInstance()->setViewSize(Size(1000, 800));
+	}
+	else if(e->key == VK_1)
+	{
+		maxnum += 100;
 	}
 }

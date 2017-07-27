@@ -36,9 +36,9 @@ extern "C" DLL_SAMPLE_API void log_error_f(const char*loop, const char*format, .
 extern "C" DLL_SAMPLE_API void log_fatal_f(const char*loop, const char*format, ...);
 
 
-#define LOG_D(STR);				log_debug(STR);
-#define LOG_W(STR);				log_warn(STR);
-#define LOG_E(STR);				log_error(STR);
+#define LOG_D(FORMAT,...);				log_debug(FORMAT,__VA_ARGS__);
+#define LOG_W(FORMAT,...);				log_warn(FORMAT,__VA_ARGS__);
+#define LOG_E(FORMAT,...);				log_error(FORMAT,__VA_ARGS__);
 
 #define LOG_D_F(LOOP,FORMAT,...); 		log_debug_f(LOOP,FORMAT,__VA_ARGS__);
 #define LOG_I_F(LOOP,FORMAT,...); 		log_info_f(LOOP,FORMAT,__VA_ARGS__);

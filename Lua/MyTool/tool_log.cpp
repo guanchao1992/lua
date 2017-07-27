@@ -38,20 +38,30 @@ static unsigned int outbufnum = 0;
 
 extern "C" DLL_SAMPLE_API void log_debug(const char*format, ...)
 {
-	FORMAT_OUTBUF();
+	//FORMAT_OUTBUF();
+	va_list args;
+	int n;
+	++outbufnum;
+	char * outbuf = format_outbuf[outbufnum % 5];
+	va_start(args, format);
+	n = vsnprintf(outbuf, 1024, format, args);
+	va_end(args);
 	LogLog::getLogLog()->debug(outbuf);
+	OutputDebugStringA(outbuf);
 }
 
 extern "C" DLL_SAMPLE_API void log_warn(const char*format, ...)
 {
 	FORMAT_OUTBUF();
 	LogLog::getLogLog()->warn(outbuf);
+	OutputDebugStringA(outbuf);
 }
 
 extern "C" DLL_SAMPLE_API void log_error(const char*format, ...)
 {
 	FORMAT_OUTBUF();
 	LogLog::getLogLog()->error(outbuf);
+	OutputDebugStringA(outbuf);
 }
 
 extern "C" DLL_SAMPLE_API void log_debug_f(const char*loop, const char*format, ...)

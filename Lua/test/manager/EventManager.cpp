@@ -76,7 +76,11 @@ bool EventManager::runEvent()
 	{
 		return false;
 	}
-	for (auto fireEv : m_listFireEvent)
+	//将消息列表拷贝出来，防止出现消息死循环
+	std::list<EventArgs*> listFireEvent = m_listFireEvent;
+	m_listFireEvent.clear();
+
+	for (auto fireEv : listFireEvent)
 	{
 		Events&evs = m_mapEvent[fireEv->type];
 		for (auto ev : evs)
@@ -85,6 +89,6 @@ bool EventManager::runEvent()
 		}
 		delete fireEv;
 	}
-	m_listFireEvent.clear();
+	listFireEvent.clear();
 	return true;
 }

@@ -35,6 +35,7 @@
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="manager\DrawManager.h" />
     <ClInclude Include="manager\EventManager.h" />
+    <ClInclude Include="manager\GameTime.h" />
     <ClInclude Include="manager\ObjectManager.h" />
     <ClInclude Include="manager\ScriptsManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
@@ -54,6 +55,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager\DrawManager.cpp" />
     <ClCompile Include="manager\EventManager.cpp" />
+    <ClCompile Include="manager\GameTime.cpp" />
     <ClCompile Include="manager\ObjectManager.cpp" />
     <ClCompile Include="manager\ScriptsManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
