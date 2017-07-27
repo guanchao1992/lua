@@ -37,6 +37,14 @@ public:
 	void ClearTargetView();
 	void Present();
 	
+
+	//将d3d的坐标转换成view坐标
+	Position2D D3DtoViewPos(const Position2D&pos);
+	//将view坐标转换成d3d的坐标
+	Position2D ViewPostoD3D(const Position2D&pos);
+
+	//将window屏幕坐标转化成view坐标
+	Position2D mousetoViewPos(LONG lparam);
 	void setViewSize(Size size);
 	Size getViewSize();
 private:
@@ -48,3 +56,4 @@ private:
 	Size					m_viewSize;
 	HWND					m_hWnd;
 };
+

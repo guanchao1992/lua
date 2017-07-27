@@ -77,6 +77,11 @@ public:
 		return Position2D(this->m_x - pos.m_x, this->m_y - pos.m_y);
 	}
 
+	inline Position2D operator*(float f) const
+	{
+		return Position2D(this->m_x *f, this->m_y *f);
+	}
+
 	inline bool operator==(const Position2D& pos) const
 	{
 		return (this->m_x == pos.m_x && this->m_y == pos.m_y);

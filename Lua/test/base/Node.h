@@ -1,5 +1,6 @@
 #pragma once
 #include "Ref.h"
+#include "Position2D.h"
 
 
 class NodeList;
@@ -28,12 +29,24 @@ public:
 	virtual void		setOrder(int order);
 	virtual int			getOrder() { return m_order; };
 	virtual void		render() {};
+	virtual void		redraw() { m_bRedraw = false; };
+
+	virtual void				setPosition(const Position2D&position);
+	virtual const Position2D&	getPosition() { return m_positoin; };
+	virtual void				setScale(float scale);
+	virtual float				getScale() { return m_scale; };
+protected:
+	virtual Position2D			getSurePosition();
+	bool						isRedraw() { return m_bRedraw; };
 private:
-	void		setParent(Node*node) { m_parent = node; };
+	void				setParent(Node*node) { m_parent = node; };
 private:
 	NodeList*	m_listChildren;
 	Node*		m_parent;
 	int			m_tag;
 	int			m_order;
+	Position2D	m_positoin;
+	float		m_scale;
+	bool		m_bRedraw;
 };
 

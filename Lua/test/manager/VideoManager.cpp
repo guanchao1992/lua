@@ -7,6 +7,7 @@
 #include "..\config.h"
 #include "DrawManager.h"
 #include <d3dcommon.h>
+#include "..\GameApp.h"
 //#include "d3dx11effect.h"
 
 using namespace DirectX;
@@ -218,9 +219,26 @@ void VideoManager::setViewSize(Size size)
 	}
 	SetWindowPos(m_hWnd, NULL, 0, 0, size.getWidth(), size.getHeight(), SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOREDRAW);
 	m_viewSize = size;
+
+	GameApp::getInstance()->Update();
 }
 
 Size VideoManager::getViewSize()
 {
 	return m_viewSize;
+}
+
+Position2D VideoManager::D3DtoViewPos(const Position2D&pos)
+{
+	return Position2D((pos.getPositionX() + 1) / 2 * m_viewSize.getWidth(), (pos.getPositionY() + 1) / 2 * m_viewSize.getHeight());
+}
+
+Position2D VideoManager::ViewPostoD3D(const Position2D&pos)
+{
+	return Position2D(2 * pos.getPositionX() / m_viewSize.getWidth() - 1, 2 * pos.getPositionY() / m_viewSize.getHeight() - 1);
+}
+
+Position2D VideoManager::mousetoViewPos(LONG lparam)
+{
+	return Position2D(LOWORD(lparam), m_viewSize.getHeight() - HIWORD(lparam));
 }

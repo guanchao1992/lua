@@ -19,6 +19,7 @@ GameApp::~GameApp()
 {
 }
 
+
 int test_regFunc()
 {
 	LOG_D_F("main", "register ctolua function <testF>");
@@ -101,16 +102,16 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
 		break;
 	case WM_LBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseDown));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown));
 		break;
 	case WM_LBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseUp));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp));
 		break;
 	case WM_RBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseDown));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown));
 		break;
 	case WM_RBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseUp));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -126,10 +127,7 @@ void GameApp::mouseEvent(const EventArgs*args)
 	MouseEventArgs * e = (MouseEventArgs *)args;
 	if (e->mouseType == MouseEventArgs::LBMouseDown)
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX() + (rand() % 100 - 50) / 100.0f, e->viewPos.getPositionY() + (rand() % 100 - 50) / 100.0f);
-		}
+		DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX(), e->viewPos.getPositionY());
 	}
 }
 

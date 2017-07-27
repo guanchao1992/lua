@@ -76,5 +76,5 @@ std::string getAccuratePath(const char* file);
 std::wstring getAccuratePathW(const wchar_t* file);
 
 
-#define DEFAULT_VIEW_W 800
-#define DEFAULT_VIEW_H 600
+#define DEFAULT_VIEW_W 1024
+#define DEFAULT_VIEW_H 800

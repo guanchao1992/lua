@@ -9,6 +9,9 @@ Node::Node()
 	, m_listChildren(nullptr)
 	, m_tag(0)
 	, m_order(100000)
+	, m_positoin(0.0f, 0.0f)
+	, m_scale(1.0f)
+	, m_bRedraw(false)
 {
 	m_listChildren = NodeList::create();
 	m_listChildren->retain();
@@ -75,7 +78,6 @@ void Node::removeAllChild()
 	m_listChildren->Clear();
 }
 
-
 void Node::setOrder(int order)
 {
 	if (m_order != order)
@@ -83,4 +85,26 @@ void Node::setOrder(int order)
 		m_order = order;
 	}
 	m_listChildren->sortNodeByOrder();
+}
+
+void Node::setPosition(const Position2D&position)
+{
+	m_positoin = position;
+	m_bRedraw = true;
+};
+
+void Node::setScale(float scale)
+{
+	m_scale = scale;
+	m_bRedraw = true;
+}
+
+Position2D Node::getSurePosition()
+{
+	Position2D pos = m_positoin;
+	if (getParent() != 0)
+	{
+		pos = pos + getParent()->getSurePosition();
+	}
+	return pos;
 }

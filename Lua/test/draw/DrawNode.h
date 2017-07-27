@@ -1,8 +1,49 @@
 #pragma once
 #include "..\base\Node.h"
 #include <vector>
+#include "..\base\Rect2D.h"
+#include <d3d11.h>
+#include <DirectXMath.h>
+using namespace DirectX;
 
-class ID3D11Buffer;
+struct DrawNodeSimpleVertex
+{
+	XMFLOAT4 Pos;  // Position
+	XMFLOAT4 Color;  // Color
+};
+
+struct DrawBuffer
+{
+	DrawBuffer()
+		: m_d3dBuffer(nullptr)
+		, m_OriginalVertex(nullptr)
+		, m_vertexSize(0)
+		, m_Usage(D3D11_USAGE_DEFAULT)
+		, m_BindFlags(D3D11_BIND_VERTEX_BUFFER)
+		, m_primitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP)
+	{}
+	~DrawBuffer()
+	{
+		if (m_d3dBuffer)
+		{
+			m_d3dBuffer->Release();
+			m_d3dBuffer = nullptr;
+		}
+		if (m_OriginalVertex)
+		{
+			delete[] m_OriginalVertex;
+			m_OriginalVertex = nullptr;
+		}
+	}
+	ID3D11Buffer*				m_d3dBuffer;	
+	DrawNodeSimpleVertex*		m_OriginalVertex;		//保存最初的定点集合
+	DrawNodeSimpleVertex*		m_nowlVertex;		
+	UINT						m_vertexSize;
+	D3D11_USAGE					m_Usage;
+	UINT						m_BindFlags;
+	D3D11_PRIMITIVE_TOPOLOGY	m_primitiveTopology;	
+};
+
 class DrawNode :public Node
 {
 	STATIC_NODE_CREATE(DrawNode);
@@ -12,9 +53,15 @@ public:
 	virtual	~DrawNode();
 public:
 	bool	init();
-	virtual void render() ;
+	virtual void render();
+	virtual void redraw();
 	void	DrawOne(float x, float y);
+	void	DrawRect(const Rect2D&rect);
 	void	clear();
+
 private:
-	std::vector<ID3D11Buffer*>		m_vecDrawBuffer;
+	bool	createBuffer(const DrawNodeSimpleVertex*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
+	void	updateBuffer();
+private:
+	std::vector<DrawBuffer*>		m_vecBuffer;
 };

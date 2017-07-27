@@ -23,6 +23,7 @@
     <ClInclude Include="base\Node.h" />
     <ClInclude Include="base\Position2D.h" />
     <ClInclude Include="base\Position3D.h" />
+    <ClInclude Include="base\Rect2D.h" />
     <ClInclude Include="base\Ref.h" />
     <ClInclude Include="base\NodeList.h" />
     <ClInclude Include="base\Singleton.h" />

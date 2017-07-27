@@ -134,5 +134,8 @@
     <ClInclude Include="draw\DrawNode.h">
       <Filter>draw</Filter>
     </ClInclude>
+    <ClInclude Include="base\Rect2D.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
