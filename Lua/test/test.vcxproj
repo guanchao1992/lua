@@ -32,6 +32,8 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="draw\DrawLayout.h" />
     <ClInclude Include="draw\DrawNode.h" />
+    <ClInclude Include="draw\TextureNode.h" />
+    <ClInclude Include="dxconfig.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="manager\DrawManager.h" />
     <ClInclude Include="manager\EventManager.h" />
@@ -52,6 +54,7 @@
     <ClCompile Include="config.cpp" />
     <ClCompile Include="draw\DrawLayout.cpp" />
     <ClCompile Include="draw\DrawNode.cpp" />
+    <ClCompile Include="draw\TextureNode.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager\DrawManager.cpp" />

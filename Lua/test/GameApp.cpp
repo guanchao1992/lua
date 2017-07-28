@@ -54,9 +54,11 @@ HRESULT GameApp::Init(HWND hWnd)
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
 
 
+	/*
 	GameTime::getInstance()->addTimer(0, 1.0f, [](float t) {
 		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
 	});
+*/
 }
 
 void GameApp::Close()

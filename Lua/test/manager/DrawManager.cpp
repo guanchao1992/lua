@@ -13,11 +13,6 @@
 
 using namespace DirectX;
 
-struct SimpleVertex
-{
-	XMFLOAT4 Pos;  // Position
-	XMFLOAT4 Color;  // Color
-};
 
 SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
@@ -37,15 +32,34 @@ DrawManager::~DrawManager()
 
 void DrawManager::Init()
 {
-	ID3DBlob *pVSBlob1 = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Main, Blob_VS_Target);
-	ID3DBlob *pVSBlob2 = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Main, Blob_PS_Target);
-	
-	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob1->GetBufferPointer(), pVSBlob1->GetBufferSize(), NULL, &m_pDrawVertexShader);
+	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Normal, Blob_VS_Target);
+	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Normal, Blob_PS_Target);
+	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Texture, Blob_VS_Target);
+	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Texture, Blob_PS_Target);
+
+	ID3DBlob *pVSBlob_Normal = getID3DBlob(Blob_VS_Normal);
+	ID3DBlob *pPSBlob_Normal = getID3DBlob(Blob_PS_Normal);
+
+	ID3DBlob *pVSBlob_Texture = getID3DBlob(Blob_VS_Normal);
+	ID3DBlob *pPSBlob_Texture = getID3DBlob(Blob_PS_Normal);
+
+	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob_Normal->GetBufferPointer(), pVSBlob_Normal->GetBufferSize(), NULL, &m_pNormalVertexShader);
 	if (FAILED(result))
 	{
 		return;
 	}
-	result = getD3DDevice()->CreatePixelShader(pVSBlob2->GetBufferPointer(), pVSBlob2->GetBufferSize(), NULL, &m_pDrawPixelShader);
+	result = getD3DDevice()->CreatePixelShader(pPSBlob_Normal->GetBufferPointer(), pPSBlob_Normal->GetBufferSize(), NULL, &m_pNormalPixelShader);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob_Texture->GetBufferPointer(), pVSBlob_Texture->GetBufferSize(), NULL, &m_pTextureVertexShader);
+	if (FAILED(result))
+	{
+		return;
+	}
+	result = getD3DDevice()->CreatePixelShader(pPSBlob_Texture->GetBufferPointer(), pPSBlob_Texture->GetBufferSize(), NULL, &m_pTexturePixelShader);
 	if (FAILED(result))
 	{
 		return;
@@ -53,16 +67,21 @@ void DrawManager::Init()
 
 	DrawLayout *dl = createLayout(0);
 	addLayout(dl);
-	dl->addChild(DrawNode::create());
+	//dl->addChild(DrawNode::create());
 }
 
 void DrawManager::Cleanup()
 {
 	m_listVertexLayout->Clear();
-	if(m_pDrawVertexShader)
-		m_pDrawVertexShader->Release();
-	if (m_pDrawPixelShader)
-		m_pDrawPixelShader->Release();
+	if(m_pNormalVertexShader)
+		m_pNormalVertexShader->Release();
+	if (m_pNormalPixelShader)
+		m_pNormalPixelShader->Release();
+	if(m_pTextureVertexShader)
+		m_pTextureVertexShader->Release();
+	if (m_pTexturePixelShader)
+		m_pTexturePixelShader->Release();
+
 	if (m_pDrawGeometryShader)
 		m_pDrawGeometryShader->Release();
 }
@@ -111,11 +130,28 @@ void DrawManager::DrawOne(float x,float y)
 	}
 }
 
+void DrawManager::setShaderType(ShaderType type)
+{
+	switch (type)
+	{
+	case Shader_Normal:
+		getD3DContext()->VSSetShader(m_pNormalVertexShader, NULL, 0);
+		getD3DContext()->PSSetShader(m_pNormalPixelShader, NULL, 0);
+		break;
+	case Shader_Texture:
+		getD3DContext()->VSSetShader(m_pTextureVertexShader, NULL, 0);
+		getD3DContext()->PSSetShader(m_pTexturePixelShader, NULL, 0);
+		break;
+	default:
+		break;
+	}
+}
+
 void DrawManager::RenderDraw()
 {
 	//getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
-	getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
-	getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
+	//getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
+	//getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
 
 	for (auto it : m_listVertexLayout->getListNode())
 	{

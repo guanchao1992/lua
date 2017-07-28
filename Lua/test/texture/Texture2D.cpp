@@ -90,6 +90,7 @@ bool Texture2D::test()
 		return false;
 	}
 	*/
+	/*
 	D3D11_VIEWPORT viewport;
 	viewport.Width = static_cast<float>(VideoManager::getInstance()->getViewSize().getWidth());
 	viewport.Height = static_cast<float>(VideoManager::getInstance()->getViewSize().getHeight());
@@ -98,6 +99,7 @@ bool Texture2D::test()
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	getD3DContext()->RSSetViewports(1, &viewport);
+*/
 
 
 	//D3DX11_IMAGE_LOAD_INFO imageinfo;

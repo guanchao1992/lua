@@ -81,6 +81,9 @@
     <ClCompile Include="texture\Texture2D.cpp">
       <Filter>texture</Filter>
     </ClCompile>
+    <ClCompile Include="draw\TextureNode.cpp">
+      <Filter>draw</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -151,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="texture\Texture2D.h">
       <Filter>texture</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\TextureNode.h">
+      <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="dxconfig.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,11 +2,15 @@
 #include "..\base\Node.h"
 #include <vector>
 #include "..\base\Rect2D.h"
+#include <d3d11.h>
+#include <DirectXMath.h>
 #include "..\dxconfig.h"
 
-struct DrawBuffer
+using namespace DirectX;
+
+struct TextureBuffer
 {
-	DrawBuffer()
+	TextureBuffer()
 		: m_d3dBuffer(nullptr)
 		, m_OriginalVertex(nullptr)
 		, m_vertexSize(0)
@@ -14,7 +18,7 @@ struct DrawBuffer
 		, m_BindFlags(D3D11_BIND_VERTEX_BUFFER)
 		, m_primitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP)
 	{}
-	~DrawBuffer()
+	~TextureBuffer()
 	{
 		if (m_d3dBuffer)
 		{
@@ -28,21 +32,21 @@ struct DrawBuffer
 		}
 	}
 	ID3D11Buffer*				m_d3dBuffer;	
-	SimpleVertexNormal*		m_OriginalVertex;		//保存最初的定点集合
-	SimpleVertexNormal*		m_nowlVertex;
+	SimpleVertexTexture*		m_OriginalVertex;		//保存最初的定点集合
+	SimpleVertexTexture*		m_nowlVertex;		
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
 	UINT						m_BindFlags;
 	D3D11_PRIMITIVE_TOPOLOGY	m_primitiveTopology;	
 };
 
-class DrawNode :public Node
+class TextureNode :public Node
 {
-	STATIC_NODE_CREATE(DrawNode);
+	STATIC_NODE_CREATE(TextureNode);
 private:
-	DrawNode();
+	TextureNode();
 public:
-	virtual	~DrawNode();
+	virtual	~TextureNode();
 public:
 	bool	init();
 	virtual void render();
@@ -51,8 +55,11 @@ public:
 	void	clear();
 
 private:
-	bool	createBuffer(const SimpleVertexNormal*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
+	bool	createBuffer(const SimpleVertexTexture*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
 	void	updateBuffer();
 private:
-	std::vector<DrawBuffer*>		m_vecBuffer;
+	std::vector<TextureBuffer*>		m_vecBuffer;
+
+	ID3D11SamplerState * colorMapSampler_;
+	ID3D11ShaderResourceView* colorMap_;
 };

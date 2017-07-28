@@ -5,12 +5,6 @@
 #include <map>
 #include <d3dcommon.h>
 
-#define Blob_VS_Main "VS_Main"
-#define Blob_PS_Main "PS_Main"
-
-#define Blob_VS_Target "vs_5_0"
-#define Blob_PS_Target "ps_5_0"
-
 
 class ID3D11DeviceContext;
 class ID3D11VertexShader;
@@ -33,6 +27,8 @@ public:
 	ID3DBlob* loadID3DBlob(const char*fxFile, const char*entryPoint, const char*target);//使用entryPoint作为唯一标识
 	ID3DBlob* getID3DBlob(const char*entryPoint);
 
+	void setShaderType(ShaderType type);
+
 	void DrawOne(float x,float y);
 
 	DrawLayout* createLayout(int order);
@@ -44,8 +40,11 @@ private:
 	NodeList*							m_listVertexLayout;
 	std::map<const char*, ID3DBlob*>	m_mapID3DBlob;
 
-	ID3D11VertexShader*					m_pDrawVertexShader;
-	ID3D11PixelShader*					m_pDrawPixelShader;
+	ID3D11VertexShader*					m_pNormalVertexShader;
+	ID3D11PixelShader*					m_pNormalPixelShader;
+	ID3D11VertexShader*					m_pTextureVertexShader;
+	ID3D11PixelShader*					m_pTexturePixelShader;
+
 	ID3D11GeometryShader*				m_pDrawGeometryShader;
 	//ID3D11InputLayout*					m_pDrawVertexLayout;
 };
