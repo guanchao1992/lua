@@ -22,6 +22,9 @@
     <Filter Include="draw">
       <UniqueIdentifier>{3024a1d9-ea7e-450f-ae8f-007852a7465a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="texture">
+      <UniqueIdentifier>{1aa506c4-5951-42ee-8c27-9649c055f9dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="manager\GameTime.cpp">
       <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="texture\Texture2D.cpp">
+      <Filter>texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="manager\GameTime.h">
       <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="texture\Texture2D.h">
+      <Filter>texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

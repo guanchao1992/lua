@@ -30,7 +30,7 @@ public:
 	
 	void Init();
 	void Cleanup();
-	ID3DBlob* loadID3DBlob(const wchar_t*fxFile, const char*entryPoint, const char*target);//使用entryPoint作为唯一标识
+	ID3DBlob* loadID3DBlob(const char*fxFile, const char*entryPoint, const char*target);//使用entryPoint作为唯一标识
 	ID3DBlob* getID3DBlob(const char*entryPoint);
 
 	void DrawOne(float x,float y);

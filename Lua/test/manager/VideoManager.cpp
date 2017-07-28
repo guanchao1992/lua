@@ -19,14 +19,19 @@ D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 SingletonClaseCpp(VideoManager);
 
-ID3D11Device*getD3DDevice()
+ID3D11Device*			getD3DDevice()
 {
 	return VideoManager::getInstance()->m_pd3dDevice;
 }
 
-ID3D11DeviceContext*getD3DContext()
+ID3D11DeviceContext*	getD3DContext()
 {
 	return VideoManager::getInstance()->m_pImmediateContext;
+}
+
+IDXGISwapChain*			getSwapChain()
+{
+	return VideoManager::getInstance()->m_pSwapChain;
 }
 
 VideoManager::VideoManager()
@@ -75,7 +80,6 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
-		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0,

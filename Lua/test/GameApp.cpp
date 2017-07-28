@@ -8,6 +8,7 @@
 #include "manager\EventManager.h"
 #include "manager\ObjectManager.h"
 #include "manager\GameTime.h"
+#include "texture\Texture2D.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -146,12 +147,20 @@ void GameApp::mouseEvent(const EventArgs*args)
 void GameApp::keyEvent(const EventArgs*args)
 {
 	KeyEventArgs * e = (KeyEventArgs*)args;
-	if (e->key == VK_A)
+	if (e->keyType == KeyEventArgs::KeyDown)
 	{
-		VideoManager::getInstance()->setViewSize(Size(1000, 800));
-	}
-	else if(e->key == VK_1)
-	{
-		maxnum += 100;
+		if (e->key == VK_A)
+		{
+			VideoManager::getInstance()->setViewSize(Size(1000, 800));
+		}
+		else if (e->key == VK_1)
+		{
+			maxnum += 100;
+		}
+		else if (e->key == VK_T)
+		{
+			Texture2D tx;
+			tx.test();
+		}
 	}
 }

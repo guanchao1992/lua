@@ -1,8 +1,4 @@
 #include "DrawManager.h"
-#include <d3dcommon.h>
-#include <d3dcompiler.h>
-#include <d3d11.h>
-#include <directxcolors.h>
 #include <windows.h>
 #include "VideoManager.h"
 #include "..\config.h"
@@ -10,6 +6,10 @@
 #include "ObjectManager.h"
 #include "..\draw\DrawNode.h"
 #include "..\base\NodeList.h"
+
+#include <D3DX11.h>
+#include <d3dx10async.h>
+#include <D3Dcompiler.h>
 
 using namespace DirectX;
 
@@ -37,8 +37,8 @@ DrawManager::~DrawManager()
 
 void DrawManager::Init()
 {
-	ID3DBlob *pVSBlob1 = loadID3DBlob(getAccuratePathW(L"fx\\drawManager.fx").c_str(), Blob_VS_Main, Blob_VS_Target);
-	ID3DBlob *pVSBlob2 = loadID3DBlob(getAccuratePathW(L"fx\\drawManager.fx").c_str(), Blob_PS_Main, Blob_PS_Target);
+	ID3DBlob *pVSBlob1 = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Main, Blob_VS_Target);
+	ID3DBlob *pVSBlob2 = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Main, Blob_PS_Target);
 	
 	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob1->GetBufferPointer(), pVSBlob1->GetBufferSize(), NULL, &m_pDrawVertexShader);
 	if (FAILED(result))
@@ -67,13 +67,15 @@ void DrawManager::Cleanup()
 		m_pDrawGeometryShader->Release();
 }
 
-ID3DBlob* DrawManager::loadID3DBlob(const wchar_t*fxFile, const char*entryPoint, const char*target)
+ID3DBlob* DrawManager::loadID3DBlob(const char*fxFile, const char*entryPoint, const char*target)
 {
 	ID3DBlob* pBlob = NULL;
 	ID3DBlob* pErrorBlob = NULL;
 
 	HRESULT result = 0;
-	result = D3DCompileFromFile(fxFile, NULL, NULL, entryPoint, target, D3DCOMPILE_DEBUG | D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pBlob, &pErrorBlob);
+	//result = D3DCompileFromFile(fxFile, NULL, NULL, entryPoint, target, D3DCOMPILE_DEBUG | D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pBlob, &pErrorBlob);
+	result = D3DX11CompileFromFile(fxFile, NULL, NULL, entryPoint, target, D3DCOMPILE_DEBUG | D3DCOMPILE_ENABLE_STRICTNESS, NULL, NULL, &pBlob, &pErrorBlob, NULL);
+
 	if (FAILED(result))
 	{
 		if (pErrorBlob != 0)

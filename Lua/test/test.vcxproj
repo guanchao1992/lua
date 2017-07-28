@@ -41,6 +41,7 @@
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="test.h" />
+    <ClInclude Include="texture\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\Node.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="manager\ScriptsManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="texture\Texture2D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -116,8 +118,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(DXSDK_INCLUDE);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(DXSDK_LIB)$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
@@ -146,7 +148,7 @@
       </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>

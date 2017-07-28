@@ -20,11 +20,13 @@ class ID3D11InputLayout;
 
 ID3D11Device*			getD3DDevice();
 ID3D11DeviceContext*	getD3DContext();
+IDXGISwapChain*			getSwapChain();
 
 class VideoManager
 {
 	friend ID3D11Device* getD3DDevice();
 	friend ID3D11DeviceContext*	getD3DContext();
+	friend IDXGISwapChain* getSwapChain();
 	SingletonClase(VideoManager);
 public:
 	VideoManager();

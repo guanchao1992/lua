@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include "..\manager\VideoManager.h"
 #include "..\base\NodeList.h"
+#include <d3dcommon.h>
 
 DrawLayout::DrawLayout()
 	: m_pDrawVertexLayout(nullptr)
