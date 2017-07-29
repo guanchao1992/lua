@@ -10,8 +10,19 @@ using namespace DirectX;
 
 enum ShaderType
 {
+	Shader_Main,
 	Shader_Normal,
 	Shader_Texture,
+};
+
+
+#define Blob_VS_Main "VS_Main"
+#define Blob_PS_Main "PS_Main"
+struct SimpleVertexMain
+{
+	XMFLOAT4 Pos;  // Position
+	XMFLOAT4 Color;  // Color
+	XMFLOAT2 Tx0;  // Texture
 };
 
 #define Blob_VS_Normal "VS_Normal"

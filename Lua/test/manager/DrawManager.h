@@ -4,6 +4,7 @@
 #include <list>
 #include <map>
 #include <d3dcommon.h>
+#include "..\dxconfig.h"
 
 
 class ID3D11DeviceContext;
@@ -37,13 +38,10 @@ public:
 
 	void RenderDraw();
 private:
-	NodeList*							m_listVertexLayout;
-	std::map<const char*, ID3DBlob*>	m_mapID3DBlob;
-
-	ID3D11VertexShader*					m_pNormalVertexShader;
-	ID3D11PixelShader*					m_pNormalPixelShader;
-	ID3D11VertexShader*					m_pTextureVertexShader;
-	ID3D11PixelShader*					m_pTexturePixelShader;
+	NodeList*									m_listVertexLayout;
+	std::map<const char*, ID3DBlob*>			m_mapID3DBlob;
+	std::map<ShaderType, ID3D11VertexShader*>	m_mapVertexShader;
+	std::map<ShaderType, ID3D11PixelShader*>	m_mapPixelShader;
 
 	ID3D11GeometryShader*				m_pDrawGeometryShader;
 	//ID3D11InputLayout*					m_pDrawVertexLayout;

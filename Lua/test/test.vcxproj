@@ -121,8 +121,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(DXSDK_INCLUDE);$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(DXSDK_LIB)$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(DXSDK_DIR)lib\$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>

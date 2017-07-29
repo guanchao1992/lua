@@ -39,6 +39,7 @@ bool DrawLayout::init()
 
 	if (FAILED(result))
 	{
+		assert(1);
 		return false;
 	}
 

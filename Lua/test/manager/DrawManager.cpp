@@ -10,16 +10,15 @@
 #include <D3DX11.h>
 #include <d3dx10async.h>
 #include <D3Dcompiler.h>
+#include "..\..\MyTool\tool_log.h"
+#include <d3d11.h>
 
 using namespace DirectX;
 
 
 SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
-	:m_pDrawVertexShader(nullptr)
-	, m_pDrawPixelShader(nullptr)
-	, m_pDrawGeometryShader(nullptr)
-	//, m_pDrawVertexLayout(nullptr)
+	: m_pDrawGeometryShader(nullptr)
 {
 	m_listVertexLayout = NodeList::create();
 	m_listVertexLayout->retain();
@@ -32,37 +31,42 @@ DrawManager::~DrawManager()
 
 void DrawManager::Init()
 {
-	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Normal, Blob_VS_Target);
-	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Normal, Blob_PS_Target);
-	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_VS_Texture, Blob_VS_Target);
-	loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), Blob_PS_Texture, Blob_PS_Target);
-
-	ID3DBlob *pVSBlob_Normal = getID3DBlob(Blob_VS_Normal);
-	ID3DBlob *pPSBlob_Normal = getID3DBlob(Blob_PS_Normal);
-
-	ID3DBlob *pVSBlob_Texture = getID3DBlob(Blob_VS_Normal);
-	ID3DBlob *pPSBlob_Texture = getID3DBlob(Blob_PS_Normal);
-
-	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob_Normal->GetBufferPointer(), pVSBlob_Normal->GetBufferSize(), NULL, &m_pNormalVertexShader);
-	if (FAILED(result))
+	struct  ShaderS
 	{
-		return;
-	}
-	result = getD3DDevice()->CreatePixelShader(pPSBlob_Normal->GetBufferPointer(), pPSBlob_Normal->GetBufferSize(), NULL, &m_pNormalPixelShader);
-	if (FAILED(result))
+		ShaderType type;
+		const char* vsEntryPoint;
+		const char* psEntryPoint;
+	};
+	const ShaderS shader[] = {
+		Shader_Main, Blob_VS_Main ,Blob_PS_Main ,
+		Shader_Normal, Blob_VS_Normal ,Blob_PS_Normal ,
+		Shader_Texture, Blob_VS_Texture ,Blob_PS_Texture ,
+	};
+	for (int i = 0; i < sizeof(shader) / sizeof(*shader); ++i)
 	{
-		return;
-	}
+		ID3DBlob *pVSBlob = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), shader[i].vsEntryPoint, Blob_VS_Target);
+		ID3DBlob *pPSBlob = loadID3DBlob(getAccuratePath("fx\\drawManager.fx").c_str(), shader[i].psEntryPoint, Blob_PS_Target);
+		if (pVSBlob == nullptr || pPSBlob == nullptr)
+		{
+			LOG_E("CreateVertexShader failed.:pVSBlob or pPSBlob load failed.", );
+			assert(1);
+			return;
+		}
 
-	HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob_Texture->GetBufferPointer(), pVSBlob_Texture->GetBufferSize(), NULL, &m_pTextureVertexShader);
-	if (FAILED(result))
-	{
-		return;
-	}
-	result = getD3DDevice()->CreatePixelShader(pPSBlob_Texture->GetBufferPointer(), pPSBlob_Texture->GetBufferSize(), NULL, &m_pTexturePixelShader);
-	if (FAILED(result))
-	{
-		return;
+		HRESULT result = getD3DDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &m_mapVertexShader[shader[i].type]);
+		if (FAILED(result))
+		{
+			LOG_E("CreateVertexShader failed.:%s", shader[i].vsEntryPoint);
+			assert(1);
+			return;
+		}
+		result = getD3DDevice()->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &m_mapPixelShader[shader[i].type]);
+		if (FAILED(result))
+		{
+			LOG_E("CreateVertexShader failed.:%s", shader[i].psEntryPoint);
+			assert(1);
+			return;
+		}
 	}
 
 	DrawLayout *dl = createLayout(0);
@@ -73,14 +77,22 @@ void DrawManager::Init()
 void DrawManager::Cleanup()
 {
 	m_listVertexLayout->Clear();
-	if(m_pNormalVertexShader)
-		m_pNormalVertexShader->Release();
-	if (m_pNormalPixelShader)
-		m_pNormalPixelShader->Release();
-	if(m_pTextureVertexShader)
-		m_pTextureVertexShader->Release();
-	if (m_pTexturePixelShader)
-		m_pTexturePixelShader->Release();
+
+	for (auto it:m_mapID3DBlob)
+	{
+		it.second->Release();
+	}
+	m_mapID3DBlob.clear();
+	for (auto it : m_mapVertexShader)
+	{
+		it.second->Release();
+	}
+	m_mapVertexShader.clear();
+	for (auto it : m_mapPixelShader)
+	{
+		it.second->Release();
+	}
+	m_mapPixelShader.clear();
 
 	if (m_pDrawGeometryShader)
 		m_pDrawGeometryShader->Release();
@@ -132,18 +144,13 @@ void DrawManager::DrawOne(float x,float y)
 
 void DrawManager::setShaderType(ShaderType type)
 {
-	switch (type)
+	if (m_mapVertexShader.find(type) != m_mapVertexShader.end())
 	{
-	case Shader_Normal:
-		getD3DContext()->VSSetShader(m_pNormalVertexShader, NULL, 0);
-		getD3DContext()->PSSetShader(m_pNormalPixelShader, NULL, 0);
-		break;
-	case Shader_Texture:
-		getD3DContext()->VSSetShader(m_pTextureVertexShader, NULL, 0);
-		getD3DContext()->PSSetShader(m_pTexturePixelShader, NULL, 0);
-		break;
-	default:
-		break;
+		getD3DContext()->VSSetShader(m_mapVertexShader[type], NULL, 0);
+	}
+	if (m_mapPixelShader.find(type) != m_mapPixelShader.end())
+	{
+		getD3DContext()->PSSetShader(m_mapPixelShader[type], NULL, 0);
 	}
 }
 

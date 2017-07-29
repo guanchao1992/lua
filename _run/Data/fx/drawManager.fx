@@ -40,11 +40,35 @@ float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 #endif
 }
 
+void VS_Main(float4 pos : POSITION,
+	float4 color : COLOR,
+	float2 tx0 : TEXCOORD,
+	out float4 outPos : SV_POSITION,
+	out float4 outColor : COLOR,
+	float2 outTx0 : TEXCOORD)
+{
+	outPos = pos;
+	outColor = color;
+	outTx0 = tx0;
+}
+
+void PS_Main(float4 pos : POSITION,
+	float4 color : COLOR,
+	float2 tx0 : TEXCOORD,
+	out float4 outColor : SV_TARGET)
+{
+	float4 txColor = ColorTexture.Sample(ColorSampler, tx0);
+	//¼òµ¥µÄ»ìºÏ
+	outColor.x = color.x *0.5 + txColor.x*0.5;
+	outColor.y = color.y *0.5 + txColor.x*0.5;
+	outColor.z = color.z *0.5 + txColor.x*0.5;
+	outColor.w = color.w *0.5 + txColor.w*0.5;
+}
 
 void VS_Normal(float4 pos : POSITION,
 	float4 color : COLOR,
 	out float4 outPos : SV_POSITION,
-	out float4 outColor : COLOR,
+	out float4 outColor : COLOR)
 {
 	outPos = pos;
 	outColor = color;
