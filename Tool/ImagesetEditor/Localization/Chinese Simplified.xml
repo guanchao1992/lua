@@ -1,0 +1,116 @@
+<Language Name="Chinese Simplified">
+    <Control>
+        <ImagesListView>
+            <DropMenu>
+                <Item ID="01" Name="图片组"/>
+                <Item ID="02" Name="添加文件"/>
+                <Item ID="03" Name="新建分组"/>
+                <Item ID="04" Name="编辑分组"/>
+                <Item ID="05" Name="清空图片组"/>
+            </DropMenu>
+            <ContextMenu>
+                <Item ID="01" Name="全选"/>
+                <Item ID="02" Name="删除"/>
+                <Item ID="03" Name="排序"/>
+                <Item ID="04" Name="按名称顺序"/>
+                <Item ID="05" Name="按名称倒序"/>
+                <Item ID="06" Name="按尺寸顺序"/>
+                <Item ID="07" Name="按尺寸倒序"/>
+                <Item ID="08" Name="倒置"/>
+                <Item ID="09" Name="移至分组"/>
+            </ContextMenu>
+            <Item ID="01" Name="一共 #COUNT# 张图片"/>
+            <Item ID="02" Name="默认分组"/>
+        </ImagesListView>
+        <CanvasView>
+            <DropMenu>
+                <Item ID="01" Name="显示"/>
+                <Item ID="02" Name="始终显示图片边框"/>
+                <Item ID="03" Name="工作区颜色"/>
+            </DropMenu>
+            <ContextMenu>
+                <Item ID="01" Name="删除"/>
+                <Item ID="02" Name="对齐"/>
+                <Item ID="03" Name="水平左外侧对齐"/>
+                <Item ID="04" Name="水平左内侧对齐"/>
+                <Item ID="05" Name="水平右外侧对齐"/>
+                <Item ID="06" Name="水平右内侧对齐"/>
+                <Item ID="07" Name="垂直顶外侧对齐"/>
+                <Item ID="08" Name="垂直顶内侧对齐"/>
+                <Item ID="09" Name="垂直底外侧对齐"/>
+                <Item ID="10" Name="垂直底内侧对齐"/>
+            </ContextMenu>
+            <Item ID="01" Name="画布尺寸"/>
+            <Item ID="02" Name="名称"/>
+            <Item ID="03" Name="位置"/>
+            <Item ID="04" Name="尺寸"/>
+            <Item ID="05" Name="不可用"/>
+            <Item ID="06" Name="自动排版"/>
+            <Item ID="07" Name="水平数量限制"/>
+            <Item ID="08" Name="垂直数量限制"/>
+        </CanvasView>
+        <Messages>
+            <Item ID="del-caption" Name="删除"/>
+            <Item ID="del-all" Name="删除所有？"/>
+            <Item ID="del-delete-select" Name="确定从列表中删除所选的 #COUNT# 个图片？"/>
+            <Item ID="error-caption" Name="错误"/>
+            <Item ID="error-invalid-format" Name="无效的格式"/>
+            <Item ID="error-del-default-group" Name="你不能删除默认分组"/>
+        </Messages>
+    </Control>
+    <GroupEditForm>
+        <Item ID="01" Name="分组表达式"/>
+        <Item ID="02" Name="填写空白的内容即可删除当前组。
+              
+如果需要附加额外的数据，你可以这样填写分组表达式:
+
+GroupName:{&quot;key1&quot;,&quot;value1&quot;}{&quot;key2&quot;,&quot;value2&quot;}..."/>
+        <Item ID="03" Name="确定"/>
+        <Item ID="04" Name="取消"/>
+    </GroupEditForm>
+    <Forms>
+        <MainForm>
+            <Menu>
+                <File>
+                    <Item ID="01" Name="文件"/>
+                    <Item ID="02" Name="新建项目"/>
+                    <Item ID="03" Name="打开项目"/>
+                    <Item ID="04" Name="保存"/>
+                    <Item ID="05" Name="另存为"/>
+                    <Item ID="06" Name="导出"/>
+                    <Item ID="07" Name="最近的文件"/>
+                    <Item ID="08" Name="退出"/>
+                </File>
+                <Help>
+                    <Item ID="01" Name="帮助"/>
+                    <Item ID="02" Name="语言"/>
+                    <Item ID="03" Name="关于"/>
+                </Help>
+            </Menu>
+            <Messages>
+                <Item ID="new-project" Name="新建项目"/>
+                <Item ID="new-project-and-clear" Name="新建项目并且清空当前图片组?"/>
+                <Item ID="exported-to" Name="已导出至 #FILENAME#"/>
+                <Item ID="export-to-last-position" Name="导出至上一次的位置 #FILENAME#"/>
+                <Item ID="exported-to-last-position" Name="已导出至上一次的位置 #FILENAME#"/>
+                <Item ID="saved-to" Name="已保存至 #FILENAME#"/>
+                <Item ID="saved-error" Name="保存失败"/>
+                <Item ID="open-project" Name="打开项目"/>
+                <Item ID="open-version-mismatch" Name="项目格式版本不匹配，是否继续尝试打开？#N##N#要打开的项目版本: #OPEN-PROJECT-VER#, 由 #OPEN-PROJECT-CREATED-VER# 版本的编辑器创建。#N##N#当前支持的项目版本: #CURRENT-PROJECT-VER#"/>
+                <Item ID="open-image-failed" Name="一个或多个图片未能加载，将使用红色线框代替它们，他们可能被其他程序占用或者已经从原来的位置移除。"/>
+                <Item ID="open-project-failed" Name="项目 #FILENAME# 加载失败"/>
+                <Item ID="status-ready" Name="就绪"/>
+                <Item ID="change-language-caption" Name="更改语言"/>
+                <Item ID="change-language" Name="更改界面语言必须重新启动程序"/>
+                <Item ID="file-not-exist" Name="文件不存在"/>
+                <Item ID="file-modify-ask" Name="当前项目已经被修改，是否保存?"/>
+                <Item ID="close-project" Name="关闭项目"/>
+            </Messages>
+        </MainForm>
+        <AboutForm>
+            <Item ID="01" Name="关于"/>
+            <Item ID="02" Name="确定"/>
+            <Item ID="03" Name="访问项目页"/>
+        </AboutForm>
+    </Forms>
+</Language>

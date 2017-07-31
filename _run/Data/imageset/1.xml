@@ -1,0 +1,6 @@
+﻿<Imageset>
+  <Group Name="Default" />
+  <Image Name="1" XPos="-74" YPos="92" Width="600" Height="337" />
+  <Image Name="1" XPos="-88" YPos="-112" Width="512" Height="512" />
+  <Image Name="2" XPos="-88" YPos="-112" Width="396" Height="396" />
+</Imageset>

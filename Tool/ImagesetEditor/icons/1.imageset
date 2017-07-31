@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImagesetProject ProjectVersion="0.2.1" Version="0.2.5" Width="512" Height="512" RimView="True" Background="255,255,255" LastExportFile="" LastExportFilterIndex="0">
+  <Group Expression="Default" />
+  <Image Name="2" XPos="0" YPos="0" Width="396" Height="396" Source="$(ProjectDir)2.jpg" />
+  <Image Name="arrow_left" XPos="0" YPos="396" Width="16" Height="16" Source="$(ProjectDir)arrow_left.png" />
+  <Image Name="arrow_lower" XPos="16" YPos="396" Width="16" Height="16" Source="$(ProjectDir)arrow_lower.png" />
+  <Image Name="arrow_lower_left" XPos="32" YPos="396" Width="16" Height="16" Source="$(ProjectDir)arrow_lower_left.png" />
+  <Image Name="arrow_lower_right" XPos="48" YPos="396" Width="16" Height="16" Source="$(ProjectDir)arrow_lower_right.png" />
+  <Image Name="arrow_right" XPos="64" YPos="396" Width="16" Height="16" Source="$(ProjectDir)arrow_right.png" />
+  <Image Name="arrow_upper" XPos="0" YPos="412" Width="16" Height="16" Source="$(ProjectDir)arrow_upper.png" />
+  <Image Name="arrow_upper_left" XPos="16" YPos="412" Width="16" Height="16" Source="$(ProjectDir)arrow_upper_left.png" />
+  <Image Name="arrow_upper_right" XPos="32" YPos="412" Width="16" Height="16" Source="$(ProjectDir)arrow_upper_right.png" />
+</ImagesetProject>
