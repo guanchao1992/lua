@@ -32,8 +32,8 @@ struct TextureBuffer
 		}
 	}
 	ID3D11Buffer*				m_d3dBuffer;	
-	SimpleVertexTexture*		m_OriginalVertex;		//保存最初的定点集合
-	SimpleVertexTexture*		m_nowlVertex;		
+	SimpleVertexMain*		m_OriginalVertex;		//保存最初的定点集合
+	SimpleVertexMain*		m_nowlVertex;		
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
 	UINT						m_BindFlags;
@@ -55,7 +55,7 @@ public:
 	void	clear();
 
 private:
-	bool	createBuffer(const SimpleVertexTexture*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
+	bool	createBuffer(const SimpleVertexMain*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
 	void	updateBuffer();
 private:
 	std::vector<TextureBuffer*>		m_vecBuffer;

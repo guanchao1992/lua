@@ -23,7 +23,7 @@ TextureNode::~TextureNode()
 
 bool TextureNode::init()
 {
-	HRESULT result = D3DX11CreateShaderResourceViewFromFile(getD3DDevice(), getAccuratePath("image\\2.dds").c_str(), 0, 0, &colorMap_, 0);
+	HRESULT result = D3DX11CreateShaderResourceViewFromFile(getD3DDevice(), getAccuratePath("image\\2.jpg").c_str(), 0, 0, &colorMap_, 0);
 
 	if (FAILED(result))
 	{
@@ -48,7 +48,7 @@ bool TextureNode::init()
 	}
 
 	//setPosition(Position2D(1.f,1.f));
-	DrawRect(Rect2D(0, 0, 100, 105));
+	DrawRect(Rect2D(-100, 0, 100, 100));
 	return true;
 }
 
@@ -60,7 +60,7 @@ void TextureNode::render()
 	}
 
 	DrawManager::getInstance()->setShaderType(ShaderType::Shader_Texture);
-	UINT stride = sizeof(SimpleVertexTexture);
+	UINT stride = sizeof(SimpleVertexMain);
 	UINT offset = 0;
 	for (auto it : m_vecBuffer)
 	{
@@ -99,10 +99,10 @@ void TextureNode::DrawRect(const Rect2D&rect)
 	Position2D pos3 = rect.getOrigin() + Position2D(rect.getWidth(), rect.getHeight());
 	Position2D pos4 = rect.getOrigin() + Position2D(rect.getWidth(), 0);
 
-	int vertexSize = 6;
+	int vertexSize = 5;
 	TextureBuffer* db = new TextureBuffer();
-	db->m_OriginalVertex = new SimpleVertexTexture[vertexSize];
-	db->m_nowlVertex = new SimpleVertexTexture[vertexSize];
+	db->m_OriginalVertex = new SimpleVertexMain[vertexSize];
+	db->m_nowlVertex = new SimpleVertexMain[vertexSize];
 	db->m_OriginalVertex[0].Pos = XMFLOAT4(pos1.getPositionX(), pos1.getPositionY(), 1.0f, 0.3f);
 	db->m_OriginalVertex[0].Tx0 = XMFLOAT2(.0f, .0f);
 
@@ -112,15 +112,13 @@ void TextureNode::DrawRect(const Rect2D&rect)
 	db->m_OriginalVertex[2].Pos = XMFLOAT4(pos3.getPositionX(), pos3.getPositionY(), 1.0f, 0.1f);
 	db->m_OriginalVertex[2].Tx0 = XMFLOAT2(1.0f, 1.0f);
 
-	db->m_OriginalVertex[3] = db->m_OriginalVertex[2];
+	db->m_OriginalVertex[3].Pos = XMFLOAT4(pos4.getPositionX(), pos4.getPositionY(), 1.0f, 0.5f);
+	db->m_OriginalVertex[3].Tx0 = XMFLOAT2(1.0f, .0f);
 
-	db->m_OriginalVertex[4].Pos = XMFLOAT4(pos4.getPositionX(), pos4.getPositionY(), 1.0f, 0.5f);
-	db->m_OriginalVertex[4].Tx0 = XMFLOAT2(1.0f, .0f);
+	db->m_OriginalVertex[4] = db->m_OriginalVertex[0];
 
-	db->m_OriginalVertex[5] = db->m_OriginalVertex[0];
-
-	memcpy(db->m_nowlVertex, db->m_OriginalVertex, sizeof(SimpleVertexTexture)*vertexSize);
-	db->m_primitiveTopology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	memcpy(db->m_nowlVertex, db->m_OriginalVertex, sizeof(SimpleVertexMain)*vertexSize);
+	db->m_primitiveTopology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 	db->m_vertexSize = vertexSize;
 	updateBuffer();
 	m_vecBuffer.push_back(db);
@@ -156,12 +154,12 @@ void TextureNode::updateBuffer()
 	}
 }
 
-bool TextureNode::createBuffer(const SimpleVertexTexture*vertex,UINT vertexSize,D3D11_USAGE usage,UINT bindFlags,ID3D11Buffer**outBuffer)
+bool TextureNode::createBuffer(const SimpleVertexMain*vertex,UINT vertexSize,D3D11_USAGE usage,UINT bindFlags,ID3D11Buffer**outBuffer)
 {
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = usage;
-	bd.ByteWidth = sizeof(SimpleVertexTexture) * vertexSize;
+	bd.ByteWidth = sizeof(SimpleVertexMain) * vertexSize;
 	bd.BindFlags = bindFlags;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;

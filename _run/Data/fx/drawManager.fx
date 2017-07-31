@@ -17,7 +17,7 @@ RasterizerState DisableCulling
 
 Texture2D ColorTexture
 <
-	string ResourceName = "E:\\gitproject\\gitLua\\_run\\Data\\image\\1.dds";
+	string ResourceName = "E:\\gitproject\\gitLua\\_run\\Data\\image\\2.jpg";
 	string UIName = "Color Texture";
 	string ResourceType = "2D";
 >;
@@ -27,6 +27,13 @@ SamplerState ColorSampler
 	Filter = MIN_MAG_MIP_LINEAR;
 	AddressU = WRAP;
 	AddressU = WRAP;
+};
+
+struct VS_INPUT
+{
+	float4 pos : POSITION;
+	float4 color : COLOR;
+	float2 tx0 : TEXCOORD;
 };
 
 
@@ -40,16 +47,14 @@ float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 #endif
 }
 
-void VS_Main(float4 pos : POSITION,
-	float4 color : COLOR,
-	float2 tx0 : TEXCOORD,
+void VS_Main( VS_INPUT input,
 	out float4 outPos : SV_POSITION,
 	out float4 outColor : COLOR,
 	float2 outTx0 : TEXCOORD)
 {
-	outPos = pos;
-	outColor = color;
-	outTx0 = tx0;
+	outPos = input.pos;
+	outColor = input.color;
+	//outTx0 = input.tx0;
 }
 
 void PS_Main(float4 pos : POSITION,
@@ -65,13 +70,12 @@ void PS_Main(float4 pos : POSITION,
 	outColor.w = color.w *0.5 + txColor.w*0.5;
 }
 
-void VS_Normal(float4 pos : POSITION,
-	float4 color : COLOR,
+void VS_Normal(VS_INPUT input,
 	out float4 outPos : SV_POSITION,
 	out float4 outColor : COLOR)
 {
-	outPos = pos;
-	outColor = color;
+	outPos = input.pos;
+	outColor = input.color;
 }
 
 void PS_Normal(float4 pos : SV_POSITION,
@@ -81,13 +85,12 @@ void PS_Normal(float4 pos : SV_POSITION,
 	outColor = color;
 }
 
-void VS_Texture(float4 pos : POSITION,
-	float2 tx0 : TEXCOORD,
+void VS_Texture(VS_INPUT input,
 	out float4 outPos : SV_POSITION,
 	out float2 outTx0 : TEXCOORD)
 {
-	outPos = pos;
-	outTx0 = get_corrected_texture_coordinate(tx0);
+	outPos = input.pos;
+	outTx0 = get_corrected_texture_coordinate(input.tx0);
 }
 
 void PS_Texture(float4 pos : SV_POSITION,

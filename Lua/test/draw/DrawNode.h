@@ -28,8 +28,8 @@ struct DrawBuffer
 		}
 	}
 	ID3D11Buffer*				m_d3dBuffer;	
-	SimpleVertexNormal*		m_OriginalVertex;		//保存最初的定点集合
-	SimpleVertexNormal*		m_nowlVertex;
+	SimpleVertexMain*		m_OriginalVertex;		//保存最初的定点集合
+	SimpleVertexMain*		m_nowlVertex;
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
 	UINT						m_BindFlags;
@@ -51,7 +51,7 @@ public:
 	void	clear();
 
 private:
-	bool	createBuffer(const SimpleVertexNormal*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
+	bool	createBuffer(const SimpleVertexMain*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
 	void	updateBuffer();
 private:
 	std::vector<DrawBuffer*>		m_vecBuffer;
