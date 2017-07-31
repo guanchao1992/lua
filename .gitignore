@@ -29,3 +29,6 @@
 /_run/Win32/Debug/Lua-5.3.4.lib
 /_run/Win32/Debug/log4cplusD.lib
 /_run/Win32/Debug/log4cplusD.dll
+/xerces-c-3.1.4/doc
+/xerces-c-3.1.4/projects/Win32/VC15/xerces-all/.vs/xerces-all/v15
+*.opendb
