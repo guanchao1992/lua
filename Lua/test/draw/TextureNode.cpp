@@ -100,7 +100,7 @@ void TextureNode::DrawRect(const Rect2D&rect)
 	Position2D pos4 = rect.getOrigin() + Position2D(rect.getWidth(), 0);
 
 	int vertexSize = 5;
-	TextureBuffer* db = new TextureBuffer();
+	TextureNodeBuffer* db = new TextureNodeBuffer();
 	db->m_OriginalVertex = new SimpleVertexMain[vertexSize];
 	db->m_nowlVertex = new SimpleVertexMain[vertexSize];
 	db->m_OriginalVertex[0].Pos = XMFLOAT4(pos1.getPositionX(), pos1.getPositionY(), 1.0f, 0.3f);

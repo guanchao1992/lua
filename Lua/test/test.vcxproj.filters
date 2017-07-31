@@ -84,6 +84,12 @@
     <ClCompile Include="draw\TextureNode.cpp">
       <Filter>draw</Filter>
     </ClCompile>
+    <ClCompile Include="manager\TextureManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="base\TextureBuffer.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -160,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="dxconfig.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\TextureManager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Image.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\TextureBuffer.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

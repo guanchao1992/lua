@@ -8,9 +8,9 @@
 
 using namespace DirectX;
 
-struct TextureBuffer
+struct TextureNodeBuffer
 {
-	TextureBuffer()
+	TextureNodeBuffer()
 		: m_d3dBuffer(nullptr)
 		, m_OriginalVertex(nullptr)
 		, m_vertexSize(0)
@@ -18,7 +18,7 @@ struct TextureBuffer
 		, m_BindFlags(D3D11_BIND_VERTEX_BUFFER)
 		, m_primitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP)
 	{}
-	~TextureBuffer()
+	~TextureNodeBuffer()
 	{
 		if (m_d3dBuffer)
 		{
@@ -32,8 +32,8 @@ struct TextureBuffer
 		}
 	}
 	ID3D11Buffer*				m_d3dBuffer;	
-	SimpleVertexMain*		m_OriginalVertex;		//保存最初的定点集合
-	SimpleVertexMain*		m_nowlVertex;		
+	SimpleVertexMain*			m_OriginalVertex;		//保存最初的定点集合
+	SimpleVertexMain*			m_nowlVertex;		
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
 	UINT						m_BindFlags;
@@ -58,7 +58,7 @@ private:
 	bool	createBuffer(const SimpleVertexMain*vertex, UINT vertexSize, D3D11_USAGE usage, UINT bindFlags, ID3D11Buffer**outBuffer);
 	void	updateBuffer();
 private:
-	std::vector<TextureBuffer*>		m_vecBuffer;
+	std::vector<TextureNodeBuffer*>		m_vecBuffer;
 
 	ID3D11SamplerState * colorMapSampler_;
 	ID3D11ShaderResourceView* colorMap_;

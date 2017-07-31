@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base\Image.h" />
     <ClInclude Include="base\lua_get.h" />
     <ClInclude Include="base\Node.h" />
     <ClInclude Include="base\Position2D.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="base\NodeList.h" />
     <ClInclude Include="base\Singleton.h" />
     <ClInclude Include="base\Size.h" />
+    <ClInclude Include="base\TextureBuffer.h" />
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="draw\DrawLayout.h" />
@@ -40,6 +42,7 @@
     <ClInclude Include="manager\GameTime.h" />
     <ClInclude Include="manager\ObjectManager.h" />
     <ClInclude Include="manager\ScriptsManager.h" />
+    <ClInclude Include="manager\TextureManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="test.h" />
@@ -50,6 +53,7 @@
     <ClCompile Include="base\Ref.cpp" />
     <ClCompile Include="base\NodeList.cpp" />
     <ClCompile Include="base\Singleton.cpp" />
+    <ClCompile Include="base\TextureBuffer.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="draw\DrawLayout.cpp" />
@@ -62,6 +66,7 @@
     <ClCompile Include="manager\GameTime.cpp" />
     <ClCompile Include="manager\ObjectManager.cpp" />
     <ClCompile Include="manager\ScriptsManager.cpp" />
+    <ClCompile Include="manager\TextureManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="texture\Texture2D.cpp" />
