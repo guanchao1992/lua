@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "..\dxconfig.h"
+#include "..\base\Image.h"
 
 using namespace DirectX;
 
@@ -31,6 +32,7 @@ struct TextureNodeBuffer
 			m_OriginalVertex = nullptr;
 		}
 	}
+	Image*						m_image;
 	ID3D11Buffer*				m_d3dBuffer;	
 	SimpleVertexMain*			m_OriginalVertex;		//保存最初的定点集合
 	SimpleVertexMain*			m_nowlVertex;		
@@ -60,6 +62,4 @@ private:
 private:
 	std::vector<TextureNodeBuffer*>		m_vecBuffer;
 
-	ID3D11SamplerState * colorMapSampler_;
-	ID3D11ShaderResourceView* colorMap_;
 };

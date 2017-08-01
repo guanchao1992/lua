@@ -94,6 +94,7 @@ extern "C" DLL_SAMPLE_API void log_error_f(const char*loop, const char*format, .
 	NDCContextCreator _context(loop);
 	LOG4CPLUS_ERROR(Logger::getRoot(), outbuf);
 	LogLog::getLogLog()->debug(outbuf);
+	OutputDebugStringA(outbuf);
 }
 
 extern "C" DLL_SAMPLE_API void log_fatal_f(const char*loop, const char*format, ...)
@@ -102,4 +103,5 @@ extern "C" DLL_SAMPLE_API void log_fatal_f(const char*loop, const char*format, .
 	NDCContextCreator _context(loop);
 	LOG4CPLUS_FATAL(Logger::getRoot(), outbuf);
 	LogLog::getLogLog()->debug(outbuf);
+	OutputDebugStringA(outbuf);
 }

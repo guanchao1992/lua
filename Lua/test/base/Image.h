@@ -3,11 +3,14 @@
 #include "Position2D.h"
 #include "Rect2D.h"
 #include "TextureBuffer.h"
+#include "Ref.h"
 
 
-class Image
+//使用引用计数,但不放在自动管理
+class Image : public Ref
 {
-public:
+	friend class TextureBuffer;
+private:
 	//不要传空指针
 	Image(const std::string& imageName, TextureBuffer * texture, const Rect2D&rect)
 		: m_imageName(imageName)
@@ -17,6 +20,7 @@ public:
 		m_textureBuffer->retain();
 	}
 
+public:
 	~Image()
 	{
 		m_textureBuffer->release();

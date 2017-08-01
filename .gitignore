@@ -32,3 +32,7 @@
 /xerces-c-3.1.4/doc
 /xerces-c-3.1.4/projects/Win32/VC15/xerces-all/.vs/xerces-all/v15
 *.opendb
+/xerces-c-3.1.4/m4
+/xerces-c-3.1.4/config
+/xerces-c-3.1.4/scripts
+/_run/obj

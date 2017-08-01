@@ -9,6 +9,8 @@
 #include "manager\ObjectManager.h"
 #include "manager\GameTime.h"
 #include "texture\Texture2D.h"
+#include <xercesc\util\PlatformUtils.hpp>
+#include "manager\TextureManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -36,6 +38,7 @@ int test_regFunc()
 HRESULT GameApp::Init(HWND hWnd)
 {
 	theGameApp = this;
+	xercesc_3_1::XMLPlatformUtils::Initialize();
 	log_init();
 	ScriptsManager::getInstance()->Init();
 	if (FAILED(VideoManager::getInstance()->InitDevice(hWnd)))
@@ -49,10 +52,11 @@ HRESULT GameApp::Init(HWND hWnd)
 
 	ScriptsManager::getInstance()->doFile("init.lua");
 
+	TextureManager::getInstance()->init();
+
 	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
-
 
 	/*
 	GameTime::getInstance()->addTimer(0, 1.0f, [](float t) {
@@ -71,6 +75,7 @@ void GameApp::Close()
 	ObjectManager::getInstance()->checkDelete();
 	VideoManager::getInstance()->CleanupDevice();
 	log_close();
+	xercesc_3_1::XMLPlatformUtils::Terminate();
 }
 
 void GameApp::Render()

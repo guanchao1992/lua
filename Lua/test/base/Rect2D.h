@@ -70,6 +70,16 @@ public:
 		return m_size;
 	}
 
+	inline const float getOriginX() const
+	{
+		return m_origin.getPositionX();
+	}
+
+	inline const float getOriginY() const
+	{
+		return m_origin.getPositionY();
+	}
+
 	inline float getWidth() const
 	{
 		return m_size.getWidth();

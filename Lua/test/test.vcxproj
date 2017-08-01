@@ -126,7 +126,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(SolutionDir)..\Lua-5.3.4\lua-5.3.4\src;$(DXSDK_DIR)include\;$(SolutionDir)..\xerces-c-3.1.4\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(DXSDK_DIR)lib\$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,7 +156,7 @@
       </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>MyTool.lib;xerces-c_3D.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>

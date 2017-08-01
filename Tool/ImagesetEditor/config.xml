@@ -1,7 +1,6 @@
-<Config>
+<Imageset>
+  <Image Name="1" Imageset="1" />
+  <Image Name="1" Imageset="1" />
+  <Image Name="2" Imageset="1" />
   <RecentFiles n0="" n1="" n2="" n3="" n4="" n5="" n6="" n7="" n8="" n9="" />
-  <ImportFile Path="E:\gitproject\gitLua\_run\Data\image\" /> 
-  <ExportFile Path="E:\gitproject\gitLua\_run\Data\imageset\" />
-  <Imagetset Path="E:\gitproject\gitLua\_run\Data\imageset\" File="image.imageset"/>
-  
-</Config>
+</Imageset>
