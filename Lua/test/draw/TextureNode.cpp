@@ -12,7 +12,6 @@
 
 using namespace DirectX;
 
-
 //*************-------TextureNodeRectBuffer--------*************//
 
 TextureNodeRectBuffer::TextureNodeRectBuffer(const std::string&imageName, const Rect2D& rect, D3D11_USAGE usage, UINT bindFlags)
