@@ -24,6 +24,7 @@ TextureNodeRectBuffer::TextureNodeRectBuffer(const std::string&imageName, const 
 	, m_primitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP)
 {
 	m_image = TextureManager::getInstance()->loadImage("2");
+	m_image->retain();
 	m_OriginalVertex = new SimpleVertexMain[5];
 	m_nowlVertex = new SimpleVertexMain[5];
 
@@ -53,6 +54,11 @@ TextureNodeRectBuffer::TextureNodeRectBuffer(const std::string&imageName, const 
 
 TextureNodeRectBuffer::~TextureNodeRectBuffer()
 {
+	if (m_image)
+	{
+		m_image->release();
+		m_image = nullptr;
+	}
 	if (m_d3dBuffer)
 	{
 		m_d3dBuffer->Release();
@@ -62,6 +68,11 @@ TextureNodeRectBuffer::~TextureNodeRectBuffer()
 	{
 		delete[] m_OriginalVertex;
 		m_OriginalVertex = nullptr;
+	}
+	if (m_nowlVertex)
+	{
+		delete[] m_nowlVertex;
+		m_nowlVertex = nullptr;
 	}
 }
 
@@ -133,8 +144,8 @@ TextureNode::~TextureNode()
 
 bool TextureNode::init()
 {
-	//setPosition(Position2D(1.f,1.f));
-	DrawRect(Rect2D(-100, 0, 100, 100));
+	//DrawImage("2", Rect2D(-100, 0, 100, 100));
+	DrawImage("1", Rect2D(0, -100, 100, 100));
 	return true;
 }
 
@@ -170,9 +181,9 @@ void TextureNode::clear()
 	m_vecBuffer.clear();
 }
 
-void TextureNode::DrawRect(const Rect2D&rect)
+void TextureNode::DrawImage(const std::string&imageName, const Rect2D&rect)
 {
-	TextureNodeRectBuffer* db = new TextureNodeRectBuffer("2", rect);
+	TextureNodeRectBuffer* db = new TextureNodeRectBuffer(imageName, rect);
 	updateBuffer();
 	m_vecBuffer.push_back(db);
 }

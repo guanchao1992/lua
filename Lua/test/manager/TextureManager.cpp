@@ -98,7 +98,6 @@ TextureBuffer* TextureManager::loadTexture(const std::string&fileName)
 			return nullptr;
 		}
 		m_mapTexture[fileName] = buffer;
-		buffer->retain();
 		return buffer;
 	}
 	return it->second;
@@ -121,7 +120,7 @@ void TextureManager::releaseAllTexture()
 {
 	for (auto it:m_mapTexture)
 	{
-		it.second->release();
+		it.second->clear();
 	}
 	m_mapTexture.clear();
 }

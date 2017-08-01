@@ -73,6 +73,7 @@ bool TextureBuffer::init(const std::string&fileName)
 	colorMap_->GetResource(&texture);
 	((ID3D11Texture2D*)texture)->GetDesc(&desc);
 	m_size.setSize(desc.Width, desc.Height);
+	texture->Release();
 
 	parse();
 	return true;
@@ -134,6 +135,16 @@ void TextureBuffer::clear()
 		it.second->release();
 	}
 	m_mapImage.clear();
+	if (colorMap_)
+	{
+		colorMap_->Release();
+		colorMap_ = nullptr;
+	}
+	if (colorMapSampler_)
+	{
+		colorMapSampler_->Release();
+		colorMapSampler_ = nullptr;
+	}
 }
 
 Image* TextureBuffer::loadImage(const std::string&imageName)

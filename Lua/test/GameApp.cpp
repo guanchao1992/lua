@@ -59,7 +59,7 @@ HRESULT GameApp::Init(HWND hWnd)
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
 
 	/*
-	GameTime::getInstance()->addTimer(0, 1.0f, [](float t) {
+	GameTime::getInstance()->addTimer(0, 1.0f, -1,[](float t) {
 		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
 	});
 */
@@ -70,8 +70,10 @@ void GameApp::Close()
 	lua_close(GetLuaState());
 
 	DrawManager::getInstance()->Cleanup();
-
+	TextureManager::getInstance()->releaseAllTexture();
 	//最后检查一次引用计数
+	ObjectManager::getInstance()->checkDelete();
+	ObjectManager::getInstance()->checkDelete();
 	ObjectManager::getInstance()->checkDelete();
 	VideoManager::getInstance()->CleanupDevice();
 	log_close();

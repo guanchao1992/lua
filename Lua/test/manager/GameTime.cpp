@@ -7,12 +7,13 @@
 #include <windows.h>
 
 
-Timer* Timer::create(int id, float span, TIMER_FUNC func)
+Timer* Timer::create(int id, float span, int loop, TIMER_FUNC func)
 {
 	Timer* ret = new Timer();
 	 ret->autorelease(); 
 	 ret->m_id = id;
 	 ret->m_span = span;
+	 ret->m_loop = loop;
 	 ret->m_func = func;
 	 return ret;
 }
@@ -88,13 +89,17 @@ void GameTime::updateTime(float f)
 			{
 				t->m_accumulationTime -= t->m_span;
 				t->m_func(f);
+				if (t->m_loop != -1 && --t->m_loop == -1)
+				{
+					t->m_stop = true;
+				}
 			}
 		}
 		++it;
 	}
 }
 
-Timer* GameTime::addTimer(int id, float span, TIMER_FUNC func)
+Timer* GameTime::addTimer(int id, float span, int loop, TIMER_FUNC func)
 {
 	Timer* t = nullptr;
 	if (m_mapTimers.find(id) != m_mapTimers.end())
@@ -106,7 +111,7 @@ Timer* GameTime::addTimer(int id, float span, TIMER_FUNC func)
 	}
 	else
 	{
-		t = Timer::create(id, span, func);
+		t = Timer::create(id, span, loop, func);
 		t->retain();
 		m_mapTimers[id] = t;
 	}

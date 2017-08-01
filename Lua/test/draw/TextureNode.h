@@ -37,7 +37,7 @@ public:
 	bool	init();
 	virtual void render();
 	virtual void redraw();
-	void	DrawRect(const Rect2D&rect);
+	void	DrawImage(const std::string&imageName, const Rect2D&rect);
 	void	clear();
 
 private:

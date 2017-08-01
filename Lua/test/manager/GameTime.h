@@ -11,10 +11,10 @@ class Timer : public Ref
 {
 	friend class GameTime;
 private:
-	Timer() :m_id(0), m_span(1.f), m_func(nullptr), m_stop(false), m_pause(false), m_accumulationTime(0.f)
+	Timer() :m_id(0), m_span(1.f), m_func(nullptr), m_stop(false), m_pause(false), m_accumulationTime(0.f), m_loop(-1)
 	{ }
 public:
-	static Timer*	create(int id,float span,TIMER_FUNC func);
+	static Timer*	create(int id, float span, int loop, TIMER_FUNC func);
 	void			stop();
 	void			pause(bool p);
 	inline bool		isStop() { return m_stop; };
@@ -23,6 +23,7 @@ public:
 	int				m_id;
 	float			m_span;
 	TIMER_FUNC		m_func;
+	int				m_loop;	//剩余执行次数, -1表示无限
 private:
 	bool			m_stop;
 	bool			m_pause;
@@ -49,7 +50,7 @@ public:
 	void	updateTime(float f);
 
 	//id为唯一标识，重复id会覆盖
-	Timer*	addTimer(int id, float span, TIMER_FUNC func);
+	Timer*	addTimer(int id, float span, int loop, TIMER_FUNC func);
 private:
 	double						m_startSeconds;			//程序开始的时间
 	double						m_seconds;				//程序执行的总时间
