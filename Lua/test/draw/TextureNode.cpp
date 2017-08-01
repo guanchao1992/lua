@@ -13,6 +13,115 @@
 using namespace DirectX;
 
 
+//*************-------TextureNodeRectBuffer--------*************//
+
+TextureNodeRectBuffer::TextureNodeRectBuffer(const std::string&imageName, const Rect2D& rect, D3D11_USAGE usage, UINT bindFlags)
+	: m_d3dBuffer(nullptr)
+	, m_OriginalVertex(nullptr)
+	, m_vertexSize(5)
+	, m_Usage(usage)
+	, m_BindFlags(bindFlags)
+	, m_primitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP)
+{
+	m_image = TextureManager::getInstance()->loadImage("2");
+	m_OriginalVertex = new SimpleVertexMain[5];
+	m_nowlVertex = new SimpleVertexMain[5];
+
+	Position2D pos1 = rect.getOrigin();
+	Position2D pos2 = rect.getOrigin() + Position2D(0, rect.getHeight());
+	Position2D pos3 = rect.getOrigin() + Position2D(rect.getWidth(), rect.getHeight());
+	Position2D pos4 = rect.getOrigin() + Position2D(rect.getWidth(), 0);
+
+	const Rect2D& textrect = m_image->getRect();
+
+	m_OriginalVertex[0].Pos = XMFLOAT4(pos1.getPositionX(), pos1.getPositionY(), 1.0f, 0.3f);
+	m_OriginalVertex[0].Tx0 = XMFLOAT2(textrect.getOriginX(), textrect.getOriginY());
+
+	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.getPositionX(), pos2.getPositionY(), 1.0f, 0.5f);
+	m_OriginalVertex[1].Tx0 = XMFLOAT2(textrect.getOriginX(), textrect.getOriginY() + textrect.getHeight());
+
+	m_OriginalVertex[2].Pos = XMFLOAT4(pos3.getPositionX(), pos3.getPositionY(), 1.0f, 0.1f);
+	m_OriginalVertex[2].Tx0 = XMFLOAT2(textrect.getOriginX() + textrect.getWidth(), textrect.getOriginY() + textrect.getHeight());
+
+	m_OriginalVertex[3].Pos = XMFLOAT4(pos4.getPositionX(), pos4.getPositionY(), 1.0f, 0.5f);
+	m_OriginalVertex[3].Tx0 = XMFLOAT2(textrect.getOriginX() + textrect.getWidth(), textrect.getOriginY());
+
+	m_OriginalVertex[4] = m_OriginalVertex[0];
+
+	memcpy(m_nowlVertex, m_OriginalVertex, sizeof(SimpleVertexMain)*m_vertexSize);
+}
+
+TextureNodeRectBuffer::~TextureNodeRectBuffer()
+{
+	if (m_d3dBuffer)
+	{
+		m_d3dBuffer->Release();
+		m_d3dBuffer = nullptr;
+	}
+	if (m_OriginalVertex)
+	{
+		delete[] m_OriginalVertex;
+		m_OriginalVertex = nullptr;
+	}
+}
+
+void TextureNodeRectBuffer::render()
+{
+	DrawManager::getInstance()->setShaderType(ShaderType::Shader_Texture);
+	static UINT stride = sizeof(SimpleVertexMain);
+	UINT offset = 0;
+	TextureBuffer*tb = m_image->getTexture();
+	tb->PSSetView(getD3DContext());
+	getD3DContext()->IASetPrimitiveTopology(m_primitiveTopology);
+	getD3DContext()->IASetVertexBuffers(0, 1, &m_d3dBuffer, &stride, &offset);
+	getD3DContext()->Draw(m_vertexSize, 0);
+}
+
+bool TextureNodeRectBuffer::updateBuffer(const Position2D&surePos, float scale)
+{
+	if (m_d3dBuffer)
+	{
+		m_d3dBuffer->Release();
+		m_d3dBuffer = nullptr;
+	}
+	for (size_t i = 0; i < m_vertexSize; i++)
+	{
+		Position2D pos(m_OriginalVertex[i].Pos.x * scale + surePos.getPositionX(), m_OriginalVertex[i].Pos.y * scale + surePos.getPositionY());
+		Position2D d3dPos = VideoManager::getInstance()->ViewPostoD3D(pos);
+
+		m_nowlVertex[i].Pos.x = d3dPos.getPositionX();
+		m_nowlVertex[i].Pos.y = d3dPos.getPositionY();
+	}
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = m_Usage;
+	bd.ByteWidth = sizeof(SimpleVertexMain) * m_vertexSize;
+	bd.BindFlags = m_BindFlags;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = m_nowlVertex;
+
+	HRESULT result = getD3DDevice()->CreateBuffer(&bd, &InitData, &m_d3dBuffer);
+	if (FAILED(result))
+	{
+		OutputDebugStringA("error: void TextureNodeRectBuffer::updateBuffer()");
+		return false;
+	}
+	return true;
+
+	for (size_t i = 0; i < m_vertexSize; i++)
+	{
+		char buf[256];
+		sprintf_s(buf, "(%f,%f,%f,%f)\n", m_nowlVertex[i].Pos.x, m_nowlVertex[i].Pos.y, m_nowlVertex[i].Pos.z, m_nowlVertex[i].Pos.w);
+		OutputDebugStringA(buf);
+	}
+}
+
+//*************-------TextureNode--------*************//
+
 TextureNode::TextureNode()
 {
 }
@@ -24,32 +133,6 @@ TextureNode::~TextureNode()
 
 bool TextureNode::init()
 {
-	/*
-	HRESULT result = D3DX11CreateShaderResourceViewFromFile(getD3DDevice(), getAccuratePath("image\\2.jpg").c_str(), 0, 0, &colorMap_, 0);
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	D3D11_SAMPLER_DESC colorMapDesc;
-	ZeroMemory(&colorMapDesc, sizeof(colorMapDesc));
-	colorMapDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	colorMapDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	colorMapDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	colorMapDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	result = getD3DDevice()->CreateSamplerState(&colorMapDesc, &colorMapSampler_);
-
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-*/
-
 	//setPosition(Position2D(1.f,1.f));
 	DrawRect(Rect2D(-100, 0, 100, 100));
 	return true;
@@ -62,18 +145,10 @@ void TextureNode::render()
 		redraw();
 	}
 
-	DrawManager::getInstance()->setShaderType(ShaderType::Shader_Texture);
-	UINT stride = sizeof(SimpleVertexMain);
-	UINT offset = 0;
 	for (auto it : m_vecBuffer)
 	{
-		TextureBuffer*tb = it->m_image->getTexture();
-		tb->PSSetView(getD3DContext());
-		getD3DContext()->IASetPrimitiveTopology(it->m_primitiveTopology);
-		getD3DContext()->IASetVertexBuffers(0, 1, &it->m_d3dBuffer, &stride, &offset);
-		getD3DContext()->Draw(it->m_vertexSize, 0);
+		it->render();
 	}
-
 	for (Node* it : getChildren()->getListNode())
 	{
 		it->render();
@@ -97,40 +172,7 @@ void TextureNode::clear()
 
 void TextureNode::DrawRect(const Rect2D&rect)
 {
-	Position2D pos1 = rect.getOrigin();
-	Position2D pos2 = rect.getOrigin() + Position2D(0, rect.getHeight());
-	Position2D pos3 = rect.getOrigin() + Position2D(rect.getWidth(), rect.getHeight());
-	Position2D pos4 = rect.getOrigin() + Position2D(rect.getWidth(), 0);
-
-	int vertexSize = 5;
-	TextureNodeBuffer* db = new TextureNodeBuffer();
-	db->m_image = TextureManager::getInstance()->loadImage("2");
-	db->m_OriginalVertex = new SimpleVertexMain[vertexSize];
-	db->m_nowlVertex = new SimpleVertexMain[vertexSize];
-
-	const Rect2D& textrect = db->m_image->getRect();
-
-	db->m_OriginalVertex[0].Pos = XMFLOAT4(pos1.getPositionX(), pos1.getPositionY(), 1.0f, 0.3f);
-	//db->m_OriginalVertex[0].Tx0 = XMFLOAT2(.0f, .0f);
-	db->m_OriginalVertex[0].Tx0 = XMFLOAT2(textrect.getOriginX(), textrect.getOriginY());
-
-	db->m_OriginalVertex[1].Pos = XMFLOAT4(pos2.getPositionX(), pos2.getPositionY(), 1.0f, 0.5f);
-	//db->m_OriginalVertex[1].Tx0 = XMFLOAT2(.0f, 1.0f);
-	db->m_OriginalVertex[1].Tx0 = XMFLOAT2(textrect.getOriginX(), textrect.getOriginY() + textrect.getHeight());
-
-	db->m_OriginalVertex[2].Pos = XMFLOAT4(pos3.getPositionX(), pos3.getPositionY(), 1.0f, 0.1f);
-	//db->m_OriginalVertex[2].Tx0 = XMFLOAT2(1.0f, 1.0f);
-	db->m_OriginalVertex[2].Tx0 = XMFLOAT2(textrect.getOriginX() + textrect.getWidth(), textrect.getOriginY() + textrect.getHeight());
-
-	db->m_OriginalVertex[3].Pos = XMFLOAT4(pos4.getPositionX(), pos4.getPositionY(), 1.0f, 0.5f);
-	//db->m_OriginalVertex[3].Tx0 = XMFLOAT2(1.0f, .0f);
-	db->m_OriginalVertex[3].Tx0 = XMFLOAT2(textrect.getOriginX() + textrect.getWidth(), textrect.getOriginY());
-
-	db->m_OriginalVertex[4] = db->m_OriginalVertex[0];
-
-	memcpy(db->m_nowlVertex, db->m_OriginalVertex, sizeof(SimpleVertexMain)*vertexSize);
-	db->m_primitiveTopology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-	db->m_vertexSize = vertexSize;
+	TextureNodeRectBuffer* db = new TextureNodeRectBuffer("2", rect);
 	updateBuffer();
 	m_vecBuffer.push_back(db);
 }
@@ -139,50 +181,6 @@ void TextureNode::updateBuffer()
 {
 	for (auto &it : m_vecBuffer)
 	{
-		if (it->m_d3dBuffer)
-		{
-			it->m_d3dBuffer->Release();
-			it->m_d3dBuffer = nullptr;
-		}
-		Position2D surePos = getSurePosition();
-		for (size_t i = 0; i < it->m_vertexSize; i++)
-		{
-			Position2D pos(it->m_OriginalVertex[i].Pos.x * getScale() + surePos.getPositionX(), it->m_OriginalVertex[i].Pos.y * getScale() + surePos.getPositionY());
-			//Position2D pos(it->m_OriginalVertex[i].Pos.x, it->m_OriginalVertex[i].Pos.y);
-			Position2D d3dPos = VideoManager::getInstance()->ViewPostoD3D(pos);
-
-			it->m_nowlVertex[i].Pos.x = d3dPos.getPositionX();
-			it->m_nowlVertex[i].Pos.y = d3dPos.getPositionY();
-		}
-		createBuffer(it->m_nowlVertex, it->m_vertexSize, it->m_Usage, it->m_BindFlags, &it->m_d3dBuffer);
-
-		for (size_t i = 0; i < it->m_vertexSize; i++)
-		{
-			char buf[256];
-			sprintf_s(buf, "(%f,%f,%f,%f)\n", it->m_nowlVertex[i].Pos.x, it->m_nowlVertex[i].Pos.y, it->m_nowlVertex[i].Pos.z, it->m_nowlVertex[i].Pos.w);
-			OutputDebugStringA(buf);
-		}
+		it->updateBuffer(getSurePosition(), getScale());
 	}
-}
-
-bool TextureNode::createBuffer(const SimpleVertexMain*vertex,UINT vertexSize,D3D11_USAGE usage,UINT bindFlags,ID3D11Buffer**outBuffer)
-{
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = usage;
-	bd.ByteWidth = sizeof(SimpleVertexMain) * vertexSize;
-	bd.BindFlags = bindFlags;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertex;
-
-	HRESULT result = getD3DDevice()->CreateBuffer(&bd, &InitData, outBuffer);
-	if (FAILED(result))
-	{
-		OutputDebugStringA("error: void TextureNode::updateBuffer()");
-		return false;
-	}
-	return true;
 }
