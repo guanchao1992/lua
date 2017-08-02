@@ -25,6 +25,7 @@ public:
 	void		removeFromTag(int tag);
 	void		removeChild(Node*node);
 	void		removeAllChild();
+	void		removeFromeParent();
 
 	virtual void		setOrder(int order);
 	virtual int			getOrder() { return m_order; };
@@ -35,11 +36,14 @@ public:
 	virtual const Position2D&	getPosition() { return m_positoin; };
 	virtual void				setScale(float scale);
 	virtual float				getScale() { return m_scale; };
+
+	virtual void				setVisible(bool visible) { m_isVisible = visible; };
+	virtual bool				isVisible() { return m_isVisible; };
 protected:
 	virtual Position2D			getSurePosition();
-	bool						isRedraw() { return m_bRedraw; };
+	bool						isRedraw();
 private:
-	void				setParent(Node*node) { m_parent = node; };
+	void						setParent(Node*node) { m_parent = node; };
 private:
 	NodeList*	m_listChildren;
 	Node*		m_parent;
@@ -48,5 +52,6 @@ private:
 	Position2D	m_positoin;
 	float		m_scale;
 	bool		m_bRedraw;
+	bool		m_isVisible;
 };
 

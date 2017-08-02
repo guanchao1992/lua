@@ -12,6 +12,7 @@ Node::Node()
 	, m_positoin(0.0f, 0.0f)
 	, m_scale(1.0f)
 	, m_bRedraw(false)
+	, m_isVisible(true)
 {
 	m_listChildren = NodeList::create();
 	m_listChildren->retain();
@@ -78,6 +79,16 @@ void Node::removeAllChild()
 	m_listChildren->Clear();
 }
 
+void Node::removeFromeParent()
+{
+	if (m_parent == nullptr)
+	{
+		return;
+	}
+	m_parent->removeChild(this);
+	m_parent = nullptr;
+}
+
 void Node::setOrder(int order)
 {
 	if (m_order != order)
@@ -107,4 +118,17 @@ Position2D Node::getSurePosition()
 		pos = pos + getParent()->getSurePosition();
 	}
 	return pos;
+}
+
+bool Node::isRedraw()
+{
+	if (m_bRedraw)
+	{
+		return true;
+	}
+	if (getParent() && getParent()->isRedraw())
+	{
+		return true;
+	}
+	return false;
 }

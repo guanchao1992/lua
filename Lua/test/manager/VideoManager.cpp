@@ -175,6 +175,9 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
+
+
+
 	return S_OK;
 }
 

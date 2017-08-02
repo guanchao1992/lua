@@ -12,7 +12,7 @@
 #include <D3Dcompiler.h>
 #include "..\..\MyTool\tool_log.h"
 #include <d3d11.h>
-#include "..\draw\TextureNode.h"
+#include "..\draw\DrawNode.h"
 
 using namespace DirectX;
 
@@ -137,11 +137,12 @@ void DrawManager::DrawOne(float x,float y)
 	DrawLayout*layout = getLayout(0);
 	if (layout)
 	{
+		/*
 		DrawNode*dn = DrawNode::create();
 		layout->addChild(dn);
 		dn->setPosition(Position2D(x, y));
-
-		TextureNode*tn = TextureNode::create();
+*/
+		DrawNode*tn = DrawNode::create();
 		layout->addChild(tn);
 		tn->setPosition(Position2D(x, y));
 	}

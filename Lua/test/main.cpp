@@ -55,13 +55,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 
 	// Main message loop
-	DWORD lasttime = timeGetTime();
+	DWORD lasttime = clock();
 	GameTime::getInstance()->setGameStartTime(lasttime / 1000.f);
 	GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
-	int numFPS = 60;
-	float intervaltime = 1000.f / 60;
+	int numFPS = 120;
+	float intervaltime = 1000.f / numFPS;
 	float offInter = 0;
 	MSG msg = { 0 };
+
+	LARGE_INTEGER nFreq;
+	QueryPerformanceFrequency(&nFreq);
+	LARGE_INTEGER nStartTime;
+	QueryPerformanceCounter(&nStartTime);
+
 	while (WM_QUIT != msg.message)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -72,8 +78,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		}
 		EventManager::getInstance()->runEvent();
 
-		DWORD newtime = timeGetTime();
+
+		LARGE_INTEGER nEndTime;
+		QueryPerformanceCounter(&nEndTime);
+
+
+		//GameTime::getInstance()->updateFrameTime(clock() / 1000.f);
+		GameTime::getInstance()->updateFrameTime(((double)nEndTime.QuadPart - nStartTime.QuadPart) / (double)nFreq.QuadPart);
+		GameApp::getInstance()->Render();
+		CLOCKS_PER_SEC;
+
+		DWORD newtime = clock();
 		float interval = newtime - lasttime;	//执行上面的代码所耗费时间
+		lasttime = newtime;
 
 		//if (interval < intervaltime)
 		
@@ -85,15 +102,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 			offInter = tempInterval - tempIntervalDWORD;
 			Sleep(tempIntervalDWORD * 2);
 		}
-		lasttime = newtime;
 
 		if (newtime > 10000)
 		{
 			//break;
 		}
-		GameApp::getInstance()->Render();
-
-		GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
 	}
 	GameApp::getInstance()->Close();
 	return (int)msg.wParam;

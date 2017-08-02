@@ -1,0 +1,10 @@
+﻿<Imageset>
+  <Group Name="Default" />
+  <Image Name="bg" XPos="0" YPos="0" Width="396" Height="396" />
+  <Image Name="bluebox" XPos="398" YPos="1" Width="100" Height="100" />
+  <Image Name="greenbox" XPos="398" YPos="101" Width="100" Height="100" />
+  <Image Name="orangebox" XPos="398" YPos="201" Width="100" Height="100" />
+  <Image Name="purplebox" XPos="398" YPos="301" Width="100" Height="100" />
+  <Image Name="redbox" XPos="130" YPos="404" Width="100" Height="100" />
+  <Image Name="yellowbox" XPos="12" YPos="399" Width="100" Height="100" />
+</Imageset>

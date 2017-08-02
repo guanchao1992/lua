@@ -11,7 +11,7 @@ class Timer : public Ref
 {
 	friend class GameTime;
 private:
-	Timer() :m_id(0), m_span(1.f), m_func(nullptr), m_stop(false), m_pause(false), m_accumulationTime(0.f), m_loop(-1)
+	Timer() :m_id(0), m_span(1.f), m_func(nullptr), m_stop(false), m_pause(false), m_loop(-1)
 	{ }
 public:
 	static Timer*	create(int id, float span, int loop, TIMER_FUNC func);
@@ -19,6 +19,7 @@ public:
 	void			pause(bool p);
 	inline bool		isStop() { return m_stop; };
 	inline bool		isPause() { return m_pause; };
+	bool			timerCheck(double timesec);
 public:
 	int				m_id;
 	float			m_span;
@@ -27,7 +28,7 @@ public:
 private:
 	bool			m_stop;
 	bool			m_pause;
-	float			m_accumulationTime;
+	double			m_endTime;
 };
 
 class GameTime

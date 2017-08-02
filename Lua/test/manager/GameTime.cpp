@@ -5,6 +5,7 @@
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 #include <time.h>
 #include <windows.h>
+#include "..\GameApp.h"
 
 
 Timer* Timer::create(int id, float span, int loop, TIMER_FUNC func)
@@ -15,6 +16,7 @@ Timer* Timer::create(int id, float span, int loop, TIMER_FUNC func)
 	 ret->m_span = span;
 	 ret->m_loop = loop;
 	 ret->m_func = func;
+	 ret->m_endTime = clock() / 1000.f + span;
 	 return ret;
 }
 
@@ -26,6 +28,18 @@ void Timer::stop()
 void Timer::pause(bool p)
 {
 	m_pause = p;
+}
+
+bool Timer::timerCheck(double timeNow)
+{
+	if (m_pause)
+		return false;
+	if (timeNow >= m_endTime)
+	{
+		m_endTime = m_endTime + m_span;
+		return true;
+	}
+	return false;
 }
 
 SingletonClaseCpp(GameTime);
@@ -49,6 +63,28 @@ void GameTime::setGameStartTime(double sec)
 
 void GameTime::updateFrameTime(double sec)
 {
+	for (auto it = m_mapTimers.begin(); it != m_mapTimers.end(); )
+	{
+		Timer*t = it->second;
+		if (t->isStop())
+		{
+			t->release();
+			it = m_mapTimers.erase(it);
+			continue;
+		}
+		else{
+			if (t->timerCheck(sec))
+			{
+				t->m_func(t->m_span);
+				if (t->m_loop != -1 && --t->m_loop == -1)
+				{
+					t->m_stop = true;
+				}
+			}
+		}
+		++it;
+	}
+
 	float elapsed = sec - m_startFrameSeconds;
 	m_startFrameSeconds = sec;
 	updateTime(elapsed);
@@ -70,33 +106,8 @@ double GameTime::getGameTime()
 //时间循环函数
 void GameTime::updateTime(float f)
 {
-	for (auto it = m_mapTimers.begin(); it != m_mapTimers.end(); )
-	{
-		Timer*t = it->second;
-		if (t->isStop())
-		{
-			t->release();
-			it = m_mapTimers.erase(it);
-		}
-		else if (t->isPause())
-		{
-			//nothing
-		}
-		else
-		{
-			t->m_accumulationTime += f;
-			if (t->m_accumulationTime >= t->m_span)
-			{
-				t->m_accumulationTime -= t->m_span;
-				t->m_func(f);
-				if (t->m_loop != -1 && --t->m_loop == -1)
-				{
-					t->m_stop = true;
-				}
-			}
-		}
-		++it;
-	}
+
+	GameApp::getInstance()->Update(f);
 }
 
 Timer* GameTime::addTimer(int id, float span, int loop, TIMER_FUNC func)

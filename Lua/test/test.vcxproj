@@ -22,6 +22,7 @@
     <ClInclude Include="base\Image.h" />
     <ClInclude Include="base\lua_get.h" />
     <ClInclude Include="base\Node.h" />
+    <ClInclude Include="base\NodeVector.h" />
     <ClInclude Include="base\Position2D.h" />
     <ClInclude Include="base\Position3D.h" />
     <ClInclude Include="base\Rect2D.h" />
@@ -32,9 +33,9 @@
     <ClInclude Include="base\TextureBuffer.h" />
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="draw\DrawBuffer.h" />
     <ClInclude Include="draw\DrawLayout.h" />
     <ClInclude Include="draw\DrawNode.h" />
-    <ClInclude Include="draw\TextureNode.h" />
     <ClInclude Include="dxconfig.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="manager\DrawManager.h" />
@@ -49,15 +50,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\Node.cpp" />
+    <ClCompile Include="base\NodeVector.cpp" />
     <ClCompile Include="base\Ref.cpp" />
     <ClCompile Include="base\NodeList.cpp" />
     <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="base\TextureBuffer.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="draw\DrawBuffer.cpp" />
     <ClCompile Include="draw\DrawLayout.cpp" />
     <ClCompile Include="draw\DrawNode.cpp" />
-    <ClCompile Include="draw\TextureNode.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager\DrawManager.cpp" />

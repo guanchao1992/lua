@@ -1,45 +1,32 @@
-#include "NodeList.h"
+#include "NodeVector.h"
 #include "..\manager\ObjectManager.h"
 #include <assert.h>
 #include "Node.h"
 
 
-NodeList::NodeList()
+NodeVector::NodeVector()
 {
 }
 
-NodeList::~NodeList()
+NodeVector::~NodeVector()
 {
 	Clear();
 }
 
-void NodeList::PushBack(Node*node)
+void NodeVector::PushBack(Node*node)
 {
 	m_listNode.push_back(node);
 	node->retain();
 }
 
-void NodeList::PushFront(Node*node)
-{
-	m_listNode.push_front(node);
-	node->retain();
-}
-
-void NodeList::PopBack()
+void NodeVector::PopBack()
 {
 	Node* node = m_listNode.back();
 	m_listNode.pop_back();
 	node->release();
 }
 
-void NodeList::PopFront()
-{
-	Node*node = m_listNode.front();
-	m_listNode.pop_front();
-	node->release();
-}
-
-void NodeList::Insert(unsigned int index, Node*node)
+void NodeVector::Insert(unsigned int index, Node*node)
 {
 	if (index >= m_listNode.size())
 	{
@@ -59,7 +46,7 @@ void NodeList::Insert(unsigned int index, Node*node)
 	assert(1);	//index是错的
 }
 
-void NodeList::Clear()
+void NodeVector::Clear()
 {
 	for (auto it = m_listNode.begin(); it != m_listNode.end(); ++it)
 	{
@@ -68,7 +55,7 @@ void NodeList::Clear()
 	m_listNode.clear();
 }
 
-Node * NodeList::getNodeAtIndex(int index)
+Node * NodeVector::getNodeAtIndex(int index)
 {
 	int i = 0;
 	for (auto it : m_listNode)
@@ -82,7 +69,7 @@ Node * NodeList::getNodeAtIndex(int index)
 	return nullptr;
 }
 
-Node* NodeList::removeFromTag(int tag)
+Node* NodeVector::removeFromTag(int tag)
 {
 	for (auto it = m_listNode.begin(); it != m_listNode.end(); ++it)
 	{
@@ -98,7 +85,7 @@ Node* NodeList::removeFromTag(int tag)
 	return nullptr;
 }
 
-Node* NodeList::removeFromIndex(unsigned int index)
+Node* NodeVector::removeFromIndex(unsigned int index)
 {
 	int i = 0;
 	for (auto it = m_listNode.begin(); it != m_listNode.end(); ++i, ++it)
@@ -115,7 +102,7 @@ Node* NodeList::removeFromIndex(unsigned int index)
 	return nullptr;
 }
 
-void NodeList::removeNode(Node*node)
+void NodeVector::removeNode(Node*node)
 {
 	for (auto it = m_listNode.begin(); it != m_listNode.end(); ++it)
 	{
@@ -127,18 +114,4 @@ void NodeList::removeNode(Node*node)
 		}
 	}
 	assert(1);	//要移除的元素不存在
-}
-
-static bool sortNode_order(Node*a, Node*b)
-{
-	if (a->getOrder() < b->getOrder())
-	{
-		return true;
-	}
-	return false;
-}
-
-void NodeList::sortNodeByOrder()
-{
-	m_listNode.sort(sortNode_order);
 }

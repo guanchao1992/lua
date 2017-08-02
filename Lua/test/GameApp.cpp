@@ -11,6 +11,12 @@
 #include "texture\Texture2D.h"
 #include <xercesc\util\PlatformUtils.hpp>
 #include "manager\TextureManager.h"
+#include "draw\DrawNode.h"
+#include "draw\DrawLayout.h"
+#include "base\NodeList.h"
+#include "base\NodeVector.h"
+#include <D3DX10math.h>
+#include "draw\DrawNode.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -63,6 +69,37 @@ HRESULT GameApp::Init(HWND hWnd)
 		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
 	});
 */
+
+	static NodeList* list_draw = NodeList::create();
+	list_draw->retain();
+	GameTime::getInstance()->addTimer(0, .3f, -1,[=](float t) {
+		DrawLayout*layout = DrawManager::getInstance()->getLayout(0);
+		if (layout)
+		{
+			DrawNode*tn = DrawNode::create();
+			layout->addChild(tn);
+			tn->setPosition(Position2D(0, 100));
+			list_draw->PushBack(tn);
+			tn->DrawImage("redbox", Rect2D(0, 0, 30, 30));
+
+			tn->DrawRect(Rect2D(0, 100, 30, 30), 0xFF00ffff);
+		}
+	});
+	GameTime::getInstance()->addTimer(1, 0.02f, -1, [=](float t) {
+		for (int i = 0; i < list_draw->getCount(); ++i)
+		{
+			Node*tn = list_draw->getNodeAtIndex(i);
+			tn->setPosition(tn->getPosition() + Position2D(400 * t, 0));
+
+			if (tn->getPosition().getPositionX() > 800)
+			{
+				tn->removeFromeParent();
+				list_draw->removeNode(tn);
+				tn->setVisible(false);
+			}
+		}
+	});
+
 }
 
 void GameApp::Close()
@@ -73,8 +110,6 @@ void GameApp::Close()
 	TextureManager::getInstance()->releaseAllTexture();
 	//最后检查一次引用计数
 	ObjectManager::getInstance()->checkDelete();
-	ObjectManager::getInstance()->checkDelete();
-	ObjectManager::getInstance()->checkDelete();
 	VideoManager::getInstance()->CleanupDevice();
 	log_close();
 	xercesc_3_1::XMLPlatformUtils::Terminate();
@@ -83,6 +118,8 @@ void GameApp::Close()
 void GameApp::Render()
 {
 	VideoManager::getInstance()->ClearTargetView();
+	//pD3DDEV->SetStreamSource
+
 	DrawManager::getInstance()->RenderDraw();
 	VideoManager::getInstance()->Present();
 }

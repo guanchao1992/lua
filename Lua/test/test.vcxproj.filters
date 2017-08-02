@@ -69,23 +69,26 @@
     <ClCompile Include="base\NodeList.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="draw\DrawNode.cpp">
-      <Filter>draw</Filter>
-    </ClCompile>
     <ClCompile Include="manager\GameTime.cpp">
       <Filter>manager</Filter>
     </ClCompile>
     <ClCompile Include="texture\Texture2D.cpp">
       <Filter>texture</Filter>
     </ClCompile>
-    <ClCompile Include="draw\TextureNode.cpp">
-      <Filter>draw</Filter>
-    </ClCompile>
     <ClCompile Include="manager\TextureManager.cpp">
       <Filter>manager</Filter>
     </ClCompile>
     <ClCompile Include="base\TextureBuffer.cpp">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\NodeVector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\DrawBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\DrawNode.cpp">
+      <Filter>draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +146,6 @@
     <ClInclude Include="base\NodeList.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="draw\DrawNode.h">
-      <Filter>draw</Filter>
-    </ClInclude>
     <ClInclude Include="base\Rect2D.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -154,9 +154,6 @@
     </ClInclude>
     <ClInclude Include="texture\Texture2D.h">
       <Filter>texture</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\TextureNode.h">
-      <Filter>draw</Filter>
     </ClInclude>
     <ClInclude Include="dxconfig.h">
       <Filter>头文件</Filter>
@@ -169,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="base\TextureBuffer.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\NodeVector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\DrawBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\DrawNode.h">
+      <Filter>draw</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

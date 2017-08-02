@@ -1,22 +1,19 @@
 #pragma once
-#include <list>
+#include <vector>
 #include "Ref.h"
 
 class Node;
-//这个是会自动排序
-class NodeList : public Ref
+class NodeVector : public Ref
 {
 protected:
-	NodeList();
+	NodeVector();
 public:
-	virtual ~NodeList();
+	virtual ~NodeVector();
 public:
-	STATIC_NODE_CREATE(NodeList);
+	STATIC_NODE_CREATE(NodeVector);
 	bool		init() { return true; };
 	void		PushBack(Node*node);
-	void		PushFront(Node*node);
 	void		PopBack();
-	void		PopFront();
 	void		Insert(unsigned int index, Node*node);
 
 	Node*		removeFromTag(int tag);
@@ -25,10 +22,9 @@ public:
 	void		Clear();
 
 	Node*		getNodeAtIndex(int index);
-	const std::list<Node*>&	getListNode() { return m_listNode; };
-	void		sortNodeByOrder();
+	const std::vector<Node*>&	getListNode() { return m_listNode; };
 	size_t		getCount() { return m_listNode.size(); };
 private:
-	std::list<Node*> m_listNode;
+	std::vector<Node*> m_listNode;
 };
 

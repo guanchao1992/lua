@@ -121,7 +121,7 @@ bool TextureBuffer::parse()
 		int w = xercesc::XMLString::parseInt(pAtt->getNamedItem(xercesc::XMLString::transcode("Width"))->getTextContent());
 		int h = xercesc::XMLString::parseInt(pAtt->getNamedItem(xercesc::XMLString::transcode("Height"))->getTextContent());
 
-		Rect2D rect(x / m_size.getWidth(), y / m_size.getHeight(), w / m_size.getWidth(), h / m_size.getHeight());
+		Rect2D rect(x / m_size.getWidth(), 1 - (y + h) / m_size.getHeight(), w / m_size.getWidth(), h / m_size.getHeight());
 
 		m_mapImage[imagename] = new Image(imagename, this, rect);
 	}

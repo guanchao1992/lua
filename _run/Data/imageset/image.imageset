@@ -1,4 +1,9 @@
 <Imageset>
-  <Image Name="1" Imageset="1" />
-  <Image Name="2" Imageset="1" />
+  <Image Name="bg" Imageset="box" />
+  <Image Name="bluebox" Imageset="box" />
+  <Image Name="greenbox" Imageset="box" />
+  <Image Name="orangebox" Imageset="box" />
+  <Image Name="purplebox" Imageset="box" />
+  <Image Name="redbox" Imageset="box" />
+  <Image Name="yellowbox" Imageset="box" />
 </Imageset>
