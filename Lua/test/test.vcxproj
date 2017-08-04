@@ -46,6 +46,8 @@
     <ClInclude Include="manager\TextureManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="tetris\Block.h" />
+    <ClInclude Include="tetris\Map.h" />
     <ClInclude Include="texture\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +71,8 @@
     <ClCompile Include="manager\ScriptsManager.cpp" />
     <ClCompile Include="manager\TextureManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
+    <ClCompile Include="tetris\Block.cpp" />
+    <ClCompile Include="tetris\Map.cpp" />
     <ClCompile Include="texture\Texture2D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

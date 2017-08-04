@@ -8,11 +8,11 @@
 #include "..\GameApp.h"
 
 
-Timer* Timer::create(int id, float span, int loop, TIMER_FUNC func)
+Timer* Timer::create(const std::string&name, float span, int loop, TIMER_FUNC func)
 {
 	Timer* ret = new Timer();
 	 ret->autorelease(); 
-	 ret->m_id = id;
+	 ret->m_name = name;
 	 ret->m_span = span;
 	 ret->m_loop = loop;
 	 ret->m_func = func;
@@ -40,6 +40,11 @@ bool Timer::timerCheck(double timeNow)
 		return true;
 	}
 	return false;
+}
+
+void Timer::restart()
+{
+	m_endTime = timeGetTime() / 1000.f + m_span;
 }
 
 SingletonClaseCpp(GameTime);
@@ -110,21 +115,30 @@ void GameTime::updateTime(float f)
 	GameApp::getInstance()->Update(f);
 }
 
-Timer* GameTime::addTimer(int id, float span, int loop, TIMER_FUNC func)
+Timer* GameTime::addTimer(const std::string&timerName, float span, int loop, TIMER_FUNC func)
 {
 	Timer* t = nullptr;
-	if (m_mapTimers.find(id) != m_mapTimers.end())
+	if (m_mapTimers.find(timerName) != m_mapTimers.end())
 	{
-		t = m_mapTimers[id];
-		t->m_id = id;
+		t = m_mapTimers[timerName];
+		t->m_name = timerName;
 		t->m_span = span;
 		t->m_func = func;
 	}
 	else
 	{
-		t = Timer::create(id, span, loop, func);
+		t = Timer::create(timerName, span, loop, func);
 		t->retain();
-		m_mapTimers[id] = t;
+		m_mapTimers[timerName] = t;
 	}
 	return t;
+}
+
+void GameTime::removeTimer(const std::string&timerName)
+{
+	auto it = m_mapTimers.find(timerName);
+	if (it != m_mapTimers.end())
+	{
+		m_mapTimers.erase(it);
+	}
 }

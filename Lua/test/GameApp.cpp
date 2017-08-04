@@ -70,6 +70,7 @@ HRESULT GameApp::Init(HWND hWnd)
 	});
 */
 
+	/*
 	static NodeList* list_draw = NodeList::create();
 	list_draw->retain();
 	GameTime::getInstance()->addTimer(0, .3f, -1,[=](float t) {
@@ -99,7 +100,10 @@ HRESULT GameApp::Init(HWND hWnd)
 			}
 		}
 	});
-
+*/
+	
+	m_gameMap = new tetris::Map(10,15);
+	m_gameMap->startGame();
 }
 
 void GameApp::Close()
@@ -136,6 +140,7 @@ static clock_t t2 = 0;
 void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
+	m_gameMap->updateMap(t);
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -193,20 +198,13 @@ void GameApp::mouseEvent(const EventArgs*args)
 void GameApp::keyEvent(const EventArgs*args)
 {
 	KeyEventArgs * e = (KeyEventArgs*)args;
-	if (e->keyType == KeyEventArgs::KeyDown)
+	switch (e->keyType)
 	{
-		if (e->key == VK_A)
-		{
-			VideoManager::getInstance()->setViewSize(Size(1000, 800));
-		}
-		else if (e->key == VK_1)
-		{
-			maxnum += 100;
-		}
-		else if (e->key == VK_T)
-		{
-			Texture2D tx;
-			tx.test();
-		}
+	case KeyEventArgs::KeyDown:
+		m_gameMap->keyDown(e->key);
+		break;
+	case KeyEventArgs::KeyUp:
+		m_gameMap->keyUp(e->key);
+		break;
 	}
 }

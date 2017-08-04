@@ -3,6 +3,7 @@
 #include "base\Singleton.h"
 #include "config.h"
 #include <wtypes.h>
+#include "tetris\Map.h"
 
 class EventArgs;
 class GameApp
@@ -25,5 +26,6 @@ public:
 	void keyEvent(const EventArgs*args);
 public:
 	static GameApp* theGameApp;
+	tetris::Map* m_gameMap;
 };
 

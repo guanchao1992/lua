@@ -13,7 +13,7 @@ using namespace DirectX;
 class DrawNode :public Node
 {
 	STATIC_NODE_CREATE(DrawNode);
-private:
+protected:
 	DrawNode();
 public:
 	virtual	~DrawNode();

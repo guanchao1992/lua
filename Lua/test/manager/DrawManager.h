@@ -32,7 +32,7 @@ public:
 
 	void DrawOne(float x,float y);
 
-	DrawLayout* createLayout(int order);
+	static DrawLayout* createLayout(int order);
 	void addLayout(DrawLayout*layout);
 	DrawLayout* getLayout(int index);
 

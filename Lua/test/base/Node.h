@@ -42,6 +42,7 @@ public:
 protected:
 	virtual Position2D			getSurePosition();
 	bool						isRedraw();
+	void						doRedraw() { m_bRedraw = true; };
 private:
 	void						setParent(Node*node) { m_parent = node; };
 private:

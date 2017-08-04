@@ -90,6 +90,12 @@
     <ClCompile Include="draw\DrawNode.cpp">
       <Filter>draw</Filter>
     </ClCompile>
+    <ClCompile Include="tetris\Block.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tetris\Map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -175,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="draw\DrawNode.h">
       <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="tetris\Block.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tetris\Map.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

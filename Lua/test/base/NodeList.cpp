@@ -27,6 +27,10 @@ void NodeList::PushFront(Node*node)
 
 void NodeList::PopBack()
 {
+	if (m_listNode.size() == 0)
+	{
+		return;
+	}
 	Node* node = m_listNode.back();
 	m_listNode.pop_back();
 	node->release();
@@ -34,9 +38,31 @@ void NodeList::PopBack()
 
 void NodeList::PopFront()
 {
+	if (m_listNode.size() == 0)
+	{
+		return;
+	}
 	Node*node = m_listNode.front();
 	m_listNode.pop_front();
 	node->release();
+}
+
+Node* NodeList::Front()
+{
+	if (m_listNode.size() == 0)
+	{
+		return nullptr;
+	}
+	return m_listNode.front();
+}
+
+Node* NodeList::Back()
+{
+	if (m_listNode.size() == 0)
+	{
+		return nullptr;
+	}
+	return m_listNode.back();
 }
 
 void NodeList::Insert(unsigned int index, Node*node)
@@ -141,4 +167,28 @@ static bool sortNode_order(Node*a, Node*b)
 void NodeList::sortNodeByOrder()
 {
 	m_listNode.sort(sortNode_order);
+}
+
+void NodeList::ergodicFunc(FUNC_ListErgodic func)
+{
+	bool isDelete = false;
+	bool isEnd = false;
+	for (auto it = m_listNode.begin(); it != m_listNode.end(); ++it)
+	{
+		isDelete = false;
+		func(*it, isDelete, isEnd);
+		if (isDelete)
+		{
+			(*it)->release();
+			it = m_listNode.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+		if (isEnd)
+		{
+			break;
+		}
+	}
 }
