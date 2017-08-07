@@ -12,7 +12,7 @@ namespace tetris
 		: m_startGame(false)
 		, m_pause(false)
 		, m_nowBlock(nullptr)
-		, m_speed(500)
+		, m_speed(10)
 		, m_time(0.f)
 		, m_layout(nullptr)
 		, m_bgDraw(nullptr)
@@ -113,6 +113,7 @@ namespace tetris
 			if (m_nextBlock->getCount() < 10)
 			{
 				auto b = Block::create((BlockType)(rand() % BlockType_Max), BoxType(rand() % Box_Max), Size(BOXSIZE, BOXSIZE));
+				//auto b = Block::create((BlockType)(BlockType_7), BoxType(rand() % Box_Max), Size(BOXSIZE, BOXSIZE));
 				m_nextBlock->PushBack(b);
 				m_layout->addChild(b);
 			}
@@ -167,6 +168,7 @@ namespace tetris
 			}
 		}
 		drawBG();
+		disLine();
 	}
 
 	void Map::disLine()
@@ -190,13 +192,24 @@ namespace tetris
 		m_numDis = 0;
 	}
 
+	bool Map::isInDisLine(int line)
+	{
+		if (line >= m_height)
+		{
+			return false;
+		}
+		for (auto it = m_disLines.begin(); it != m_disLines.end(); ++it)
+		{
+			if (line == *it)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void Map::disingLine()
 	{
-		if (m_numDis >= m_width)
-		{
-			m_disLines.clear();
-			return;
-		}
 		for (auto line : m_disLines)
 		{
 			UINT index = line* m_width + m_numDis;
@@ -205,10 +218,33 @@ namespace tetris
 				m_boxMap[index].m_type = Box_Null;
 			}
 		}
-		if (m_numDis > m_width)
+		++m_numDis;
+		if (m_numDis >= m_width)
 		{
+			int lineNum = 0;
+			for (int h = 0; h < m_height; ++h)
+			{
+				while (isInDisLine(h + lineNum)) {
+					++lineNum;
+				}
+				if (h + lineNum < m_height)
+				{
+					for (int w = 0; w < m_width; ++w)
+					{
+						m_boxMap[w + h*m_width] = m_boxMap[w + (h + lineNum)*m_width];
+					}
+				}
+				else
+				{
+					for (int w = 0; w < m_width; ++w)
+					{
+						m_boxMap[w + h*m_width] = Box_Null;
+					}
+				}
+			}
 			m_disLines.clear();
 		}
+		drawBG();
 	}
 
 	void Map::updateNowBlockPos()
@@ -234,29 +270,37 @@ namespace tetris
 
 	void Map::keyDown(UINT key)
 	{
-		if (!m_leftDown && !m_rightDown && !m_downDown && !m_upDown)
-		{
-			m_timer->restart();
-		}
 		switch (key)
 		{
 		case VK_A:
-			left();
-			keyLeft(true);
-			keyRight(false);
+			if (!m_leftDown)
+			{
+				left();
+				keyLeft(true);
+				keyRight(false);
+			}
 			break;
 		case VK_D:
-			right();
-			keyRight(true);
-			keyLeft(false);
+			if (!m_rightDown)
+			{
+				right();
+				keyRight(true);
+				keyLeft(false);
+			}
 			break;
 		case VK_S:
-			down();
-			keyDown(true);
+			if (!m_downDown)
+			{
+				down();
+				keyDown(true);
+			}
 			break;
 		case VK_W:
-			rotateLeft();
-			keyUp(true);
+			if (!m_upDown)
+			{
+				rotateLeft();
+				keyUp(true);
+			}
 			break;
 		}
 	}
@@ -352,8 +396,10 @@ namespace tetris
 		m_nowBlock->rotateLeft();
 		if (collision(m_nowBlock, m_nowBlockX, m_nowBlockY))
 		{
-			m_nowBlock->rotateRight();
-			return;
+			if (!rotateAdaptation())
+			{
+				m_nowBlock->rotateRight();
+			}
 		}
 		updateNowBlockPos();
 	}
@@ -365,9 +411,33 @@ namespace tetris
 		m_nowBlock->rotateRight();
 		if (collision(m_nowBlock, m_nowBlockX, m_nowBlockY))
 		{
-			m_nowBlock->rotateLeft();
+			if (!rotateAdaptation())
+			{
+				m_nowBlock->rotateLeft();
+			}
 			return;
 		}
 		updateNowBlockPos();
+	}
+
+	bool Map::rotateAdaptation()
+	{
+		++m_nowBlockY;
+		if (collision(m_nowBlock, m_nowBlockX, m_nowBlockY))
+		{
+			--m_nowBlockY;
+			m_nowBlockX += 1;
+			if (collision(m_nowBlock, m_nowBlockX, m_nowBlockY))
+			{
+				m_nowBlockX -= 1;
+				m_nowBlockX -= 1;
+				if (collision(m_nowBlock, m_nowBlockX, m_nowBlockY))
+				{
+					m_nowBlockX += 1;
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

@@ -24,6 +24,7 @@ namespace tetris
 		void BlockGOMap(const Block*b, int blockX, int blockY);
 		void disLine();
 		void disingLine();
+		bool isInDisLine(int line);
 
 		void popNowBlock();
 
@@ -45,6 +46,8 @@ namespace tetris
 		void down();
 		void rotateLeft();
 		void rotateRight();
+
+		bool rotateAdaptation();
 
 	private:
 		UINT					m_width;
