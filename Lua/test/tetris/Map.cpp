@@ -55,6 +55,7 @@ namespace tetris
 
 			m_bgDraw = DrawNode::create();
 			m_layout->addChild(m_bgDraw, -100);
+			m_bgDraw->DrawRect(Rect2D(0, 0, m_width*BOXSIZE, m_height*BOXSIZE), 0xff1111ff);
 
 		}
 		m_startGame = true;
@@ -258,6 +259,7 @@ namespace tetris
 	void Map::drawBG()
 	{
 		m_bgDraw->clear();
+		m_bgDraw->DrawRect(Rect2D(0, 0, m_width*BOXSIZE, m_height*BOXSIZE), 0xeeeeeeff);
 		for (int i = 0; i < m_boxMap.size(); ++i)
 		{
 			Rect2D rect((i % m_width)*BOXSIZE, (i / m_width) * BOXSIZE, BOXSIZE, BOXSIZE);
