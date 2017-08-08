@@ -102,8 +102,6 @@ HRESULT GameApp::Init(HWND hWnd)
 	});
 */
 	
-	m_gameMap = new tetris::Map(10,15);
-	m_gameMap->startGame();
 }
 
 void GameApp::Close()
@@ -140,7 +138,6 @@ static clock_t t2 = 0;
 void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
-	m_gameMap->updateMap(t);
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -201,10 +198,8 @@ void GameApp::keyEvent(const EventArgs*args)
 	switch (e->keyType)
 	{
 	case KeyEventArgs::KeyDown:
-		m_gameMap->keyDown(e->key);
 		break;
 	case KeyEventArgs::KeyUp:
-		m_gameMap->keyUp(e->key);
 		break;
 	}
 }
