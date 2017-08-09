@@ -17,6 +17,7 @@
 #include "base\NodeVector.h"
 #include <D3DX10math.h>
 #include "draw\DrawNode.h"
+#include "manager\KeyManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -64,44 +65,36 @@ HRESULT GameApp::Init(HWND hWnd)
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
 
-	/*
-	GameTime::getInstance()->addTimer(0, 1.0f, -1,[](float t) {
-		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
-	});
-*/
+	KeyManager::getInstance()->Init();
 
-	/*
-	static NodeList* list_draw = NodeList::create();
-	list_draw->retain();
-	GameTime::getInstance()->addTimer(0, .3f, -1,[=](float t) {
-		DrawLayout*layout = DrawManager::getInstance()->getLayout(0);
-		if (layout)
-		{
-			DrawNode*tn = DrawNode::create();
-			layout->addChild(tn);
-			tn->setPosition(Position2D(0, 100));
-			list_draw->PushBack(tn);
-			tn->DrawImage("redbox", Rect2D(0, 0, 30, 30));
 
-			tn->DrawRect(Rect2D(0, 100, 30, 30), 0xFF00ffff);
-		}
-	});
-	GameTime::getInstance()->addTimer(1, 0.02f, -1, [=](float t) {
-		for (int i = 0; i < list_draw->getCount(); ++i)
-		{
-			Node*tn = list_draw->getNodeAtIndex(i);
-			tn->setPosition(tn->getPosition() + Position2D(400 * t, 0));
+	DrawLayout*layout = DrawManager::getInstance()->createLayout(0);
+	DrawManager::getInstance()->addLayout(layout);
+	m_drawnode = DrawNode::create();
+	m_drawnode->DrawRect(Rect2D(0, 0, 100, 100), 0xef2f00ff);
+	layout->addChild(m_drawnode);
 
-			if (tn->getPosition().getPositionX() > 800)
-			{
-				tn->removeFromeParent();
-				list_draw->removeNode(tn);
-				tn->setVisible(false);
-			}
-		}
-	});
-*/
-	
+	testKeyManager();
+}
+
+void GameApp::testKeyManager()
+{
+	KeyManager::getInstance()->RegKey('A', "×óÆ®", KeyManager::Down | KeyManager::Loop, []() {
+		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(-20, 0));
+	}, 0.1f);
+	KeyManager::getInstance()->RegKey('D', "ÓÒÆ®", KeyManager::Down | KeyManager::Loop, []() {
+		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(20, 0));
+	}, 0.1f);
+	KeyManager::getInstance()->RegKey('W', "ÉÏÆ®", KeyManager::Down | KeyManager::Loop, []() {
+		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(0, 20));
+	}, 0.1f);
+	KeyManager::getInstance()->RegKey('S', "ÏÂÆ®", KeyManager::Down | KeyManager::Loop, []() {
+		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(0, -20));
+	}, 0.1f);
 }
 
 void GameApp::Close()
@@ -138,6 +131,7 @@ static clock_t t2 = 0;
 void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
+	KeyManager::getInstance()->Update(t);
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -198,8 +192,10 @@ void GameApp::keyEvent(const EventArgs*args)
 	switch (e->keyType)
 	{
 	case KeyEventArgs::KeyDown:
+		KeyManager::getInstance()->KeyDown(e->key);
 		break;
 	case KeyEventArgs::KeyUp:
+		KeyManager::getInstance()->KeyUp(e->key);
 		break;
 	}
 }

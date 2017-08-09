@@ -3,8 +3,8 @@
 #include "base\Singleton.h"
 #include "config.h"
 #include <wtypes.h>
-#include "tetris\Map.h"
 
+class DrawNode;
 class EventArgs;
 class GameApp
 {
@@ -24,8 +24,10 @@ public:
 
 	void mouseEvent(const EventArgs*args);
 	void keyEvent(const EventArgs*args);
+
+	void testKeyManager();
 public:
 	static GameApp* theGameApp;
-	tetris::Map* m_gameMap;
+	DrawNode*	m_drawnode;
 };
 
