@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aircraft\Craft.h" />
+    <ClInclude Include="aircraft\Map.h" />
     <ClInclude Include="base\Image.h" />
     <ClInclude Include="base\lua_get.h" />
     <ClInclude Include="base\Node.h" />
@@ -50,6 +52,8 @@
     <ClInclude Include="texture\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aircraft\Craft.cpp" />
+    <ClCompile Include="aircraft\Map.cpp" />
     <ClCompile Include="base\Node.cpp" />
     <ClCompile Include="base\NodeVector.cpp" />
     <ClCompile Include="base\Ref.cpp" />

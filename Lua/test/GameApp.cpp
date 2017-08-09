@@ -68,13 +68,16 @@ HRESULT GameApp::Init(HWND hWnd)
 	KeyManager::getInstance()->Init();
 
 
-	DrawLayout*layout = DrawManager::getInstance()->createLayout(0);
+	DrawLayout*layout = DrawManager::getInstance()->createLayout<DrawLayout>(0);
 	DrawManager::getInstance()->addLayout(layout);
 	m_drawnode = DrawNode::create();
 	m_drawnode->DrawRect(Rect2D(0, 0, 100, 100), 0xef2f00ff);
 	layout->addChild(m_drawnode);
 
 	testKeyManager();
+
+	m_aircraftMap = new aircraft::Map();
+	m_aircraftMap->startGame();
 }
 
 void GameApp::testKeyManager()
@@ -99,6 +102,10 @@ void GameApp::testKeyManager()
 
 void GameApp::Close()
 {
+	m_aircraftMap->clearGame();
+	delete m_aircraftMap;
+	m_aircraftMap = nullptr;
+
 	lua_close(GetLuaState());
 
 	DrawManager::getInstance()->Cleanup();
@@ -132,6 +139,11 @@ void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
 	KeyManager::getInstance()->Update(t);
+
+	if (m_aircraftMap)
+	{
+		m_aircraftMap->updateMap(t);
+	}
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)

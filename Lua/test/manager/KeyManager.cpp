@@ -27,6 +27,24 @@ bool KeyManager::RegKey(unsigned int key, const std::string&id, UINT keyEventTyp
 	return true;
 }
 
+void KeyManager::ClearKey(unsigned int key, const std::string&id)
+{
+	if (m_mapKeyEvent.find(key)==m_mapKeyEvent.end())
+	{
+		return;
+	}
+	KeyMS& ems = m_mapKeyEvent[key];
+	if (ems.mapKey.find(id) != ems.mapKey.end())
+	{
+		ems.mapKey.erase(id);
+	}
+	if (ems.mapKey.size())
+	{
+		m_mapKeyEvent.erase(key);
+	}
+	
+}
+
 void KeyManager::Update(float t)
 {
 	for (auto &ems : m_mapKeyEvent)
@@ -35,7 +53,7 @@ void KeyManager::Update(float t)
 		{
 			for (auto &mapKey : ems.second.mapKey)
 			{
-				if (mapKey.second.type&KeyEventType::Loop)
+				if (mapKey.second.type&KeyEventType::Loop && mapKey.second.functor)
 				{
 					mapKey.second.dtime += t;
 					if (mapKey.second.dtime > mapKey.second.loopSpan)
@@ -60,7 +78,7 @@ void KeyManager::KeyDown(unsigned int key)
 		for (auto& mapKey : ems.mapKey)
 		{
 			mapKey.second.dtime = 0.f;
-			if (mapKey.second.type & KeyEventType::Down)
+			if (mapKey.second.type & KeyEventType::Down && mapKey.second.functor)
 			{
 				mapKey.second.functor();
 			}
@@ -78,10 +96,15 @@ void KeyManager::KeyUp(unsigned int key)
 		ems.isDown = false;
 		for (auto mapKey : ems.mapKey)
 		{
-			if (mapKey.second.type & KeyEventType::Up)
+			if (mapKey.second.type & KeyEventType::Up && mapKey.second.functor)
 			{
 				mapKey.second.functor();
 			}
 		}
 	}
+}
+
+bool KeyManager::IsKeyDown(unsigned int key)
+{
+	return m_mapKeyEvent[key].isDown;
 }

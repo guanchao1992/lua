@@ -55,6 +55,16 @@ public:
 		return m_y;
 	}
 
+	inline void offsetX(float x)
+	{
+		m_x += x;
+	}
+
+	inline void offsetY(float y)
+	{
+		m_y += y;
+	}
+
 	inline Position2D operator-() const
 	{
 		return Position2D(-this->m_x, -this->m_y);

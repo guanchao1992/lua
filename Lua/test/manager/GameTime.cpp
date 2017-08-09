@@ -111,7 +111,6 @@ double GameTime::getGameTime()
 //时间循环函数
 void GameTime::updateTime(float f)
 {
-
 	GameApp::getInstance()->Update(f);
 }
 

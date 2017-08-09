@@ -3,6 +3,7 @@
 #include "base\Singleton.h"
 #include "config.h"
 #include <wtypes.h>
+#include "aircraft\Map.h"
 
 class DrawNode;
 class EventArgs;
@@ -28,6 +29,7 @@ public:
 	void testKeyManager();
 public:
 	static GameApp* theGameApp;
-	DrawNode*	m_drawnode;
+	DrawNode*		m_drawnode;
+	aircraft::Map*	m_aircraftMap;
 };
 

@@ -93,6 +93,12 @@
     <ClCompile Include="manager\KeyManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="aircraft\Map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="aircraft\Craft.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -180,6 +186,12 @@
       <Filter>draw</Filter>
     </ClInclude>
     <ClInclude Include="manager\KeyManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aircraft\Map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aircraft\Craft.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

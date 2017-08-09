@@ -70,7 +70,7 @@ void DrawManager::Init()
 		}
 	}
 
-	DrawLayout *dl = createLayout(0);
+	DrawLayout *dl = createLayout<DrawLayout>(0);
 	addLayout(dl);
 	//dl->addChild(DrawNode::create());
 }
@@ -173,9 +173,10 @@ void DrawManager::RenderDraw()
 	}
 }
 
-DrawLayout* DrawManager::createLayout(int order)
+template <typename T>
+T* DrawManager::createLayout(int order)
 {
-	DrawLayout* layout = DrawLayout::create();
+	T* layout = T::create();
 	layout->setOrder(order);
 	return layout;
 }

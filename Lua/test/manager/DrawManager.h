@@ -32,7 +32,9 @@ public:
 
 	void DrawOne(float x,float y);
 
-	static DrawLayout* createLayout(int order);
+	template <typename T>
+	static T* createLayout(int order);
+
 	void addLayout(DrawLayout*layout);
 	DrawLayout* getLayout(int index);
 

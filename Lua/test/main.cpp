@@ -58,7 +58,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	DWORD lasttime = clock();
 	GameTime::getInstance()->setGameStartTime(lasttime / 1000.f);
 	GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
-	int numFPS = 120;
+	int numFPS = 60;
 	float intervaltime = 1000.f / numFPS;
 	float offInter = 0;
 	MSG msg = { 0 };
@@ -90,10 +90,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 		DWORD newtime = clock();
 		float interval = newtime - lasttime;	//执行上面的代码所耗费时间
-		lasttime = newtime;
 
-		//if (interval < intervaltime)
-		
+		if (interval < intervaltime)
+		{
+			Sleep(intervaltime - interval);
+		}
+		lasttime = newtime;
+		/*
 		int temp = interval * numFPS;
 		if (temp < 1000)
 		{
@@ -101,7 +104,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 			DWORD tempIntervalDWORD = tempInterval;
 			offInter = tempInterval - tempIntervalDWORD;
 			Sleep(tempIntervalDWORD * 2);
-		}
+		}*/
 
 		if (newtime > 10000)
 		{

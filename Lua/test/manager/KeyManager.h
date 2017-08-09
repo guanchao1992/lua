@@ -39,10 +39,15 @@ public:
 	~KeyManager();
 public:
 	bool Init();
-	bool RegKey(unsigned int key, const std::string&id, UINT keyEventType, KEYMANAGER_FUNC_EVENT functor, float span = 1.0f);
+
+	//注册按键回调
+	//对象被析构的时候，一定要注意调用ClearKey
+	bool RegKey(unsigned int key, const std::string&id, UINT keyEventType, KEYMANAGER_FUNC_EVENT functor = nullptr, float span = 1.0f);
+	void ClearKey(unsigned int key, const std::string&id);
 	void Update(float t);
 	void KeyDown(unsigned int key);
 	void KeyUp(unsigned int key);
+	bool IsKeyDown(unsigned int key);
 private:
 	std::map<unsigned int, KeyMS> m_mapKeyEvent;
 };
