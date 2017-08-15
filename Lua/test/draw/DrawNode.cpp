@@ -4,11 +4,6 @@
 #include <d3dcommon.h>
 #include <d3dcompiler.h>
 #include <directxcolors.h>
-#include "..\base\Size.h"
-#include "..\manager\VideoManager.h"
-#include "..\base\NodeList.h"
-#include <D3DX11tex.h>
-#include "..\manager\TextureManager.h"
 
 using namespace DirectX;
 
@@ -29,31 +24,21 @@ bool DrawNode::init()
 	return true;
 }
 
-void DrawNode::render()
+void DrawNode::renderThis(const Matrix4& transform)
 {
-	if (isVisible() == false)
-	{
-		return;
-	}
-	if (isRedraw())
-	{
-		redraw();
-	}
-
 	for (auto it : m_vecBuffer)
-	{
-		it->render();
-	}
-	for (Node* it : getChildren()->getListNode())
 	{
 		it->render();
 	}
 }
 
-void DrawNode::redraw()
+void DrawNode::draw(const Matrix4& transform)
 {
-	__super::redraw();
-	updateBuffer();
+	if (m_bRedraw)
+	{
+		m_bRedraw = false;
+		updateBuffer(transform);
+	}
 }
 
 void DrawNode::clear()
@@ -69,20 +54,40 @@ void DrawNode::DrawImage(const std::string&imageName, const Rect2D&rect)
 {
 	TextureRectBuffer * db = new TextureRectBuffer(imageName, rect);
 	m_vecBuffer.push_back(db);
-	updateBuffer();
+	doRedraw();
 }
 
-void DrawNode::DrawRect(const Rect2D&rect, LONG32 rgb)
+void DrawNode::DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&color)
 {
-	DrawRectBuffer *db = new DrawRectBuffer(rect, rgb);
+	DrawLineBuffer *db = new DrawLineBuffer(Vector3(pos1.x, pos1.y, 0), Vector3(pos2.x, pos2.y, 0));
+	setColor(color);
+	db->setColor(color);
 	m_vecBuffer.push_back(db);
-	updateBuffer();
+	doRedraw();
 }
 
-void DrawNode::updateBuffer()
+void DrawNode::DrawRect(const Rect2D&rect, const Color4F&color)
+{
+	DrawRectBuffer *db = new DrawRectBuffer(rect);
+	setColor(color);
+	db->setColor(color);
+	m_vecBuffer.push_back(db);
+	doRedraw();
+}
+
+void DrawNode::DrawSolidRect(const Rect2D&rect, const Color4F&color)
+{
+	DrawSolidRectBuffer *db = new DrawSolidRectBuffer(rect);
+	setColor(color);
+	db->setColor(color);
+	m_vecBuffer.push_back(db);
+	doRedraw();
+}
+
+void DrawNode::updateBuffer(const Matrix4& transform)
 {
 	for (auto &it : m_vecBuffer)
 	{
-		it->updateBuffer(getSurePosition(), getScale());
+		it->updateBuffer(transform);
 	}
 }

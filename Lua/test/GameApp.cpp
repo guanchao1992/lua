@@ -70,33 +70,38 @@ HRESULT GameApp::Init(HWND hWnd)
 
 	DrawLayout*layout = DrawManager::getInstance()->createLayout<DrawLayout>(0);
 	DrawManager::getInstance()->addLayout(layout);
-	m_drawnode = DrawNode::create();
-	m_drawnode->DrawRect(Rect2D(0, 0, 100, 100), 0xef2f00ff);
-	layout->addChild(m_drawnode);
 
+	/*
+	m_drawnode = DrawNode::create();
+	Rect2D rect = Rect2D(0.f, 0.f, 100.f, 100.f);
+	m_drawnode->DrawRect(rect, 0xef2f00ff);
+	layout->addChild(m_drawnode);
 	testKeyManager();
+*/
 
 	m_aircraftMap = new aircraft::Map();
 	m_aircraftMap->startGame();
+
+	return S_OK;
 }
 
 void GameApp::testKeyManager()
 {
 	KeyManager::getInstance()->RegKey('A', "×óÆ®", KeyManager::Down | KeyManager::Loop, []() {
 		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
-		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(-20, 0));
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Vector3(-20, 0, 0));
 	}, 0.1f);
 	KeyManager::getInstance()->RegKey('D', "ÓÒÆ®", KeyManager::Down | KeyManager::Loop, []() {
 		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
-		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(20, 0));
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Vector3(20, 0, 0));
 	}, 0.1f);
 	KeyManager::getInstance()->RegKey('W', "ÉÏÆ®", KeyManager::Down | KeyManager::Loop, []() {
 		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
-		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(0, 20));
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Vector3(0, 20, 0));
 	}, 0.1f);
 	KeyManager::getInstance()->RegKey('S', "ÏÂÆ®", KeyManager::Down | KeyManager::Loop, []() {
 		auto pos = GameApp::getInstance()->m_drawnode->getPosition();
-		GameApp::getInstance()->m_drawnode->setPosition(pos + Position2D(0, -20));
+		GameApp::getInstance()->m_drawnode->setPosition(pos + Vector3(0, -20, 0));
 	}, 0.1f);
 }
 
@@ -146,12 +151,12 @@ void GameApp::Update(float t)
 	}
 }
 
-Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
+Vector2 GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
 {
 	UINT x = LOWORD(lParam);
 	UINT y = HIWORD(lParam);
 	const Size &size= VideoManager::getInstance()->getViewSize();
-	Position2D pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
+	Vector2 pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
 	return pos;
 }
 
@@ -194,7 +199,7 @@ void GameApp::mouseEvent(const EventArgs*args)
 	MouseEventArgs * e = (MouseEventArgs *)args;
 	if (e->mouseType == MouseEventArgs::LBMouseDown)
 	{
-		DrawManager::getInstance()->DrawOne(e->viewPos.getPositionX(), e->viewPos.getPositionY());
+		DrawManager::getInstance()->DrawOne(e->viewPos.x, e->viewPos.y);
 	}
 }
 

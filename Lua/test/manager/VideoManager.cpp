@@ -233,17 +233,17 @@ Size VideoManager::getViewSize()
 	return m_viewSize;
 }
 
-Position2D VideoManager::D3DtoViewPos(const Position2D&pos)
+Vector2 VideoManager::D3DtoViewPos(const Vector2&pos)
 {
-	return Position2D((pos.getPositionX() + 1) / 2 * m_viewSize.getWidth(), (pos.getPositionY() + 1) / 2 * m_viewSize.getHeight());
+	return Vector2((pos.x + 1) / 2 * m_viewSize.getWidth(), (pos.y + 1) / 2 * m_viewSize.getHeight());
 }
 
-Position2D VideoManager::ViewPostoD3D(const Position2D&pos)
+Vector2 VideoManager::ViewPostoD3D(const Vector2&pos)
 {
-	return Position2D(2 * pos.getPositionX() / m_viewSize.getWidth() - 1, 2 * pos.getPositionY() / m_viewSize.getHeight() - 1);
+	return Vector2(2 * pos.x / m_viewSize.getWidth() - 1, 2 * pos.y / m_viewSize.getHeight() - 1);
 }
 
-Position2D VideoManager::mousetoViewPos(LONG lparam)
+Vector2 VideoManager::mousetoViewPos(LONG lparam)
 {
-	return Position2D(LOWORD(lparam), m_viewSize.getHeight() - HIWORD(lparam));
+	return Vector2(LOWORD(lparam), m_viewSize.getHeight() - HIWORD(lparam));
 }

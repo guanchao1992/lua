@@ -14,7 +14,7 @@ namespace aircraft
 {
 
 	Craft::Craft()
-		:m_speed(0, 0)
+		:m_speed(0, 0, 0)
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace aircraft
 
 	bool Craft::init()
 	{
-		DrawRect(Rect2D(0,0,50,50),0x00ee22ff);
+		DrawSolidRect(Rect2D(0,0,200,200),0x000000ff);
 		return true;
 	}
 
@@ -60,70 +60,99 @@ namespace aircraft
 
 	void Craft::resistance(float t)
 	{
-		if (m_speed.getPositionX() > RESISTANCE_NUM * t)
+		if (m_speed.x > RESISTANCE_NUM * t)
 		{
-			m_speed.offsetX(-RESISTANCE_NUM * t);
+			m_speed.x -= RESISTANCE_NUM * t;
 		}
-		else if (m_speed.getPositionX() < -RESISTANCE_NUM * t)
+		else if (m_speed.x < -RESISTANCE_NUM * t)
 		{
-			m_speed.offsetX(RESISTANCE_NUM * t);
-		}
-		else
-		{
-			m_speed.setPositionX(0);
-		}
-		if (m_speed.getPositionY() > RESISTANCE_NUM * t)
-		{
-			m_speed.offsetY(-RESISTANCE_NUM * t);
-		}
-		else if (m_speed.getPositionY() < -RESISTANCE_NUM * t)
-		{
-			m_speed.offsetY(RESISTANCE_NUM * t);
+			m_speed.x += RESISTANCE_NUM * t;
 		}
 		else
 		{
-			m_speed.setPositionY(0);
+			m_speed.x = 0;
+		}
+		if (m_speed.y > RESISTANCE_NUM * t)
+		{
+			m_speed.y -= RESISTANCE_NUM * t;
+		}
+		else if (m_speed.y < -RESISTANCE_NUM * t)
+		{
+			m_speed.y += RESISTANCE_NUM * t;
+		}
+		else
+		{
+			m_speed.y = 0;
 		}
 	}
 
 	void Craft::move(float t)
 	{
 		setPosition(getPosition() + m_speed*t);
+		if (m_positoin.x > 800) {
+			m_positoin.x = 800;
+			if (m_speed.x > 0)
+			{
+				m_speed.x > 0;
+			}
+		}
+		if (m_positoin.x < 0) {
+			m_positoin.x = 0;
+			if (m_speed.x < 0)
+			{
+				m_speed.x = 0;
+			}
+		}
+		if (m_positoin.y > 600) {
+			m_positoin.y = 600;
+			if (m_speed.y > 0)
+			{
+				m_speed.y = 0;
+			}
+		}
+		if (m_positoin.y < 0) {
+			m_positoin.y = 0;
+			if (m_speed.y < 0)
+			{
+				m_speed.y = 0;
+			}
+		}
+
 	}
 
 	void Craft::left(float t)
 	{
-		m_speed.offsetX(-CHANGE_SPEED*t);
-		if (m_speed.getPositionX() < -MaxSpeed)
+		m_speed.x -= CHANGE_SPEED*t;
+		if (m_speed.x < -MaxSpeed)
 		{
-			m_speed.setPositionX(-MaxSpeed);
+			m_speed.x = -MaxSpeed;
 		}
 	}
 
 	void Craft::right(float t)
 	{
-		m_speed.offsetX(CHANGE_SPEED*t);
-		if (m_speed.getPositionX() > MaxSpeed)
+		m_speed.x += CHANGE_SPEED*t;
+		if (m_speed.x > MaxSpeed)
 		{
-			m_speed.setPositionX(MaxSpeed);
+			m_speed.x = MaxSpeed;
 		}
 	}
 
 	void Craft::up(float t)
 	{
-		m_speed.offsetY(CHANGE_SPEED*t);
-		if (m_speed.getPositionY() > MaxSpeed)
+		m_speed.y += CHANGE_SPEED*t;
+		if (m_speed.y > MaxSpeed)
 		{
-			m_speed.setPositionY(MaxSpeed);
+			m_speed.y = MaxSpeed;
 		}
 	}
 
 	void Craft::down(float t)
 	{
-		m_speed.offsetY(-CHANGE_SPEED*t);
-		if (m_speed.getPositionY() < -MaxSpeed)
+		m_speed.y += -CHANGE_SPEED*t;
+		if (m_speed.y < -MaxSpeed)
 		{
-			m_speed.setPositionY(-MaxSpeed);
+			m_speed.y = -MaxSpeed;
 		}
 	}
 

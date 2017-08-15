@@ -7,14 +7,14 @@
 #include "..\dxconfig.h"
 
 
-class ID3D11DeviceContext;
-class ID3D11VertexShader;
-class ID3D11PixelShader;
-class ID3D11GeometryShader;
-class ID3D11InputLayout;
-class ID3D11Buffer;
-class DrawLayout;
-class NodeList;
+struct ID3D11DeviceContext;
+struct ID3D11VertexShader;
+struct ID3D11PixelShader;
+struct ID3D11GeometryShader;
+struct ID3D11InputLayout;
+struct ID3D11Buffer;
+struct DrawLayout;
+struct NodeList;
 
 class DrawManager
 {

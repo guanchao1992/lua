@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Position2D.h"
+#include "Vector2.h"
 #include "Rect2D.h"
 #include "TextureBuffer.h"
 #include "Ref.h"

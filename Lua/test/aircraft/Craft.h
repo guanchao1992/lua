@@ -28,6 +28,6 @@ namespace aircraft
 		void up(float t);
 		void down(float t);
 	private:
-		Position2D	m_speed;
+		Vector3	m_speed;
 	};
 }

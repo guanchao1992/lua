@@ -79,6 +79,6 @@ namespace aircraft
 	void Map::drawBG()
 	{
 		m_bgDraw->clear();
-		m_bgDraw->DrawRect(Rect2D(0, 0, 100 * BOXSIZE, 100 * BOXSIZE), 0xeeeeeeff);
+		m_bgDraw->DrawRect(Rect2D(0, 0, 100 * BOXSIZE, 100 * BOXSIZE), 0xffff00ff);
 	}
 }

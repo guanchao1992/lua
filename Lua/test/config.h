@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include "base\Size.h"
-#include "base\Position3D.h"
-#include "base\Position2D.h"
+#include "base\Vector3.h"
+#include "base\Vector2.h"
 
 //定义数据字符0~9  
 #define   VK_0         0x30   

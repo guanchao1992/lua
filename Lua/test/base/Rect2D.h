@@ -1,5 +1,5 @@
 #pragma once
-#include "Position2D.h"
+#include "Vector2.h"
 #include "Size.h"
 
 class Rect2D
@@ -12,14 +12,14 @@ public:
 	{
 	}
 
-	Rect2D(float positionX, float positionY, float width, float height)
-		: m_origin(positionX, positionY)
+	Rect2D(float ValueX, float ValueY, float width, float height)
+		: m_origin(ValueX, ValueY)
 		, m_size(width, height)
 	{
 	}
 
-	Rect2D(const Position2D&position, const Size&size)
-		: m_origin(position)
+	Rect2D(const Vector2&Value, const Size&size)
+		: m_origin(Value)
 		, m_size(size)
 	{
 	}
@@ -33,15 +33,15 @@ public:
 	{
 	}
 
-	inline void setRect(float positionX, float positionY, float width, float height)
+	inline void setRect(float ValueX, float ValueY, float width, float height)
 	{
-		m_origin.setPosition(positionX, positionY);
+		m_origin.setValue(ValueX, ValueY);
 		m_size.setSize(width, height);
 	}
 
-	inline void setRect(const Position2D&position, const Size&size)
+	inline void setRect(const Vector2&Value, const Size&size)
 	{
-		m_origin.setPosition(position);
+		m_origin.setValue(Value);
 		m_size.setSize(size);
 	}
 
@@ -50,9 +50,9 @@ public:
 		*this = Rect2D;
 	}
 
-	inline void setOrigin(const Position2D&position)
+	inline void setOrigin(const Vector2&Value)
 	{
-		m_origin.setPosition(position);
+		m_origin.setValue(Value);
 	}
 
 	inline void setSize(const Size&size)
@@ -60,7 +60,7 @@ public:
 		m_size.setSize(size);
 	}
 
-	inline const Position2D&getOrigin() const
+	inline const Vector2&getOrigin() const
 	{
 		return m_origin;
 	}
@@ -72,12 +72,12 @@ public:
 
 	inline const float getOriginX() const
 	{
-		return m_origin.getPositionX();
+		return m_origin.getValueX();
 	}
 
 	inline const float getOriginY() const
 	{
-		return m_origin.getPositionY();
+		return m_origin.getValueY();
 	}
 
 	inline float getWidth() const
@@ -102,7 +102,7 @@ public:
 		return (this->m_origin == rect.m_origin && this->m_size == rect.m_size);
 	}
 private:
-	Position2D	m_origin;
+	Vector2	m_origin;
 	Size		m_size;
 };
 

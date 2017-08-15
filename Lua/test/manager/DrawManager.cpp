@@ -140,11 +140,11 @@ void DrawManager::DrawOne(float x,float y)
 		/*
 		DrawNode*dn = DrawNode::create();
 		layout->addChild(dn);
-		dn->setPosition(Position2D(x, y));
+		dn->setPosition(Vector2(x, y));
 */
 		DrawNode*tn = DrawNode::create();
 		layout->addChild(tn);
-		tn->setPosition(Position2D(x, y));
+		tn->setPosition(Vector2(x, y));
 	}
 }
 

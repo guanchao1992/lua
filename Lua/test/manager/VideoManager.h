@@ -9,14 +9,15 @@ struct shaderData
 	UINT size;
 };
 
-class ID3D11Device;
-class ID3D11DeviceContext;
-class IDXGISwapChain;
-class ID3D11RenderTargetView;
-class ID3D11VertexShader;
-class ID3D11PixelShader;
-class ID3D11Buffer;
-class ID3D11InputLayout;
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+struct IDXGISwapChain;
+struct ID3D11RenderTargetView;
+struct ID3D11VertexShader;
+struct ID3D11PixelShader;
+struct ID3D11Buffer;
+struct ID3D11InputLayout;
+struct ID3D10EffectMatrixVariable;
 
 ID3D11Device*			getD3DDevice();
 ID3D11DeviceContext*	getD3DContext();
@@ -41,12 +42,12 @@ public:
 	
 
 	//将d3d的坐标转换成view坐标
-	Position2D D3DtoViewPos(const Position2D&pos);
+	Vector2 D3DtoViewPos(const Vector2&pos);
 	//将view坐标转换成d3d的坐标
-	Position2D ViewPostoD3D(const Position2D&pos);
+	Vector2 ViewPostoD3D(const Vector2&pos);
 
 	//将window屏幕坐标转化成view坐标
-	Position2D mousetoViewPos(LONG lparam);
+	Vector2 mousetoViewPos(LONG lparam);
 	void setViewSize(Size size);
 	Size getViewSize();
 private:
@@ -54,6 +55,7 @@ private:
 	ID3D11DeviceContext*    m_pImmediateContext;
 	IDXGISwapChain*         m_pSwapChain;
 	ID3D11RenderTargetView* m_pRenderTargetView;
+	ID3D10EffectMatrixVariable *m_pFxWorldViewProj;
 
 	Size					m_viewSize;
 	HWND					m_hWnd;

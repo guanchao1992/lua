@@ -7,6 +7,7 @@
 #include "..\dxconfig.h"
 #include "..\base\Image.h"
 #include "..\draw\DrawBuffer.h"
+#include "..\base\Matrix4.h"
 
 using namespace DirectX;
 
@@ -19,14 +20,17 @@ public:
 	virtual	~DrawNode();
 public:
 	bool	init();
-	virtual void render();
-	virtual void redraw();
+	virtual void draw(const Matrix4& transform) override;
+	//virtual void render(const Matrix4& transform) override;
+	virtual void renderThis(const Matrix4& transform) override;
 	void	DrawImage(const std::string&imageName, const Rect2D&rect);
-	void	DrawRect(const Rect2D&rect, LONG32 rgb);
+	void	DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&color);
+	void	DrawRect(const Rect2D&rect, const Color4F&color);
+	void	DrawSolidRect(const Rect2D&rect, const Color4F&color);
 	void	clear();
 
-private:
-	void	updateBuffer();
+protected:
+	virtual void	updateBuffer(const Matrix4& transform) override;
 private:
 	std::vector<DrawBuffer*>		m_vecBuffer;
 

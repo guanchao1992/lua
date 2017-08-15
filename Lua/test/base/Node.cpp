@@ -2,6 +2,9 @@
 #include "..\manager\ObjectManager.h"
 #include <assert.h>
 #include "NodeList.h"
+#include <wtypes.h>
+#include "..\draw\DrawBuffer.h"
+#include "MyMath.h"
 
 
 Node::Node()
@@ -9,8 +12,9 @@ Node::Node()
 	, m_listChildren(nullptr)
 	, m_tag(0)
 	, m_order(100000)
-	, m_positoin(0.0f, 0.0f)
-	, m_scale(1.0f)
+	, m_positoin(0.0f, 0.0f, 0.0f)
+	, m_scale(1.0f, 1.0f, 1.0f)
+	, m_rotate(0.f, 0.f, 0.f)
 	, m_bRedraw(false)
 	, m_isVisible(true)
 {
@@ -36,6 +40,7 @@ void Node::addChild(Node*node, int order)
 		node->setParent(this);
 		node->m_order = order;
 		m_listChildren->PushBack(node);
+		m_bRedraw = true;
 	}
 }
 
@@ -58,6 +63,7 @@ void Node::removeFromTag(int tag)
 	{
 		node->setParent(nullptr);
 	}
+	m_bRedraw = true;
 }
 
 void Node::removeChild(Node*node)
@@ -68,6 +74,7 @@ void Node::removeChild(Node*node)
 	}
 	node->setParent(nullptr);
 	m_listChildren->removeNode(node);
+	m_bRedraw = true;
 }
 
 void Node::removeAllChild()
@@ -77,6 +84,7 @@ void Node::removeAllChild()
 		it->setParent(nullptr);
 	}
 	m_listChildren->Clear();
+	m_bRedraw = true;
 }
 
 void Node::removeFromeParent()
@@ -87,37 +95,160 @@ void Node::removeFromeParent()
 	}
 	m_parent->removeChild(this);
 	m_parent = nullptr;
+	m_bRedraw = true;
+}
+
+void Node::render(const Matrix4& transform)
+{
+	if (isVisible() == false)
+	{
+		return;
+	}
+	Matrix4 newTransform = getTransform(transform);
+	draw(newTransform);
+	//在底下的
+	for (Node* it : getChildren()->getListNode())
+	{
+		if (it->getOrder() < 0)
+		{
+			it->render(newTransform);
+		}
+	}
+	renderThis(newTransform);
+	for (Node* it : getChildren()->getListNode())
+	{
+		if (it->getOrder() <= 0)
+		{
+			it->render(newTransform);
+		}
+	}
+}
+
+void Node::renderThis(const Matrix4& transform)
+{ }
+
+void Node::draw(const Matrix4& transform)
+{
+	m_bRedraw = false;
 }
 
 void Node::setOrder(int order)
 {
-	if (m_order != order)
-	{
-		m_order = order;
+	if (m_order == order) {
+		return;
 	}
+	m_order = order;
 	m_listChildren->sortNodeByOrder();
+	m_bRedraw = true;
 }
 
-void Node::setPosition(const Position2D&position)
+void Node::setPosition(const Vector3&position)
 {
+	if (m_positoin == position) {
+		return;
+	}
 	m_positoin = position;
 	m_bRedraw = true;
 };
 
+void Node::setPosition(const Vector2&position)
+{
+	if (m_positoin.x == position.x && m_positoin.y == position.y) {
+		return;
+	}
+	m_positoin.x = position.x;
+	m_positoin.y = position.y;
+	m_bRedraw = true;
+}
+
+void Node::setScaleX(float scale)
+{
+	if (m_scale.x == scale) {
+		return;
+	}
+	m_scale.x = scale;
+	m_bRedraw = true;
+}
+
+void Node::setScaleY(float scale)
+{
+	if (m_scale.y == scale) {
+		return;
+	}
+	m_scale.y = scale;
+	m_bRedraw = true;
+}
+
+void Node::setScaleZ(float scale)
+{
+	if (m_scale.z == scale) {
+		return;
+	}
+	m_scale.z = scale;
+	m_bRedraw = true;
+}
+
 void Node::setScale(float scale)
 {
+	if (m_scale.x == scale &&m_scale.y == scale &&m_scale.z == scale) {
+		return;
+	}
+	m_scale.x = m_scale.y = m_scale.z = scale;
+	m_bRedraw = true;
+}
+
+void Node::setScale(const Vector3& scale)
+{
+	if (m_scale == scale) {
+		return;
+	}
 	m_scale = scale;
 	m_bRedraw = true;
 }
 
-Position2D Node::getSurePosition()
+void Node::setRotateX(float angle)
 {
-	Position2D pos = m_positoin;
-	if (getParent() != 0)
-	{
-		pos = pos + getParent()->getSurePosition();
+	if (m_rotate.x == angle) {
+		return;
 	}
-	return pos;
+	m_rotate.x = angle;
+	m_bRedraw = true;
+}
+
+void Node::setRotateY(float angle)
+{
+	if (m_rotate.y == angle) {
+		return;
+	}
+	m_rotate.y = angle;
+	m_bRedraw = true;
+}
+
+void Node::setRotateZ(float angle)
+{
+	if (m_rotate.z == angle) {
+		return;
+	}
+	m_rotate.z = angle;
+	m_bRedraw = true;
+}
+
+void Node::setRotate(const Vector3& angle)
+{
+	if (m_rotate == angle) {
+		return;
+	}
+	m_rotate = angle;
+	m_bRedraw = true;
+}
+
+void Node::setColor(const Color4F&color)
+{
+	if (m_color == color) {
+		return;
+	}
+	m_color = color;
+	m_bRedraw = true;
 }
 
 bool Node::isRedraw()
@@ -131,4 +262,52 @@ bool Node::isRedraw()
 		return true;
 	}
 	return false;
+}
+
+Matrix4	Node::getTransform(const Matrix4&transform)
+{
+
+	Matrix4 newTransform = transform;
+	//平移
+	Matrix4 mv;
+	mv.setColumn(3, m_positoin);
+	newTransform = newTransform.multiply(mv);
+
+	//旋转
+	Vector3 radian = MyMath::DegreeRadian(m_rotate);
+
+	UINT i, j, k, p, r, f;
+	const float ti = radian.x;
+	const float tj = radian.y;
+	const float th = radian.z;
+
+	const float ci = cosf(ti);
+	const float cj = cosf(tj);
+	const float ch = cosf(th);
+
+	const float si = sinf(ti);
+	const float sj = sinf(tj);
+	const float sh = sinf(th);
+
+	const float cc = ci * ch;
+	const float cs = ci * sh;
+	const float sc = si * ch;
+	const float ss = si * sh;
+
+	Matrix4 mr;
+	mr.set(cj*ch, sj*sc - cs, sj*cc + ss, 0,
+		cj*sh, sj*ss + cc, sj*cs - sc, 0,
+		-sj, cj*si, cj*ci, 0,
+		0, 0, 0, 1);
+	newTransform = newTransform.multiply(mr);
+
+	//缩放
+	Matrix4 ms(m_scale.x, 0.f, 0.f, 0.f,
+		0.f, m_scale.y, 0.f, 0.f,
+		0.f, 0.f, m_scale.z, 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+	newTransform = newTransform.multiply(ms);
+
+	return newTransform;
 }
