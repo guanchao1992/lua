@@ -50,6 +50,8 @@ public:
 	Vector2 mousetoViewPos(LONG lparam);
 	void setViewSize(Size size);
 	Size getViewSize();
+
+	void updateWorldTransform();
 private:
 	ID3D11Device*			m_pd3dDevice;
 	ID3D11DeviceContext*    m_pImmediateContext;

@@ -160,7 +160,7 @@ void DrawManager::setShaderType(ShaderType type)
 	}
 }
 
-void DrawManager::RenderDraw()
+void DrawManager::RenderDraw(const Matrix4& transform)
 {
 	//getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
 	//getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
@@ -169,7 +169,7 @@ void DrawManager::RenderDraw()
 	for (auto it : m_listVertexLayout->getListNode())
 	{
 		DrawLayout*layout = (DrawLayout*)it;
-		layout->render();
+		layout->render(transform);
 	}
 }
 

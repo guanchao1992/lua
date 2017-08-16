@@ -78,9 +78,12 @@ void DrawNode::DrawRect(const Rect2D&rect, const Color4F&color)
 void DrawNode::DrawSolidRect(const Rect2D&rect, const Color4F&color)
 {
 	DrawSolidRectBuffer *db = new DrawSolidRectBuffer(rect);
+	DrawRectBuffer *db2 = new DrawRectBuffer(rect);
 	setColor(color);
 	db->setColor(color);
+	db2->setColor(0xff0000ff);
 	m_vecBuffer.push_back(db);
+	m_vecBuffer.push_back(db2);
 	doRedraw();
 }
 

@@ -16,7 +16,7 @@ public:
 public:
 	bool	init();
 
-	void	render();
+	void	render(const Matrix4& transform);
 private:
 	ID3D11InputLayout*					m_pDrawVertexLayout;
 	int									m_order;

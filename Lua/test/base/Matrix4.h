@@ -3,6 +3,7 @@
 #include "Vector4.h"
 #include <corecrt_memcpy_s.h>
 #include "baseMath.h"
+#include <DirectXMath.h>
 
 class Matrix4
 {
@@ -13,10 +14,10 @@ public:
 	}
 
 	Matrix4(
-		float f00, float f10, float f20, float f30,
-		float f01, float f11, float f21, float f31,
-		float f02, float f12, float f22, float f32,
-		float f03, float f13, float f23, float f33
+		float f00, float f01, float f02, float f03,
+		float f10, float f11, float f12, float f13,
+		float f20, float f21, float f22, float f23,
+		float f30, float f31, float f32, float f33
 	)
 	{
 		m_Column[0][0] = f00; m_Column[1][0] = f10; m_Column[2][0] = f20; m_Column[3][0] = f30;
@@ -93,10 +94,10 @@ public:
 	}
 
 	inline void set(
-		float f00, float f10, float f20, float f30,
-		float f01, float f11, float f21, float f31,
-		float f02, float f12, float f22, float f32,
-		float f03, float f13, float f23, float f33
+		float f00, float f01, float f02, float f03,
+		float f10, float f11, float f12, float f13,
+		float f20, float f21, float f22, float f23,
+		float f30, float f31, float f32, float f33
 	)
 	{
 		m_Column[0][0] = f00; m_Column[1][0] = f10; m_Column[2][0] = f20; m_Column[3][0] = f30;
@@ -226,6 +227,12 @@ public:
 	inline Matrix4& operator=(const Matrix4& mat)
 	{
 		memcpy_s(this, sizeof(Matrix4), &mat, sizeof(Matrix4));
+		return *this;
+	}
+
+	inline Matrix4& operator=(const DirectX::XMMATRIX&mat)
+	{
+		memcpy_s(this, sizeof(Matrix4), &mat, sizeof(DirectX::XMMATRIX));
 		return *this;
 	}
 

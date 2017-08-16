@@ -19,9 +19,8 @@ struct DrawBuffer
 	virtual void				setColor(const Color4F&color);
 protected:
 	ID3D11Buffer*				m_d3dBuffer;
-	SimpleVertexOriginal*		m_OriginalVertex;		//保存最初的定点集合
+	SimpleVertexMain*			m_OriginalVertex;		//保存最初的定点集合
 	SimpleVertexMain*			m_nowlVertex;
-	XMFLOAT4					m_color;		// Color
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
 	UINT						m_BindFlags;

@@ -30,12 +30,8 @@ bool DrawLayout::init()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//点坐标
-		{ "CENTER", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//偏移中心点
-		{ "ROTATE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//旋转方向
-		{ "ANGLE", 0, DXGI_FORMAT_R32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },			//旋转角度
-		{ "SCALE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },		//缩放比例
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//颜色
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 },		//纹理坐标
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//颜色
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },		//纹理坐标
 	};
 	UINT numElements = ARRAYSIZE(layout);
 	// Create the input layout
@@ -49,21 +45,22 @@ bool DrawLayout::init()
 	return true;
 }
 
-void DrawLayout::render()
+void DrawLayout::render(const Matrix4& transform)
 {
+	if (isVisible() == false)
+	{
+		return;
+	}
+	Matrix4 newTransform = getTransform(transform);
+	draw(newTransform);
+
 	getD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
+	renderThis(newTransform);
 
-	Size winSize = VideoManager::getInstance()->getViewSize();
-	Matrix4 world_transform(
-		2.0 / winSize.getWidth(), 0, 0, -1,
-		0, 2.0 / winSize.getHeight(), 0, -1,
-		0, 0, 2.0 / winSize.getWidth(), 0,
-		0, 0, 0, 1
-	);
 	for (Node* it : getChildren()->getListNode())
 	{
-		it->render(world_transform);
+		it->render(newTransform);
 	}
 	m_bRedraw = false;
 }

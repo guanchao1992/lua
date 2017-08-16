@@ -12,9 +12,9 @@ public:
 	}
 
 	Matrix3(
-		float f00, float f10, float f20,
-		float f01, float f11, float f21,
-		float f02, float f12, float f22
+		float f00, float f01, float f02,
+		float f10, float f11, float f12,
+		float f20, float f21, float f22
 	)
 	{
 		m_Column[0][0] = f00; m_Column[1][0] = f10; m_Column[2][0] = f20;
@@ -86,9 +86,9 @@ public:
 	}
 
 	inline void set(
-		float f00, float f10, float f20,
-		float f01, float f11, float f21,
-		float f02, float f12, float f22
+		float f00, float f01, float f02,
+		float f10, float f11, float f12,
+		float f20, float f21, float f22
 	)
 	{
 		m_Column[0][0] = f00; m_Column[1][0] = f10; m_Column[2][0] = f20;

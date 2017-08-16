@@ -7,10 +7,12 @@
 #define ROTE_PI			3.1415926535
 
 
-cbuffer CBufferPerObject
+cbuffer ConstantBuffer
 {
-	float4x4 WorldViewProjection : WORLDVIEWPROJECTION<string UIWidget = "None"; >;
-}
+	matrix World;
+	matrix View;
+	matrix Projection;
+};
 
 RasterizerState DisableCulling
 {
@@ -34,9 +36,6 @@ SamplerState ColorSampler
 struct VS_INPUT
 {
 	float4 pos : POSITION;
-	float4 center : CENTER;
-	float3 rotate : ROTATE;	
-	float3 scale : SCALE;
 	float4 color : COLOR;
 	float2 tx0 : TEXCOORD;
 };
@@ -51,47 +50,19 @@ float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 #endif
 }
 
-float4 posToSurePos(float4 pos, float4 center, float3 rotate, float3 scale)
+float4 posToSurePos(float4 pos)
 {
-	float4 outPos;
-	outPos.w = pos.w;
-	float4 vecPos = pos - center;
-	//Ðý×ª
-	/*
-	float3x4 matrix_x = {	{ 1,0,0 },
-							{ 0,cos(rotate.x),sin(rotate.x) },
-							{ 0,-sin(rotate.x),cos(rotate.x) },
-							{ 0,0,0 }};
-*/
-
-	float4x4 matrix_x = {	{ 1,0,0,0},
-							{ 0,cos(rotate.x),sin(rotate.x),0 },
-							{ 0,-sin(rotate.x),cos(rotate.x),0},
-							{ 0,0,0,1} };
-
-	float4x4 matrix_y = {	{ cos(rotate.y),0,sin(rotate.y),0},
-							{ 0,1,0,0 },
-							{ -sin(rotate.y),0,cos(rotate.y),0},
-							{ 0,0,0,1} };
-
-	float4x4 matrix_z = {	{ cos(rotate.z),sin(rotate.z),0,0},
-							{ -sin(rotate.z),cos(rotate.z),0,0},
-							{ 0,0,1,0 },
-							{ 0,0,0,1} };
-
-	/*
-	vecPos = mul(vecPos, matrix_x);
-	vecPos = mul(vecPos, matrix_y);
-	vecPos = mul(vecPos, matrix_z);
-*/
-	//Ëõ·Å
-	/*
-	outPos.x = vecPos.x * scale.x + center.x;
-	outPos.y = vecPos.y * scale.y + center.y;
-	outPos.z = vecPos.z * scale.z + center.z;
-	*/
-	outPos = pos;
-
+	float4 outPos = pos;
+	outPos = mul(World,pos);
+	float zs = 1.f;
+	zs = (1.0 - 0.2*outPos.z) / 0.8f;
+	if (zs < 0)
+	{
+		zs = 0;
+	}
+	outPos.x = outPos.x * zs;
+	outPos.y = outPos.y * zs;
+	outPos.z = outPos.z * 0.0001;
 	return outPos;
 }
 
@@ -122,7 +93,7 @@ void VS_Normal(VS_INPUT input,
 	out float4 outPos : SV_POSITION,
 	out float4 outColor : COLOR)
 {
-	outPos = posToSurePos(input.pos, input.center, input.rotate, input.scale);
+	outPos = posToSurePos(input.pos);
 	//outPos = input.pos;
 	outColor = input.color;
 }

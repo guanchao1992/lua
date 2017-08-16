@@ -15,6 +15,7 @@ struct ID3D11InputLayout;
 struct ID3D11Buffer;
 struct DrawLayout;
 struct NodeList;
+class Matrix4;
 
 class DrawManager
 {
@@ -38,7 +39,7 @@ public:
 	void addLayout(DrawLayout*layout);
 	DrawLayout* getLayout(int index);
 
-	void RenderDraw();
+	void RenderDraw(const Matrix4& transform);
 private:
 	NodeList*									m_listVertexLayout;
 	std::map<const char*, ID3DBlob*>			m_mapID3DBlob;

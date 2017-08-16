@@ -54,6 +54,22 @@ namespace aircraft
 		{
 			down(t);
 		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_E))
+		{
+			setRotateX(getRotateX()+1);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_Q))
+		{
+			setRotateY(getRotateY() + 1);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_Z))
+		{
+			setRotateZ(getRotateZ() + 1);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
+		{
+			setRotate(Vector3(0, 0, 0));
+		}
 		move(t);
 		resistance(t);
 	}

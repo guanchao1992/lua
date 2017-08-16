@@ -12,6 +12,7 @@
 */
 class Singleton
 {
+	Singleton();
 	SingletonClase(Singleton);
 };
 

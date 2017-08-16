@@ -79,9 +79,10 @@ HRESULT GameApp::Init(HWND hWnd)
 	testKeyManager();
 */
 
+	updateCameraTransform();
+
 	m_aircraftMap = new aircraft::Map();
 	m_aircraftMap->startGame();
-
 	return S_OK;
 }
 
@@ -127,18 +128,26 @@ void GameApp::Render()
 	VideoManager::getInstance()->ClearTargetView();
 	//pD3DDEV->SetStreamSource
 
-	DrawManager::getInstance()->RenderDraw();
+	DrawManager::getInstance()->RenderDraw(m_camera_transform);
 	VideoManager::getInstance()->Present();
+
 }
 
-static int rectnum = 0;
-static int maxnum = 100;
-
-static int nfps = 0;
-static int ifps = 0;
-static clock_t t0 = 0;
-static clock_t t1 = 0;
-static clock_t t2 = 0;
+void GameApp::updateCameraTransform()
+{
+	Size winSize = VideoManager::getInstance()->getViewSize();
+	m_camera_transform.set(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	);
+	auto eye = XMVectorSet(0, 0, -1000, 0);
+	auto at = XMVectorSet(0, 0, 0, 0);
+	auto up = XMVectorSet(0, 1, 0, 0);
+	auto viewMatrix = XMMatrixLookAtLH(eye, at, up);
+	m_camera_transform = viewMatrix;
+}
 
 void GameApp::Update(float t)
 {

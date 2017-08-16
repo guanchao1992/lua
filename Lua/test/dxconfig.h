@@ -18,32 +18,15 @@ enum ShaderType
 
 #define Blob_VS_Main "VS_Main"
 #define Blob_PS_Main "PS_Main"
-struct SimpleVertexOriginal
-{
-	SimpleVertexOriginal()
-		: Pos(0.f, 0.f, 0.f, 1.0f)
-		, Center(0.f, 0.f, 0.f, 1.0f)
-		, Tx0(0.f, 0.f)
-	{}
-	XMFLOAT4 Pos;		// Position
-	XMFLOAT4 Center;	// Position
-	XMFLOAT2 Tx0;		// Texture
-}; 
 
 struct SimpleVertexMain
 {
 	SimpleVertexMain()
 		: Pos(0.f, 0.f, 0.f, 1.0f)
-		, Center(0.f, 0.f, 0.f, 1.0f)
-		, Rotate(0.f, 0.f, 0.f)
-		, Scale(1.f, 1.f, 1.f)
 		, Color(1.f, 1.f, 1.f, 1.f)
 		, Tx0(0.f, 0.f)
 	{ }
 	XMFLOAT4 Pos ;		// Position
-	XMFLOAT4 Center;	// Position
-	XMFLOAT3 Rotate;	// Rotate
-	XMFLOAT3 Scale;		// Scale
 	XMFLOAT4 Color;		// Color
 	XMFLOAT2 Tx0;		// Texture
 };

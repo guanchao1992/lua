@@ -19,6 +19,13 @@ D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 SingletonClaseCpp(VideoManager);
 
+struct ConstantBuffer
+{
+	XMFLOAT4X4 mWorld;
+	XMFLOAT4X4 mView;
+	XMFLOAT4X4 mProjection;
+};
+
 ID3D11Device*			getD3DDevice()
 {
 	return VideoManager::getInstance()->m_pd3dDevice;
@@ -175,10 +182,37 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
-
-
-
+	updateWorldTransform();
 	return S_OK;
+}
+
+void VideoManager::updateWorldTransform()
+{
+	HRESULT hr = S_OK;
+	ID3D11Buffer* matrixBuffer;
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(ConstantBuffer);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+	hr = m_pd3dDevice->CreateBuffer(&bd, NULL, &matrixBuffer);
+
+	Size winSize = VideoManager::getInstance()->getViewSize();
+	XMFLOAT4X4 world_transform(
+		2.0f / winSize.getWidth(), 0, 0, 0,
+		0, 2.0f / winSize.getHeight(), 0, 0,
+		0, 0, 1.0 / 1000, 0,
+		-1, -1, 0, 1
+	);
+
+	ConstantBuffer cb;
+	cb.mWorld = world_transform;
+	//cb.mView = XMMatrixTranspose(viewMatrix);
+	//cb.mProjection = XMMatrixTranspose(projectionMatrix);
+	m_pImmediateContext->UpdateSubresource(matrixBuffer, 0, NULL, &cb, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
+	matrixBuffer->Release();
 }
 
 //--------------------------------------------------------------------------------------
@@ -226,6 +260,7 @@ void VideoManager::setViewSize(Size size)
 	}
 	SetWindowPos(m_hWnd, NULL, 0, 0, size.getWidth(), size.getHeight(), SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOREDRAW);
 	m_viewSize = size;
+	updateWorldTransform();
 }
 
 Size VideoManager::getViewSize()
