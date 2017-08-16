@@ -118,7 +118,7 @@ DrawLineBuffer::~DrawLineBuffer()
 //*********************------- DrawRectBuffer ------***********************//
 
 DrawRectBuffer::DrawRectBuffer(const Rect2D& rect)
-	:DrawBuffer(4)
+	:DrawBuffer(5)
 {
 	Vector2 pos1 = rect.getOrigin();
 	Vector2 pos2 = rect.getOrigin() + Vector2(0, rect.getHeight());
@@ -129,6 +129,7 @@ DrawRectBuffer::DrawRectBuffer(const Rect2D& rect)
 	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.x, pos2.y, 1.0f, 1.5f);
 	m_OriginalVertex[2].Pos = XMFLOAT4(pos3.x, pos3.y, 1.0f, 1.1f);
 	m_OriginalVertex[3].Pos = XMFLOAT4(pos4.x, pos4.y, 1.0f, 1.5f);
+	m_OriginalVertex[4] = m_OriginalVertex[0];
 
 	memcpy(m_nowlVertex, m_OriginalVertex, sizeof(SimpleVertexMain)*m_vertexSize);
 	m_primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;

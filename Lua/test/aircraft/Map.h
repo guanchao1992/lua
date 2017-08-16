@@ -6,6 +6,7 @@
 #include "..\draw\DrawNode.h"
 #include "..\manager\GameTime.h"
 #include "Craft.h"
+#include <Box2D\Box2d.h>
 
 #define BOXSIZE	15.f
 
@@ -22,6 +23,9 @@ namespace aircraft
 		void updateMap(float t);
 		void drawBG();
 
+		void initBox2D();
+		b2Body* createBox2D(const Vector2& pos, const Size& size);
+
 	private:
 		bool					m_leftD;
 		bool					m_rightD;
@@ -33,7 +37,10 @@ namespace aircraft
 
 		DrawLayout*				m_layout;
 		DrawNode*				m_bgDraw;
+		DrawNode*				m_b2BoxDraw;
 
 		Craft*					m_controlCraft;
+
+		b2World*				m_b2World;
 	};
 }

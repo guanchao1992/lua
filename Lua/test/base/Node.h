@@ -50,13 +50,13 @@ public:
 	virtual void				setScale(const Vector3& scale);
 	virtual const Vector3&		getScale() { return m_scale; };
 
-	virtual void				setRotateX(float angle);
+	virtual void				setRotateX(float rotate);
 	virtual float				getRotateX() { return m_rotate.x; };
-	virtual void				setRotateY(float angle);
+	virtual void				setRotateY(float rotate);
 	virtual float				getRotateY() { return m_rotate.y; };
-	virtual void				setRotateZ(float angle);
+	virtual void				setRotateZ(float rotate);
 	virtual float				getRotateZ() { return m_rotate.z; };
-	virtual void				setRotate(const Vector3& angle);
+	virtual void				setRotate(const Vector3& rotate);
 	virtual const Vector3&		getRotate() { return m_rotate; };
 
 	virtual void				setColor(const Color4F&color);

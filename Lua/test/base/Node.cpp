@@ -206,39 +206,39 @@ void Node::setScale(const Vector3& scale)
 	m_bRedraw = true;
 }
 
-void Node::setRotateX(float angle)
+void Node::setRotateX(float rotate)
 {
-	if (m_rotate.x == angle) {
+	if (m_rotate.x == rotate) {
 		return;
 	}
-	m_rotate.x = angle;
+	m_rotate.x = rotate;
 	m_bRedraw = true;
 }
 
-void Node::setRotateY(float angle)
+void Node::setRotateY(float rotate)
 {
-	if (m_rotate.y == angle) {
+	if (m_rotate.y == rotate) {
 		return;
 	}
-	m_rotate.y = angle;
+	m_rotate.y = rotate;
 	m_bRedraw = true;
 }
 
-void Node::setRotateZ(float angle)
+void Node::setRotateZ(float rotate)
 {
-	if (m_rotate.z == angle) {
+	if (m_rotate.z == rotate) {
 		return;
 	}
-	m_rotate.z = angle;
+	m_rotate.z = rotate;
 	m_bRedraw = true;
 }
 
-void Node::setRotate(const Vector3& angle)
+void Node::setRotate(const Vector3& rotate)
 {
-	if (m_rotate == angle) {
+	if (m_rotate == rotate) {
 		return;
 	}
-	m_rotate = angle;
+	m_rotate = rotate;
 	m_bRedraw = true;
 }
 
