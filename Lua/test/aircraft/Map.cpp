@@ -90,7 +90,7 @@ namespace aircraft
 		groundBody->CreateFixture(&groundBox, 0.0f);
 
 	
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 50; ++i)
 		{
 			createBox2D(Vector2(400 + i % 10 * 20, 400 + i / 10 * 25), Size(20, 20));
 		}

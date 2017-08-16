@@ -31,7 +31,7 @@ public:
 
 protected:
 	virtual void	updateBuffer(const Matrix4& transform) override;
-private:
+protected:
 	std::vector<DrawBuffer*>		m_vecBuffer;
 
 };

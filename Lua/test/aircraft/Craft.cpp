@@ -5,6 +5,7 @@
 #include "..\config.h"
 #include "..\manager\GameTime.h"
 #include "..\manager\KeyManager.h"
+#include "..\draw\Draw3DBuffer.h"
 
 #define MaxSpeed 500
 #define RESISTANCE_NUM  1000
@@ -32,7 +33,20 @@ namespace aircraft
 
 	bool Craft::init()
 	{
-		DrawSolidRect(Rect2D(0,0,200,200),0x000000ff);
+		//DrawSolidRect(Rect2D(0,0,200,200),0x000000ff);
+		//DrawCubeBuffer(Vector3(50, 800, 100), 0x0000ffff);
+
+		DrawCubeBuffer *db = new DrawCubeBuffer(Vector3(50, 80, 100), 0x0000ffff);
+		//DrawRectBuffer *db2 = new DrawRectBuffer(rect);
+		//setColor(0x0000ffff);
+		//db->setColor(0x0000ffff);
+		//db2->setColor(0xff0000ff);
+		m_vecBuffer.push_back(db);
+
+		DrawLineBuffer *dl = new DrawLineBuffer(Vector3(0,0,0),Vector3());
+		//m_vecBuffer.push_back(db2);
+		doRedraw();
+
 		return true;
 	}
 

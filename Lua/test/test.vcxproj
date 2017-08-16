@@ -88,6 +88,7 @@
     <ClInclude Include="Box2D\Box2D\Rope\b2Rope.h" />
     <ClInclude Include="ClassToLua.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="draw\Draw3DBuffer.h" />
     <ClInclude Include="draw\DrawBuffer.h" />
     <ClInclude Include="draw\DrawLayout.h" />
     <ClInclude Include="draw\DrawNode.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Box2D\HelloWorld\HelloWorld.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="draw\Draw3DBuffer.cpp" />
     <ClCompile Include="draw\DrawBuffer.cpp" />
     <ClCompile Include="draw\DrawLayout.cpp" />
     <ClCompile Include="draw\DrawNode.cpp" />

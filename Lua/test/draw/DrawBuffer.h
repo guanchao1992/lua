@@ -14,32 +14,33 @@ struct DrawBuffer
 {
 	DrawBuffer(UINT vertexSize);
 	~DrawBuffer();
+	void						updateRender();
+	bool						updateBuffer(const Matrix4&transform);
 	virtual void				render();
-	virtual bool				updateBuffer(const Matrix4&transform);
+	virtual bool				bindVertex();
+	virtual bool				bindIndex();
 	virtual void				setColor(const Color4F&color);
 protected:
-	ID3D11Buffer*				m_d3dBuffer;
+	ID3D11Buffer*				m_d3dVertexBuffer;
+	ID3D11Buffer*				m_d3dIndexBuffer;
 	SimpleVertexMain*			m_OriginalVertex;		//保存最初的定点集合
 	SimpleVertexMain*			m_nowlVertex;
 	UINT						m_vertexSize;
 	D3D11_USAGE					m_Usage;
-	UINT						m_BindFlags;
-	D3D11_PRIMITIVE_TOPOLOGY	m_primitiveTopology;
 };
 
 struct DrawLineBuffer : public DrawBuffer
 {
 	DrawLineBuffer(const Vector3&pos1, const Vector3&pos2);
 	~DrawLineBuffer();
-	//virtual void render() override;
+	virtual void render() override;
 };
 
 struct DrawRectBuffer : public DrawBuffer
 {
 	DrawRectBuffer(const Rect2D& rect);
 	~DrawRectBuffer();
-	//virtual bool				updateBuffer(const Vector3&surePos, float scale) override;
-	//virtual void				render() override;
+	virtual void				render() override;
 protected:
 };
 
@@ -47,8 +48,8 @@ struct DrawSolidRectBuffer : public DrawBuffer
 {
 	DrawSolidRectBuffer(const Rect2D& rect);
 	~DrawSolidRectBuffer();
-	//virtual bool				updateBuffer(const Vector3&surePos, float scale) override;
-	//virtual void				render() override;
+	virtual bool				bindIndex() override;
+	virtual void				render() override;
 protected:
 };
 
@@ -56,8 +57,7 @@ struct TextureRectBuffer : public DrawBuffer
 {
 	TextureRectBuffer(const std::string&imageName, const Rect2D& rect);
 	~TextureRectBuffer();
-	//bool				updateBuffer(const Vector3&surePos, float scale);
-	void				render();
+	virtual void				render() override;
 protected:
 	Image*						m_image;
 };
