@@ -60,7 +60,14 @@ void DrawNode::DrawImage(const std::string&imageName, const Rect2D&rect)
 void DrawNode::DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&color)
 {
 	DrawLineBuffer *db = new DrawLineBuffer(Vector3(pos1.x, pos1.y, 0), Vector3(pos2.x, pos2.y, 0));
-	setColor(color);
+	db->setColor(color);
+	m_vecBuffer.push_back(db);
+	doRedraw();
+}
+
+void DrawNode::DrawLine(const Vector3&pos1, const Vector3&pos2, const Color4F&color)
+{
+	DrawLineBuffer *db = new DrawLineBuffer(pos1, pos2);
 	db->setColor(color);
 	m_vecBuffer.push_back(db);
 	doRedraw();
@@ -69,7 +76,6 @@ void DrawNode::DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&co
 void DrawNode::DrawRect(const Rect2D&rect, const Color4F&color)
 {
 	DrawRectBuffer *db = new DrawRectBuffer(rect);
-	setColor(color);
 	db->setColor(color);
 	m_vecBuffer.push_back(db);
 	doRedraw();
@@ -79,7 +85,6 @@ void DrawNode::DrawSolidRect(const Rect2D&rect, const Color4F&color)
 {
 	DrawSolidRectBuffer *db = new DrawSolidRectBuffer(rect);
 	DrawRectBuffer *db2 = new DrawRectBuffer(rect);
-	setColor(color);
 	db->setColor(color);
 	db2->setColor(0xff0000ff);
 	m_vecBuffer.push_back(db);

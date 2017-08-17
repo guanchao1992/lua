@@ -26,6 +26,27 @@ public:
 		m_Column[0][3] = f03; m_Column[1][3] = f13; m_Column[2][3] = f23; m_Column[3][3] = f33;
 	}
 
+	// 四元数转矩阵
+	Matrix4(const Vector4&vecIn)
+	{
+		float xx, xy, xz, xw, yy, yz, yw, zz, zw;
+
+		xx = vecIn[0] * vecIn[0];
+		xy = vecIn[0] * vecIn[1];
+		xz = vecIn[0] * vecIn[2];
+		xw = vecIn[0] * vecIn[3];
+		yy = vecIn[1] * vecIn[1];
+		yz = vecIn[1] * vecIn[2];
+		yw = vecIn[1] * vecIn[3];
+		zz = vecIn[2] * vecIn[2];
+		zw = vecIn[2] * vecIn[3];
+
+		this->set(1 - 2 * (yy + zz), 2 * (xy + zw), 2 * (xz - yw), 0,
+			2 * (xy - zw), 1 - 2 * (xx + zz), 2 * (yz + xw), 0,
+			2 * (xz + yw), 2 * (yz - xw), 1 - 2 * (xx + yy), 0,
+			0, 0, 0, 1);
+	}
+
 	Matrix4(const Matrix4&mat)
 	{
 		*this = mat;
@@ -291,6 +312,63 @@ public:
 		const float ry = m_Column[0][1] * v.x + m_Column[1][1] * v.y + m_Column[2][1] * v.z ;
 		const float rz = m_Column[0][2] * v.x + m_Column[1][2] * v.y + m_Column[2][2] * v.z ;
 		return Vector3(rx, ry, rz);
+	}
+
+	//计算得到偏移后的矩阵
+	void transformForDeviationn(const Vector3& position)
+	{
+		Matrix4 ms(
+			1.f, 0.f, 0.f, 0.f,
+			0.f, 1.f, 0.f, 0.f,
+			0.f, 0.f, 1.f, 0.f,
+			position.x, position.y, position.z, 1.f
+		);
+		Matrix4 mv;
+		mv.setColumn(3, position);
+		*this = this->multiply(mv);
+	}
+
+	//计算得到旋转后的矩阵
+	void transformForRotate(const Vector3&rotate)
+	{
+		Vector3 radian = rotate.DegreeRadian();
+
+		unsigned i, j, k, p, r, f;
+		const float ti = radian.x;
+		const float tj = radian.y;
+		const float th = radian.z;
+
+		const float ci = cosf(ti);
+		const float cj = cosf(tj);
+		const float ch = cosf(th);
+
+		const float si = sinf(ti);
+		const float sj = sinf(tj);
+		const float sh = sinf(th);
+
+		const float cc = ci * ch;
+		const float cs = ci * sh;
+		const float sc = si * ch;
+		const float ss = si * sh;
+
+		Matrix4 mr(
+			cj*ch, sj*sc - cs, sj*cc + ss, 0,
+			cj*sh, sj*ss + cc, sj*cs - sc, 0,
+			-sj, cj*si, cj*ci, 0,
+			0, 0, 0, 1);
+		*this = this->multiply(mr);
+	}
+
+	//计算得到缩放后的矩阵
+	void transformForScale(const Vector3&scale)
+	{
+		Matrix4 ms(
+			scale.x, 0.f, 0.f, 0.f,
+			0.f, scale.y, 0.f, 0.f,
+			0.f, 0.f, scale.z, 0.f,
+			0.f, 0.f, 0.f, 1.f
+		);
+		*this = this->multiply(ms);
 	}
 
 	inline Matrix4 operator-(const Matrix4& mat) const

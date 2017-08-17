@@ -62,7 +62,7 @@ namespace aircraft
 	void Map::initBox2D()
 	{
 		// Define the gravity vector.
-		b2Vec2 gravity(0.0f, -100.0f);
+		b2Vec2 gravity(0.0f, -1000.0f);
 
 		// Construct a world object, which will hold and simulate the rigid bodies.
 		m_b2World = new b2World(gravity);
@@ -90,9 +90,9 @@ namespace aircraft
 		groundBody->CreateFixture(&groundBox, 0.0f);
 
 	
-		for (int i = 0; i < 50; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
-			createBox2D(Vector2(400 + i % 10 * 20, 400 + i / 10 * 25), Size(20, 20));
+			createBox2D(Vector2(400 + i % 10 * 20 + rand() % 20, 400 + i / 10 * 25), Size(20, 20));
 		}
 	}
 
@@ -105,7 +105,7 @@ namespace aircraft
 		b2Body* body = m_b2World->CreateBody(&bodyDef);
 
 		auto bodyNode = DrawNode::create();
-		bodyNode->DrawRect(Rect2D(-size.getWidth() / 2, -size.getHeight() / 2, size.getHeight(), size.getHeight()), 0xff0000ff);
+		bodyNode->DrawSolidRect(Rect2D(-size.getWidth() / 2, -size.getHeight() / 2, size.getHeight(), size.getHeight()), 0xff3f32ff);
 		m_layout->addChild(bodyNode);
 		body->SetUserData(bodyNode);
 
@@ -178,6 +178,12 @@ namespace aircraft
 	void Map::drawBG()
 	{
 		m_bgDraw->clear();
-		m_bgDraw->DrawRect(Rect2D(0, 0, 100 * BOXSIZE, 100 * BOXSIZE), 0xffff00ff);
+		//m_bgDraw->DrawRect(Rect2D(0, 0, 100 * BOXSIZE, 100 * BOXSIZE), 0xffff00ff);
+		for (int i = 0; i < 100; ++i)
+		{
+			m_bgDraw->DrawLine(Vector3(0 + 50 * i, 0, 0), Vector3(45 + 50 * i, 0, 0), 0xaaaaaaff);
+			m_bgDraw->DrawLine(Vector3(0, 0 + 50 * i, 0), Vector3(0, 45 + 50 * i, 0), 0xaaaaaaff);
+			m_bgDraw->DrawLine(Vector3(0, 0, 0 + 50 * i), Vector3(0, 0, 45 + 50 * i), 0xaaaaaaff);
+		}
 	}
 }

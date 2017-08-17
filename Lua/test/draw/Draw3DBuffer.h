@@ -10,9 +10,14 @@ struct DrawCubeBuffer : public DrawBuffer
 
 	virtual void render() override;
 	virtual bool bindIndex() override;
-	void setShowBoundary(bool setting);
+
+	//为false时只显示边框
+	void setFill(bool setting)
+	{
+		m_fill = setting;
+	}
 protected:
-	bool m_showBoundary;
+	bool m_fill;
 };
 
 

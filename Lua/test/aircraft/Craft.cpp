@@ -36,12 +36,11 @@ namespace aircraft
 		//DrawSolidRect(Rect2D(0,0,200,200),0x000000ff);
 		//DrawCubeBuffer(Vector3(50, 800, 100), 0x0000ffff);
 
-		DrawCubeBuffer *db = new DrawCubeBuffer(Vector3(50, 80, 100), 0x0000ffff);
-		//DrawRectBuffer *db2 = new DrawRectBuffer(rect);
-		//setColor(0x0000ffff);
-		//db->setColor(0x0000ffff);
-		//db2->setColor(0xff0000ff);
+		DrawCubeBuffer *db = new DrawCubeBuffer(Vector3(50, 50, 50), 0x0000ffff);
+		DrawCubeBuffer *db2 = new DrawCubeBuffer(Vector3(50, 50, 50), 0xff0000ff);
+		db->setFill(true);
 		m_vecBuffer.push_back(db);
+		m_vecBuffer.push_back(db2);
 
 		DrawLineBuffer *dl = new DrawLineBuffer(Vector3(0,0,0),Vector3());
 		//m_vecBuffer.push_back(db2);
@@ -83,6 +82,7 @@ namespace aircraft
 		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
 		{
 			setRotate(Vector3(0, 0, 0));
+			setPosition(Vector3(0, 0, 0));
 		}
 		move(t);
 		resistance(t);
@@ -119,6 +119,7 @@ namespace aircraft
 	void Craft::move(float t)
 	{
 		setPosition(getPosition() + m_speed*t);
+		return;
 		if (m_positoin.x > 800) {
 			m_positoin.x = 800;
 			if (m_speed.x > 0)

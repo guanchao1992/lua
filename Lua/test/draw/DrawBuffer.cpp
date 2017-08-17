@@ -10,7 +10,6 @@ DrawBuffer::DrawBuffer(UINT vertexSize)
 	, m_OriginalVertex(nullptr)
 	, m_nowlVertex(nullptr)
 	, m_vertexSize(vertexSize)
-	, m_primitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST)
 	, m_Usage()
 {
 	m_OriginalVertex = new SimpleVertexMain[m_vertexSize];
@@ -131,8 +130,8 @@ void DrawBuffer::setColor(const Color4F&color)
 DrawLineBuffer::DrawLineBuffer(const Vector3&pos1, const Vector3&pos2)
 	:DrawBuffer(2)
 {
-	m_OriginalVertex[0].Pos = XMFLOAT4(pos1.x, pos1.y, 1.0f, 1.3f);
-	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.x, pos2.y, 1.0f, 1.5f);
+	m_OriginalVertex[0].Pos = XMFLOAT4(pos1.x, pos1.y, pos1.z, 1.3f);
+	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.x, pos2.y, pos2.z, 1.5f);
 
 	memcpy(m_nowlVertex, m_OriginalVertex, sizeof(SimpleVertexMain)*m_vertexSize);
 }
@@ -188,10 +187,10 @@ DrawSolidRectBuffer::DrawSolidRectBuffer(const Rect2D& rect)
 	Vector2 pos3 = rect.getOrigin() + Vector2(rect.getWidth(), rect.getHeight());
 	Vector2 pos4 = rect.getOrigin() + Vector2(rect.getWidth(), 0);
 
-	m_OriginalVertex[0].Pos = XMFLOAT4(pos1.x, pos1.y, 0.0f, 1.3f);
-	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.x, pos2.y, 0.0f, 1.5f);
-	m_OriginalVertex[2].Pos = XMFLOAT4(pos3.x, pos3.y, 0.0f, 1.1f);
-	m_OriginalVertex[3].Pos = XMFLOAT4(pos4.x, pos4.y, 0.0f, 1.5f);
+	m_OriginalVertex[0].Pos = XMFLOAT4(pos1.x, pos1.y, 1.0f, 1.3f);
+	m_OriginalVertex[1].Pos = XMFLOAT4(pos2.x, pos2.y, 1.0f, 1.5f);
+	m_OriginalVertex[2].Pos = XMFLOAT4(pos3.x, pos3.y, 1.0f, 1.1f);
+	m_OriginalVertex[3].Pos = XMFLOAT4(pos4.x, pos4.y, 1.0f, 1.5f);
 	
 	memcpy(m_nowlVertex, m_OriginalVertex, sizeof(SimpleVertexMain)*m_vertexSize);
 }

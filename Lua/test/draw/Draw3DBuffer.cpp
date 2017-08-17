@@ -7,18 +7,18 @@
 //*********************------- DrawLineBuffer ------***********************//
 
 DrawCubeBuffer::DrawCubeBuffer(const Vector3& size, const Color4F& color)
-	:DrawBuffer(8)
-	, m_showBoundary(false)
+	: DrawBuffer(8)
+	, m_fill(false)
 {
-	m_OriginalVertex[0].Pos = XMFLOAT4(0, 0, 0, 1.3f);
-	m_OriginalVertex[1].Pos = XMFLOAT4(size.x, 0, 0, 1.3f);
-	m_OriginalVertex[2].Pos = XMFLOAT4(size.x, size.y, 0, 1.3f);
-	m_OriginalVertex[3].Pos = XMFLOAT4(0, size.y, 0, 1.3f);
+	m_OriginalVertex[0].Pos = XMFLOAT4(-size.x / 2, -size.y / 2, -size.z / 2, 1.3f);
+	m_OriginalVertex[1].Pos = XMFLOAT4(size.x / 2, -size.y / 2, -size.z / 2, 1.3f);
+	m_OriginalVertex[2].Pos = XMFLOAT4(size.x / 2, size.y / 2, -size.z / 2, 1.3f);
+	m_OriginalVertex[3].Pos = XMFLOAT4(-size.x / 2, size.y / 2, -size.z / 2, 1.3f);
 
-	m_OriginalVertex[4].Pos = XMFLOAT4(0, 0, size.z, 1.3f);
-	m_OriginalVertex[5].Pos = XMFLOAT4(size.x, 0, size.z, 1.3f);
-	m_OriginalVertex[6].Pos = XMFLOAT4(size.x, size.y, size.z, 1.3f);
-	m_OriginalVertex[7].Pos = XMFLOAT4(0, size.y, size.z, 1.3f);
+	m_OriginalVertex[4].Pos = XMFLOAT4(-size.x / 2, -size.y / 2, size.z / 2, 1.3f);
+	m_OriginalVertex[5].Pos = XMFLOAT4(size.x / 2, -size.y / 2, size.z / 2, 1.3f);
+	m_OriginalVertex[6].Pos = XMFLOAT4(size.x / 2, size.y / 2, size.z / 2, 1.3f);
+	m_OriginalVertex[7].Pos = XMFLOAT4(-size.x / 2, size.y / 2, size.z / 2, 1.3f);
 
 	// 01 03 04 12 15 23 26 37 45 47 56 67
 
@@ -89,9 +89,14 @@ bool DrawCubeBuffer::bindIndex()
 void DrawCubeBuffer::render()
 {
 	updateRender();
-	getD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	getD3DContext()->DrawIndexed(36, 0, 0);
-
-	getD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	getD3DContext()->DrawIndexed(24, 36, 0);
+	if (m_fill)
+	{
+		getD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		getD3DContext()->DrawIndexed(36, 0, 0);
+	}
+	else
+	{
+		getD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		getD3DContext()->DrawIndexed(24, 36, 0);
+	}
 }

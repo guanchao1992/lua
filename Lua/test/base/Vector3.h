@@ -1,6 +1,7 @@
 #pragma once
 #include "baseMath.h"
 #include <corecrt_math.h>
+#include <corecrt_math_defines.h>
 
 class Vector3
 {
@@ -68,6 +69,25 @@ public:
 		return ret;
 	}
 
+	// 角度转弧度
+	const Vector3 DegreeRadian() const
+	{
+		Vector3 out;
+		out.x = data[0] * (M_PI / 180.0);
+		out.y = data[1] * (M_PI / 180.0);
+		out.z = data[2] * (M_PI / 180.0);
+		return out;
+	}
+
+	// 弧度转角度
+	const Vector3 RadianDegree() const
+	{
+		Vector3 out;
+		out.x = data[0] * (180.0 / M_PI);
+		out.y = data[1] * (180.0 / M_PI);
+		out.z = data[2] * (180.0 / M_PI);
+		return out;
+	}
 
 	inline Vector3 operator-() const
 	{

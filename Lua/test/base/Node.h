@@ -59,9 +59,6 @@ public:
 	virtual void				setRotate(const Vector3& rotate);
 	virtual const Vector3&		getRotate() { return m_rotate; };
 
-	virtual void				setColor(const Color4F&color);
-	virtual const Color4F&		getColor() { return m_color; }
-
 	virtual void				setVisible(bool visible) { m_isVisible = visible; };
 	virtual bool				isVisible() { return m_isVisible; };
 protected:
@@ -80,7 +77,6 @@ protected:
 	Vector3		m_positoin;
 	Vector3		m_scale;
 	Vector3		m_rotate;
-	Color4F		m_color;
 	bool		m_bRedraw;
 	bool		m_isVisible;
 };

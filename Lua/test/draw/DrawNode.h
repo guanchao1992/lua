@@ -25,6 +25,7 @@ public:
 	virtual void renderThis(const Matrix4& transform) override;
 	void	DrawImage(const std::string&imageName, const Rect2D&rect);
 	void	DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&color);
+	void	DrawLine(const Vector3&pos1, const Vector3&pos2, const Color4F&color);
 	void	DrawRect(const Rect2D&rect, const Color4F&color);
 	void	DrawSolidRect(const Rect2D&rect, const Color4F&color);
 	void	clear();

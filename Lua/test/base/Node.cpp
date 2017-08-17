@@ -242,15 +242,6 @@ void Node::setRotate(const Vector3& rotate)
 	m_bRedraw = true;
 }
 
-void Node::setColor(const Color4F&color)
-{
-	if (m_color == color) {
-		return;
-	}
-	m_color = color;
-	m_bRedraw = true;
-}
-
 bool Node::isRedraw()
 {
 	if (m_bRedraw)
@@ -274,7 +265,7 @@ Matrix4	Node::getTransform(const Matrix4&transform)
 	newTransform = newTransform.multiply(mv);
 
 	//Ðý×ª
-	Vector3 radian = MyMath::DegreeRadian(m_rotate);
+	Vector3 radian = m_rotate.DegreeRadian();
 
 	UINT i, j, k, p, r, f;
 	const float ti = radian.x;

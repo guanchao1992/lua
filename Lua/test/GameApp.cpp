@@ -142,17 +142,20 @@ void GameApp::updateCameraTransform()
 		0, 0, 1, 0,
 		0, 0, 0, 1
 	);
+	/*
 	auto eye = XMVectorSet(0, 0, -1000, 0);
 	auto at = XMVectorSet(0, 0, 0, 0);
 	auto up = XMVectorSet(0, 1, 0, 0);
 	auto viewMatrix = XMMatrixLookAtLH(eye, at, up);
 	m_camera_transform = viewMatrix;
+*/
 }
 
 void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
 	KeyManager::getInstance()->Update(t);
+	VideoManager::getInstance()->updateGame(t);
 
 	if (m_aircraftMap)
 	{

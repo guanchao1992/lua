@@ -2,6 +2,7 @@
 #include "..\base\Singleton.h"
 #include <windows.h>
 #include "..\config.h"
+#include <DirectXMath.h>
 
 struct shaderData
 {
@@ -52,6 +53,9 @@ public:
 	Size getViewSize();
 
 	void updateWorldTransform();
+	void CreateWindowSizeDependentResources();
+
+	void updateGame(float t);
 private:
 	ID3D11Device*			m_pd3dDevice;
 	ID3D11DeviceContext*    m_pImmediateContext;
@@ -61,5 +65,6 @@ private:
 
 	Size					m_viewSize;
 	HWND					m_hWnd;
+
 };
 

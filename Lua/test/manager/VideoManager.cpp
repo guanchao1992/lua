@@ -8,6 +8,7 @@
 #include "DrawManager.h"
 #include <d3dcommon.h>
 #include "..\GameApp.h"
+#include "..\base\MyMath.h"
 //#include "d3dx11effect.h"
 
 using namespace DirectX;
@@ -21,10 +22,12 @@ SingletonClaseCpp(VideoManager);
 
 struct ConstantBuffer
 {
-	XMFLOAT4X4 mWorld;
 	XMFLOAT4X4 mView;
 	XMFLOAT4X4 mProjection;
+	XMFLOAT4X4 mModel;
 };
+
+static ConstantBuffer			m_constantBufferData;
 
 ID3D11Device*			getD3DDevice()
 {
@@ -182,8 +185,42 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
+	CreateWindowSizeDependentResources();
+
 	updateWorldTransform();
 	return S_OK;
+}
+
+void VideoManager::CreateWindowSizeDependentResources()
+{
+	float aspectRatio = m_viewSize.getWidth() / m_viewSize.getHeight();
+	float fovAngleY = 70.0f * XM_PI / 180.0f;
+
+	float w = m_viewSize.getWidth();
+	float h = m_viewSize.getHeight();
+
+	XMFLOAT4X4 world_transform0(
+		1 / w, 0, 0, 0,
+		0, 1 / h, 0, 0,
+		0, 0, 1 / w, 0,
+		0, 0, 0.5, 1
+	);
+
+	m_constantBufferData.mProjection = world_transform0;
+
+	m_constantBufferData.mModel = XMFLOAT4X4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, -1, 0,
+		-w / 2, -w / 2, 0, 1
+	);
+	Size winSize = VideoManager::getInstance()->getViewSize();
+
+	XMVECTOR eye = XMVectorSet(0.0f, 0.0f, 0.5f, 0.0f);
+	XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.f, 0.0f);
+
+	XMStoreFloat4x4(&m_constantBufferData.mView, XMMatrixTranspose(XMMatrixLookAtRH(eye, at, up)));
 }
 
 void VideoManager::updateWorldTransform()
@@ -198,21 +235,20 @@ void VideoManager::updateWorldTransform()
 	bd.CPUAccessFlags = 0;
 	hr = m_pd3dDevice->CreateBuffer(&bd, NULL, &matrixBuffer);
 
-	Size winSize = VideoManager::getInstance()->getViewSize();
-	XMFLOAT4X4 world_transform(
-		2.0f / winSize.getWidth(), 0, 0, 0,
-		0, 2.0f / winSize.getHeight(), 0, 0,
-		0, 0, 1.0 / 1000, 0,
-		-1, -1, 0, 1
-	);
-
-	ConstantBuffer cb;
-	cb.mWorld = world_transform;
-	//cb.mView = XMMatrixTranspose(viewMatrix);
-	//cb.mProjection = XMMatrixTranspose(projectionMatrix);
-	m_pImmediateContext->UpdateSubresource(matrixBuffer, 0, NULL, &cb, 0, 0);
+	m_pImmediateContext->UpdateSubresource(matrixBuffer, 0, NULL, &m_constantBufferData, 0, 0);
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
 	matrixBuffer->Release();
+}
+
+void VideoManager::updateGame(float t)
+{
+	return;
+	Matrix4 trans;
+	memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mView, sizeof(Matrix4));
+	trans.transformForRotate(Vector3(0, 100 * t, 0));
+	memcpy_s(&m_constantBufferData.mView, sizeof(Matrix4), &trans, sizeof(Matrix4));
+
+	updateWorldTransform();
 }
 
 //--------------------------------------------------------------------------------------
@@ -235,10 +271,9 @@ void VideoManager::CleanupDevice()
 	}
 	if (d3dDebug != nullptr)            d3dDebug->Release();
 #endif  
-
 	if (m_pd3dDevice) m_pd3dDevice->Release();
-
 }
+
 
 void VideoManager::ClearTargetView()
 {

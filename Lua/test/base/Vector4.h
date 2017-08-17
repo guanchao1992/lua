@@ -69,7 +69,6 @@ public:
 		return ret;
 	}
 
-
 	inline Vector4 operator-() const
 	{
 		return Vector4(-x, -y, -z, -w);

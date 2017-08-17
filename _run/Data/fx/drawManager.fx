@@ -9,9 +9,9 @@
 
 cbuffer ConstantBuffer
 {
-	matrix World;
 	matrix View;
 	matrix Projection;
+	matrix Model;
 };
 
 RasterizerState DisableCulling
@@ -52,6 +52,7 @@ float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 
 float4 posToSurePos(float4 pos)
 {
+	/*
 	float4 outPos = pos;
 	outPos = mul(World,pos);
 	float zs = 1.f;
@@ -62,7 +63,13 @@ float4 posToSurePos(float4 pos)
 	}
 	outPos.x = outPos.x * zs;
 	outPos.y = outPos.y * zs;
-	outPos.z = outPos.z * 0.0001;
+	outPos.z = outPos.z * 0.01;
+	return outPos;
+*/
+	float4 outPos = pos;
+	outPos = mul(Model, outPos);
+	outPos = mul(Projection, outPos);
+	outPos = mul(View, outPos);
 	return outPos;
 }
 
