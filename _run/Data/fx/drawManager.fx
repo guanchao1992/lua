@@ -6,7 +6,6 @@
 #define FLIP_TEXTURE_Y	1
 #define ROTE_PI			3.1415926535
 
-
 cbuffer ConstantBuffer
 {
 	matrix View;
@@ -40,6 +39,8 @@ struct VS_INPUT
 	float2 tx0 : TEXCOORD;
 };
 
+RWStructuredBuffer<float4> voxIn : register(u1);
+
 /****************** Utility Functions ********************/
 float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 {
@@ -52,20 +53,6 @@ float2 get_corrected_texture_coordinate(float2 textureCoordinate)
 
 float4 posToSurePos(float4 pos)
 {
-	/*
-	float4 outPos = pos;
-	outPos = mul(World,pos);
-	float zs = 1.f;
-	zs = (1.0 - 0.2*outPos.z) / 0.8f;
-	if (zs < 0)
-	{
-		zs = 0;
-	}
-	outPos.x = outPos.x * zs;
-	outPos.y = outPos.y * zs;
-	outPos.z = outPos.z * 0.01;
-	return outPos;
-*/
 	float4 outPos = pos;
 	outPos = mul(Model, outPos);
 	outPos = mul(Projection, outPos);
@@ -80,13 +67,13 @@ void VS_Main( VS_INPUT input,
 {
 	outPos = input.pos;
 	outColor = input.color;
-	//outTx0 = input.tx0;
 }
 
 void PS_Main(float3 pos : POSITION,
 	float4 color : COLOR,
 	float2 tx0 : TEXCOORD,
-	out float4 outColor : SV_TARGET)
+	out float4 outColor : SV_TARGET,
+	out float outDepth:SV_Depth)
 {
 	float4 txColor = ColorTexture.Sample(ColorSampler, tx0);
 	//¼òµ¥µÄ»ìºÏ
@@ -94,6 +81,7 @@ void PS_Main(float3 pos : POSITION,
 	outColor.y = color.y *0.5 + txColor.x*0.5;
 	outColor.z = color.z *0.5 + txColor.x*0.5;
 	outColor.w = color.w *0.5 + txColor.w*0.5;
+	outDepth = pos.z;
 }
 
 void VS_Normal(VS_INPUT input,
@@ -101,15 +89,16 @@ void VS_Normal(VS_INPUT input,
 	out float4 outColor : COLOR)
 {
 	outPos = posToSurePos(input.pos);
-	//outPos = input.pos;
 	outColor = input.color;
 }
 
 void PS_Normal(float4 pos : SV_POSITION,
 	float4 color : COLOR ,
-	out float4 outColor: SV_TARGET) 
-{  
+	out float4 outColor : SV_TARGET)
+{
 	outColor = color;
+	//float4 color = float4(0, 0, 0, 0);
+	voxIn[0] = float4(1, 1, 0, 1);
 }
 
 void VS_Texture(VS_INPUT input,

@@ -178,12 +178,10 @@ namespace aircraft
 	void Map::drawBG()
 	{
 		m_bgDraw->clear();
-		//m_bgDraw->DrawRect(Rect2D(0, 0, 100 * BOXSIZE, 100 * BOXSIZE), 0xffff00ff);
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 11; ++i)
 		{
-			m_bgDraw->DrawLine(Vector3(0 + 50 * i, 0, 0), Vector3(45 + 50 * i, 0, 0), 0xaaaaaaff);
-			m_bgDraw->DrawLine(Vector3(0, 0 + 50 * i, 0), Vector3(0, 45 + 50 * i, 0), 0xaaaaaaff);
-			m_bgDraw->DrawLine(Vector3(0, 0, 0 + 50 * i), Vector3(0, 0, 45 + 50 * i), 0xaaaaaaff);
+			m_bgDraw->DrawLine(Vector3(0, i * 100, 0), Vector3(1000, i * 100, 0), 0xaaaaaaff);
+			m_bgDraw->DrawLine(Vector3(i * 100, 0, 0), Vector3(i * 100, 1000, 0), 0xaaaaaaff);
 		}
 	}
 }

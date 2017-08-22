@@ -9,6 +9,7 @@
 #include <d3dcommon.h>
 #include "..\GameApp.h"
 #include "..\base\MyMath.h"
+#include "KeyManager.h"
 //#include "d3dx11effect.h"
 
 using namespace DirectX;
@@ -173,7 +174,43 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	if (FAILED(hr))
 		return hr;
 
-	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+	depthStencilDesc.Width = width;
+	depthStencilDesc.Height = height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+
+	hr = m_pd3dDevice->CreateTexture2D(&depthStencilDesc, 0, &m_depthStencilBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, _T("Create depth stencil buffer failed!"), _T("ERROR"), MB_OK);
+		return false;
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = depthStencilDesc.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	hr = m_pd3dDevice->CreateDepthStencilView(m_depthStencilBuffer, &descDSV, &m_depthStencilView);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, _T("Create depth stencil view failed!"), _T("ERROR"), MB_OK);
+		return false;
+	}
+	//m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
+	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_depthStencilView);
+
+	CreateWindowSizeDependentResources();
+	updateWorldTransform();
 
 	// Setup the viewport
 	D3D11_VIEWPORT vp;
@@ -185,9 +222,6 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
-	CreateWindowSizeDependentResources();
-
-	updateWorldTransform();
 	return S_OK;
 }
 
@@ -212,12 +246,12 @@ void VideoManager::CreateWindowSizeDependentResources()
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, -1, 0,
-		-w / 2, -w / 2, 0, 1
+		-w / 2, -h / 2, 0, 1
 	);
 	Size winSize = VideoManager::getInstance()->getViewSize();
 
-	XMVECTOR eye = XMVectorSet(0.0f, 0.0f, 0.5f, 0.0f);
-	XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR eye = XMVectorSet(0.0f, 0.0f, 0.2f, 0.5f);
+	XMVECTOR at = XMVectorSet(0.0f, -0.01f, 0.0f, 0.0f);
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.f, 0.0f);
 
 	XMStoreFloat4x4(&m_constantBufferData.mView, XMMatrixTranspose(XMMatrixLookAtRH(eye, at, up)));
@@ -244,12 +278,12 @@ void VideoManager::updateGame(float t)
 {
 	return;
 	Matrix4 trans;
-	memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mView, sizeof(Matrix4));
+	memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mModel, sizeof(Matrix4));
 	trans.transformForRotate(Vector3(0, 100 * t, 0));
-	memcpy_s(&m_constantBufferData.mView, sizeof(Matrix4), &trans, sizeof(Matrix4));
-
+	memcpy_s(&m_constantBufferData.mModel, sizeof(Matrix4), &trans, sizeof(Matrix4));
 	updateWorldTransform();
 }
+
 
 //--------------------------------------------------------------------------------------
 // Clean up the objects we've created
@@ -278,7 +312,9 @@ void VideoManager::CleanupDevice()
 void VideoManager::ClearTargetView()
 {
 	// Just clear the backbuffer
-	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::White);
+	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
+	m_pImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 }
 
 void VideoManager::Present()

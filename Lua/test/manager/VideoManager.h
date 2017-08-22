@@ -20,6 +20,9 @@ struct ID3D11Buffer;
 struct ID3D11InputLayout;
 struct ID3D10EffectMatrixVariable;
 
+struct ID3D11Texture2D;
+struct ID3D11DepthStencilView;
+
 ID3D11Device*			getD3DDevice();
 ID3D11DeviceContext*	getD3DContext();
 IDXGISwapChain*			getSwapChain();
@@ -62,6 +65,10 @@ private:
 	IDXGISwapChain*         m_pSwapChain;
 	ID3D11RenderTargetView* m_pRenderTargetView;
 	ID3D10EffectMatrixVariable *m_pFxWorldViewProj;
+
+	ID3D11Texture2D*		m_depthStencilBuffer;
+	ID3D11DepthStencilView* m_depthStencilView;
+
 
 	Size					m_viewSize;
 	HWND					m_hWnd;

@@ -30,7 +30,6 @@ GameApp::~GameApp()
 {
 }
 
-
 int test_regFunc()
 {
 	LOG_D_F("main", "register ctolua function <testF>");
