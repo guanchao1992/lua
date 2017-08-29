@@ -1,190 +1,158 @@
 #include "Craft.h"
 #include <minwindef.h>
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 #include "..\manager\DrawManager.h"
 #include "..\config.h"
 #include "..\manager\GameTime.h"
 #include "..\manager\KeyManager.h"
 #include "..\draw\Draw3DBuffer.h"
+#include <Box2D\Box2d.h>
+#include <D3DX10math.h>
+#include "..\draw\DrawNode.h"
+#include "..\draw\DrawLayout.h"
+#include "aircraft_config.h"
+#include <Box2D\Dynamics\b2Body.h>
 
-#define MaxSpeed 500
-#define RESISTANCE_NUM  1000
-#define CHANGE_SPEED 3000
+#define LINEARIMPULSE_NUM	5000
+#define ANGULARIMPULSE_NUM	8
 
 namespace aircraft
 {
 
 	Craft::Craft()
-		:m_speed(0, 0, 0)
+		:m_body(nullptr)
 	{
 	}
 
 	Craft::~Craft()
 	{
+		if (m_body)
+		{
+			m_body->SetUserData(nullptr);
+		}
 	}
 
-	Craft* Craft::create()
+	Craft* Craft::create(b2World* world)
 	{
 		Craft* ret = new Craft();
-		ret->init();
+		ret->init(world);
 		ret->autorelease();
 		return ret;
 	}
 
-	bool Craft::init()
+	bool Craft::init(b2World* world)
 	{
-		//DrawSolidRect(Rect2D(0,0,200,200),0x000000ff);
-		//DrawCubeBuffer(Vector3(50, 800, 100), 0x0000ffff);
-
-		DrawCubeBuffer *db = new DrawCubeBuffer(Vector3(50, 50, 50), 0x0000ffff);
-		DrawCubeBuffer *db2 = new DrawCubeBuffer(Vector3(50, 50, 50), 0xff0000ff);
-		db->setFill(true);
-		m_vecBuffer.push_back(db);
-		m_vecBuffer.push_back(db2);
-
-		DrawLineBuffer *dl = new DrawLineBuffer(Vector3(0,0,0),Vector3());
-		//m_vecBuffer.push_back(db2);
-		doRedraw();
-
+		initBody(world);
+		initDraw();
 		return true;
+	}
+
+	void Craft::initBody(b2World* world)
+	{
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.position.Set(0 * BOX2D_LENTH_RATIO_RE, 0 * BOX2D_LENTH_RATIO_RE);
+		m_body = world->CreateBody(&bodyDef);
+		m_body->SetUserData(this);
+
+		// Define another box shape for our dynamic body.
+		b2PolygonShape dynamicBox;
+		dynamicBox.SetAsBox(40 / 2 * BOX2D_LENTH_RATIO_RE, 40 / 2 * BOX2D_LENTH_RATIO_RE);
+
+		// Define the dynamic body fixture.
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &dynamicBox;
+
+		fixtureDef.filter.categoryBits = 0x0001;
+		fixtureDef.filter.maskBits = 0xFFFF;
+		fixtureDef.filter.groupIndex = 0;
+
+		// Set the box density to be non-zero, so it will be dynamic.
+		fixtureDef.density = 0.2f;
+
+		// Override the default friction.
+		fixtureDef.friction = 0.3f;
+
+		fixtureDef.restitution = 0.1;
+
+		// Add the shape to the body.
+		m_body->CreateFixture(&fixtureDef);
+
+		m_body->SetLinearDamping(5.0);
+		m_body->SetAngularDamping(20.0);
+	}
+
+	void Craft::initDraw()
+	{
+		m_drawNode = DrawNode::create();
+		m_drawNode->DrawSolidRect(Rect2D(-40 / 2, -40 / 2, 40, 40), 0xff3f32ff);
+		DrawLayout* layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
+		layout->addChild(m_drawNode);
 	}
 
 	void Craft::updateTime(float t)
 	{
 		if (KeyManager::getInstance()->IsKeyDown(VK_A))
 		{
-			left(t);
+			m_body->ApplyForceToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
+			//left(t);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_D))
 		{
-			right(t);
+			m_body->ApplyForceToCenter(Vector2(LINEARIMPULSE_NUM* t, 0).toBox2d(), true);
+			//right(t);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_W))
 		{
-			up(t);
+			m_body->ApplyForceToCenter(Vector2(0, LINEARIMPULSE_NUM* t).toBox2d(), true);
+			//up(t);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_S))
 		{
-			down(t);
+			m_body->ApplyForceToCenter(Vector2(0, -LINEARIMPULSE_NUM* t).toBox2d(), true);
+			//down(t);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_E))
 		{
-			setRotateX(getRotateX()+1);
+			m_body->ApplyAngularImpulse(ANGULARIMPULSE_NUM * BOX2D_LENTH_RATIO_RE*t, true);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_Q))
 		{
-			setRotateY(getRotateY() + 1);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_Z))
-		{
-			setRotateZ(getRotateZ() + 1);
+			m_body->ApplyAngularImpulse(-ANGULARIMPULSE_NUM* BOX2D_LENTH_RATIO_RE*t, true);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
 		{
-			setRotate(Vector3(0, 0, 0));
-			setPosition(Vector3(0, 0, 0));
-		}
-		move(t);
-		resistance(t);
-	}
-
-	void Craft::resistance(float t)
-	{
-		if (m_speed.x > RESISTANCE_NUM * t)
-		{
-			m_speed.x -= RESISTANCE_NUM * t;
-		}
-		else if (m_speed.x < -RESISTANCE_NUM * t)
-		{
-			m_speed.x += RESISTANCE_NUM * t;
-		}
-		else
-		{
-			m_speed.x = 0;
-		}
-		if (m_speed.y > RESISTANCE_NUM * t)
-		{
-			m_speed.y -= RESISTANCE_NUM * t;
-		}
-		else if (m_speed.y < -RESISTANCE_NUM * t)
-		{
-			m_speed.y += RESISTANCE_NUM * t;
-		}
-		else
-		{
-			m_speed.y = 0;
+			m_body->SetTransform(Vector2(0, 200).toBox2d(), 0);
+			m_body->SetAwake(true);
 		}
 	}
 
-	void Craft::move(float t)
+	void Craft::setPosition(const Vector2&pos)
 	{
-		setPosition(getPosition() + m_speed*t);
-		return;
-		if (m_positoin.x > 800) {
-			m_positoin.x = 800;
-			if (m_speed.x > 0)
-			{
-				m_speed.x > 0;
-			}
-		}
-		if (m_positoin.x < 0) {
-			m_positoin.x = 0;
-			if (m_speed.x < 0)
-			{
-				m_speed.x = 0;
-			}
-		}
-		if (m_positoin.y > 600) {
-			m_positoin.y = 600;
-			if (m_speed.y > 0)
-			{
-				m_speed.y = 0;
-			}
-		}
-		if (m_positoin.y < 0) {
-			m_positoin.y = 0;
-			if (m_speed.y < 0)
-			{
-				m_speed.y = 0;
-			}
-		}
-
+		m_body->SetTransform(Vector2(0, 200).toBox2d(), m_body->GetAngle());
+		m_body->SetAwake(true);
 	}
 
-	void Craft::left(float t)
+	void Craft::setAngle(float angle)
 	{
-		m_speed.x -= CHANGE_SPEED*t;
-		if (m_speed.x < -MaxSpeed)
-		{
-			m_speed.x = -MaxSpeed;
-		}
+		m_body->SetTransform(m_body->GetPosition(), -angle * D3DX_PI / 180);
+		m_body->SetAwake(true);
 	}
 
-	void Craft::right(float t)
+	void Craft::updateTransform()
 	{
-		m_speed.x += CHANGE_SPEED*t;
-		if (m_speed.x > MaxSpeed)
-		{
-			m_speed.x = MaxSpeed;
-		}
+		m_drawNode->setPosition(Vector2(m_body->GetPosition()));
+		m_drawNode->setRotateZ(-m_body->GetAngle() / D3DX_PI * 180);
 	}
 
-	void Craft::up(float t)
+	void Craft::updatePosition()
 	{
-		m_speed.y += CHANGE_SPEED*t;
-		if (m_speed.y > MaxSpeed)
-		{
-			m_speed.y = MaxSpeed;
-		}
+		m_drawNode->setPosition(Vector2(m_body->GetPosition()));
 	}
 
-	void Craft::down(float t)
+	void Craft::updateAngle()
 	{
-		m_speed.y += -CHANGE_SPEED*t;
-		if (m_speed.y < -MaxSpeed)
-		{
-			m_speed.y = -MaxSpeed;
-		}
+		m_drawNode->setRotateZ(-m_body->GetAngle() / D3DX_PI * 180);
 	}
 
 }

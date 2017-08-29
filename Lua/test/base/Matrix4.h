@@ -333,7 +333,6 @@ public:
 	{
 		Vector3 radian = rotate.DegreeRadian();
 
-		unsigned i, j, k, p, r, f;
 		const float ti = radian.x;
 		const float tj = radian.y;
 		const float th = radian.z;

@@ -68,6 +68,7 @@ public:
 	/// Clear flags from the current flags.
 	void ClearFlags(uint32 flags);
 
+	virtual void ClearAllDraw() = 0;
 	/// Draw a closed polygon provided in CCW order.
 	virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) = 0;
 

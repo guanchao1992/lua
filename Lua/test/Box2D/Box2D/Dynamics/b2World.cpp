@@ -1150,6 +1150,15 @@ void b2World::DrawJoint(b2Joint* joint)
 	}
 }
 
+void b2World::ClearDrawDebug()
+{
+	if (g_debugDraw == nullptr)
+	{
+		return;
+	}
+	g_debugDraw->ClearAllDraw();
+}
+
 void b2World::DrawDebugData()
 {
 	if (g_debugDraw == nullptr)

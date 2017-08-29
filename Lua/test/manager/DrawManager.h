@@ -14,8 +14,9 @@ struct ID3D11GeometryShader;
 struct ID3D11InputLayout;
 struct ID3D11Buffer;
 struct DrawLayout;
-struct NodeList;
+struct RefList;
 class Matrix4;
+
 
 class DrawManager
 {
@@ -33,20 +34,21 @@ public:
 
 	void DrawOne(float x,float y);
 
-	template <typename T>
-	static T* createLayout(int order);
-
-	void addLayout(DrawLayout*layout);
-	DrawLayout* getLayout(int index);
+	void addLayout(DrawLayout*layout, const std::string& layoutName);
+	void removeLayout(const std::string&layoutName);
+	DrawLayout* getLayout(const std::string& layoutName);
+	void updateLayoutOrder();
 
 	void RenderDraw(const Matrix4& transform);
 private:
-	NodeList*									m_listVertexLayout;
+	std::vector<std::pair<std::string, DrawLayout*>>			m_listVertexLayout;
+
 	std::map<const char*, ID3DBlob*>			m_mapID3DBlob;
 	std::map<ShaderType, ID3D11VertexShader*>	m_mapVertexShader;
 	std::map<ShaderType, ID3D11PixelShader*>	m_mapPixelShader;
 
-	ID3D11GeometryShader*				m_pDrawGeometryShader;
-	//ID3D11InputLayout*					m_pDrawVertexLayout;
+	ID3D11GeometryShader*						m_pDrawGeometryShader;
+
+
 };
 

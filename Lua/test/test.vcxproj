@@ -19,25 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aircraft\aircraft_config.h" />
+    <ClInclude Include="aircraft\b2DrawDebug.h" />
     <ClInclude Include="aircraft\Craft.h" />
     <ClInclude Include="aircraft\Map.h" />
     <ClInclude Include="base\baseMath.h" />
     <ClInclude Include="base\Color4F.h" />
     <ClInclude Include="base\Image.h" />
     <ClInclude Include="base\lua_get.h" />
-    <ClInclude Include="base\MyMath.h" />
+    <ClInclude Include="base\Math.h" />
     <ClInclude Include="base\Matrix3.h" />
     <ClInclude Include="base\Matrix4.h" />
+    <ClInclude Include="base\MyMath.h" />
     <ClInclude Include="base\Node.h" />
+    <ClInclude Include="base\RefList.h" />
     <ClInclude Include="base\NodeVector.h" />
-    <ClInclude Include="base\Vector2.h" />
-    <ClInclude Include="base\Vector3.h" />
     <ClInclude Include="base\Rect2D.h" />
     <ClInclude Include="base\Ref.h" />
-    <ClInclude Include="base\NodeList.h" />
     <ClInclude Include="base\Singleton.h" />
     <ClInclude Include="base\Size.h" />
     <ClInclude Include="base\TextureBuffer.h" />
+    <ClInclude Include="base\Vector2.h" />
+    <ClInclude Include="base\Vector3.h" />
     <ClInclude Include="base\Vector4.h" />
     <ClInclude Include="Box2D\Box2D\Box2D.h" />
     <ClInclude Include="Box2D\Box2D\Collision\b2BroadPhase.h" />
@@ -94,6 +97,7 @@
     <ClInclude Include="draw\DrawNode.h" />
     <ClInclude Include="dxconfig.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="manager\b2DrawManager.h" />
     <ClInclude Include="manager\DrawManager.h" />
     <ClInclude Include="manager\EventManager.h" />
     <ClInclude Include="manager\GameTime.h" />
@@ -103,15 +107,15 @@
     <ClInclude Include="manager\TextureManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="texture\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aircraft\b2DrawDebug.cpp" />
     <ClCompile Include="aircraft\Craft.cpp" />
     <ClCompile Include="aircraft\Map.cpp" />
     <ClCompile Include="base\Node.cpp" />
+    <ClCompile Include="base\RefList.cpp" />
     <ClCompile Include="base\NodeVector.cpp" />
     <ClCompile Include="base\Ref.cpp" />
-    <ClCompile Include="base\NodeList.cpp" />
     <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="base\TextureBuffer.cpp" />
     <ClCompile Include="Box2D\Box2D\Collision\b2BroadPhase.cpp" />
@@ -169,6 +173,7 @@
     <ClCompile Include="draw\DrawNode.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="manager\b2DrawManager.cpp" />
     <ClCompile Include="manager\DrawManager.cpp" />
     <ClCompile Include="manager\EventManager.cpp" />
     <ClCompile Include="manager\GameTime.cpp" />
@@ -177,7 +182,6 @@
     <ClCompile Include="manager\ScriptsManager.cpp" />
     <ClCompile Include="manager\TextureManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
-    <ClCompile Include="texture\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\_run\Data\fx\drawManager.fx">

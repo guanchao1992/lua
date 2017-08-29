@@ -20,19 +20,14 @@ public:
 	virtual	~DrawNode();
 public:
 	bool	init();
-	virtual void draw(const Matrix4& transform) override;
-	//virtual void render(const Matrix4& transform) override;
-	virtual void renderThis(const Matrix4& transform) override;
 	void	DrawImage(const std::string&imageName, const Rect2D&rect);
 	void	DrawLine(const Vector2&pos1, const Vector2&pos2, const Color4F&color);
 	void	DrawLine(const Vector3&pos1, const Vector3&pos2, const Color4F&color);
+	void	DrawPolygon(const std::vector<Vector3>& vec, const Color4F&color);
+	void	DrawSolidPolygon(const std::vector<Vector3>& vec, const Color4F&color);
 	void	DrawRect(const Rect2D&rect, const Color4F&color);
 	void	DrawSolidRect(const Rect2D&rect, const Color4F&color);
-	void	clear();
-
-protected:
-	virtual void	updateBuffer(const Matrix4& transform) override;
-protected:
-	std::vector<DrawBuffer*>		m_vecBuffer;
+	void	DrawCircle(const Vector3&pos, float radius, const Color4F&color);
+	void	DrawSolidCircle(const Vector3&pos, float radius, const Color4F&color);
 
 };

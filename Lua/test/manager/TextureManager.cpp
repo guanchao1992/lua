@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 #include <D3DX11tex.h>
 #include "..\..\MyTool\tool_log.h"
 #include "VideoManager.h"
@@ -57,7 +57,7 @@ bool TextureManager::parseImageset(const std::string&dir)
 		}
 
 		// 获取所有名称为node的节点
-		xercesc::DOMNodeList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
+		xercesc::DOMRefList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
 		int number = nodes->getLength();
 		// 遍历所有node节点的信息
 		for (int i = 0; i < number; i++)

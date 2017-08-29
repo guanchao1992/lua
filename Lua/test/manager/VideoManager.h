@@ -3,6 +3,8 @@
 #include <windows.h>
 #include "..\config.h"
 #include <DirectXMath.h>
+#include "..\base\Size.h"
+#include "..\base\Vector2.h"
 
 struct shaderData
 {

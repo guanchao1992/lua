@@ -12,6 +12,7 @@ class DrawLayout :public Node
 private:
 	DrawLayout();
 public:
+	static DrawLayout* create(int order);
 	virtual ~DrawLayout();
 public:
 	bool	init();

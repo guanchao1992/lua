@@ -2,7 +2,7 @@
 #include "..\manager\DrawManager.h"
 #include <d3d11.h>
 #include "..\manager\VideoManager.h"
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 #include <d3dcommon.h>
 
 DrawLayout::DrawLayout()
@@ -17,6 +17,15 @@ DrawLayout::~DrawLayout()
 	{
 		m_pDrawVertexLayout->Release();
 	}
+}
+
+DrawLayout* DrawLayout::create(int order)
+{
+	DrawLayout* layout = new DrawLayout();
+	layout->init();
+	layout->autorelease();
+	layout->setOrder(order);
+	return layout;
 }
 
 bool DrawLayout::init()
@@ -58,9 +67,11 @@ void DrawLayout::render(const Matrix4& transform)
 	getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
 	renderThis(newTransform);
 
-	for (Node* it : getChildren()->getListNode())
+	for (Ref* it : getChildren()->getListRef())
 	{
-		it->render(newTransform);
+		Node*node = (Node*)it;
+		node->render(newTransform);
 	}
 	m_bRedraw = false;
 }
+

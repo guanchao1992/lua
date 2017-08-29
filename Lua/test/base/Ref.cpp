@@ -4,7 +4,8 @@
 
 
 Ref::Ref()
-	:m_countReference(1)
+	: m_countReference(1)
+	, m_tag(0)
 	, m_delete(false)
 {
 }

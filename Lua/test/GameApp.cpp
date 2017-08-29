@@ -8,16 +8,16 @@
 #include "manager\EventManager.h"
 #include "manager\ObjectManager.h"
 #include "manager\GameTime.h"
-#include "texture\Texture2D.h"
 #include <xercesc\util\PlatformUtils.hpp>
 #include "manager\TextureManager.h"
 #include "draw\DrawNode.h"
 #include "draw\DrawLayout.h"
-#include "base\NodeList.h"
+#include "base\RefList.h"
 #include "base\NodeVector.h"
 #include <D3DX10math.h>
 #include "draw\DrawNode.h"
 #include "manager\KeyManager.h"
+#include "manager\b2DrawManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -66,9 +66,10 @@ HRESULT GameApp::Init(HWND hWnd)
 
 	KeyManager::getInstance()->Init();
 
+	b2DrawManager::getInstance()->Init();
 
-	DrawLayout*layout = DrawManager::getInstance()->createLayout<DrawLayout>(0);
-	DrawManager::getInstance()->addLayout(layout);
+	DrawLayout*layout = DrawLayout::create(0);
+	DrawManager::getInstance()->addLayout(layout, "gameapp_layout");
 
 	/*
 	m_drawnode = DrawNode::create();

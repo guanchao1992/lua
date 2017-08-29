@@ -20,8 +20,12 @@ public:
 	virtual void retain();
 	virtual void release();
 	void autorelease();
+
+	void		setTag(int tag) { m_tag = tag; };
+	int			getTag() { return m_tag; };
 private:
-	int		m_countReference;
-	bool	m_delete;
+	int			m_countReference;
+	bool		m_delete;
+	int			m_tag;
 };
 

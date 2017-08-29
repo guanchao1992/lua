@@ -104,6 +104,7 @@ public:
 	/// @see SetAutoClearForces
 	void ClearForces();
 
+	void ClearDrawDebug();
 	/// Call this to draw shapes and other debug draw data. This is intentionally non-const.
 	void DrawDebugData();
 

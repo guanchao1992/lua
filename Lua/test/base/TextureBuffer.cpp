@@ -106,7 +106,7 @@ bool TextureBuffer::parse()
 		return false;
 	}
 
-	xercesc::DOMNodeList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
+	xercesc::DOMRefList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
 	int number = nodes->getLength();
 	for (int i = 0; i < number; i++)
 	{

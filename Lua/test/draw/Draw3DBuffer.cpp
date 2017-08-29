@@ -4,26 +4,23 @@
 #include "..\manager\TextureManager.h"
 
 
-//*********************------- DrawLineBuffer ------***********************//
+//*********************------- DrawCubeBuffer ------***********************//
 
 DrawCubeBuffer::DrawCubeBuffer(const Vector3& size, const Color4F& color)
-	: DrawBuffer(8)
+	: DrawBuffer(8, color)
 	, m_fill(false)
 {
-	m_OriginalVertex[0].Pos = XMFLOAT4(-size.x / 2, -size.y / 2, -size.z / 2, 1.3f);
-	m_OriginalVertex[1].Pos = XMFLOAT4(size.x / 2, -size.y / 2, -size.z / 2, 1.3f);
-	m_OriginalVertex[2].Pos = XMFLOAT4(size.x / 2, size.y / 2, -size.z / 2, 1.3f);
-	m_OriginalVertex[3].Pos = XMFLOAT4(-size.x / 2, size.y / 2, -size.z / 2, 1.3f);
+	m_OriginalVector3[0] = Vector3(-size.x / 2, -size.y / 2, -size.z / 2);
+	m_OriginalVector3[1] = Vector3(size.x / 2, -size.y / 2, -size.z / 2);
+	m_OriginalVector3[2] = Vector3(size.x / 2, size.y / 2, -size.z / 2);
+	m_OriginalVector3[3] = Vector3(-size.x / 2, size.y / 2, -size.z / 2);
 
-	m_OriginalVertex[4].Pos = XMFLOAT4(-size.x / 2, -size.y / 2, size.z / 2, 1.3f);
-	m_OriginalVertex[5].Pos = XMFLOAT4(size.x / 2, -size.y / 2, size.z / 2, 1.3f);
-	m_OriginalVertex[6].Pos = XMFLOAT4(size.x / 2, size.y / 2, size.z / 2, 1.3f);
-	m_OriginalVertex[7].Pos = XMFLOAT4(-size.x / 2, size.y / 2, size.z / 2, 1.3f);
+	m_OriginalVector3[4] = Vector3(-size.x / 2, -size.y / 2, size.z / 2);
+	m_OriginalVector3[5] = Vector3(size.x / 2, -size.y / 2, size.z / 2);
+	m_OriginalVector3[6] = Vector3(size.x / 2, size.y / 2, size.z / 2);
+	m_OriginalVector3[7] = Vector3(-size.x / 2, size.y / 2, size.z / 2);
 
 	// 01 03 04 12 15 23 26 37 45 47 56 67
-
-	setColor(color);
-	memcpy(m_nowlVertex, m_OriginalVertex, sizeof(SimpleVertexMain)*m_vertexSize);
 }
 
 DrawCubeBuffer::~DrawCubeBuffer()

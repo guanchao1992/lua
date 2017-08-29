@@ -1,8 +1,5 @@
 #pragma once
 #include <string>
-#include "base\Size.h"
-#include "base\Vector3.h"
-#include "base\Vector2.h"
 
 //定义数据字符0~9  
 #define   VK_0         0x30   
@@ -78,3 +75,8 @@ std::wstring getAccuratePathW(const wchar_t* file);
 
 #define DEFAULT_VIEW_W 1024
 #define DEFAULT_VIEW_H 800
+
+
+//与box2d的长度比
+#define BOX2D_LENTH_RATIO		100.f
+#define BOX2D_LENTH_RATIO_RE	0.01f

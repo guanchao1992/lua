@@ -1,5 +1,5 @@
 #include "ObjectManager.h"
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 
 
 SingletonClaseCpp(ObjectManager);

@@ -2,32 +2,36 @@
 #include <wtypes.h>
 #include <vector>
 #include <list>
-#include "..\draw\DrawLayout.h"
-#include "..\draw\DrawNode.h"
-#include "..\manager\GameTime.h"
+#include "..\base\Ref.h"
+#include "..\base\Vector2.h"
 
-#define BOXSIZE	15.f
+#define BOXSIZE		15.f
+class b2World;
+class b2Body;
+class DrawNode;
 
 namespace aircraft
 {
-	class Craft : public DrawNode
+	class Craft : public Ref
 	{
 	protected:
 		Craft();
 	public:
 		~Craft();
+		static Craft* create(b2World* world);
+		bool init(b2World* world);
+		virtual void initBody(b2World* world);
+		virtual void initDraw();
+		virtual void updateTime(float t);
 
-		static Craft* create();
-		bool init();
+		void setPosition(const Vector2&pos);
+		void setAngle(float angle);//½Ç¶È
 
-		void updateTime(float t);
-		void resistance(float t);
-		void move(float t);
-		void left(float t);
-		void right(float t);
-		void up(float t);
-		void down(float t);
+		void updateTransform();
+		void updatePosition();
+		void updateAngle();	
 	private:
-		Vector3	m_speed;
+		b2Body*			m_body;
+		DrawNode*		m_drawNode;
 	};
 }

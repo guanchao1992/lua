@@ -2,6 +2,7 @@
 #include "baseMath.h"
 #include <corecrt_math.h>
 #include <corecrt_math_defines.h>
+#include "Vector2.h"
 
 class Vector3
 {
@@ -23,6 +24,13 @@ public:
 	Vector3(const Vector3&pos)
 	{
 		*this = pos;
+	}
+
+	Vector3(const Vector2&pos)
+	{
+		this->x = pos.x;
+		this->y = pos.y;
+		this->z = 0;
 	}
 
 	~Vector3()
@@ -99,6 +107,13 @@ public:
 		this->x = pos.x;
 		this->y = pos.y;
 		this->z = pos.z;
+		return *this;
+	}
+
+	inline Vector3& operator=(const Vector2& pos)
+	{
+		this->x = pos.x;
+		this->y = pos.y;
 		return *this;
 	}
 

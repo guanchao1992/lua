@@ -4,8 +4,10 @@
 #include "Vector3.h"
 #include "Color4F.h"
 #include "Matrix4.h"
+#include <vector>
 
-class NodeList;
+class DrawBuffer;
+class RefList;
 class Node : public Ref
 {
 protected:
@@ -17,11 +19,8 @@ public:
 	bool		init() { return true; };
 	void		addChild(Node*node, int order = 0);
 
-	void		setTag(int tag) { m_tag = tag; };
-	int			getTag() { return m_tag; };
-
 	Node*		getParent() { return m_parent; };
-	NodeList*	getChildren() { return m_listChildren; };
+	RefList*	getChildren() { return m_listChildren; };
 	Node*		getChildFromTag(int tag);
 
 	void		removeFromTag(int tag);
@@ -31,6 +30,7 @@ public:
 
 	virtual void		render(const Matrix4& transform);
 	virtual void		draw(const Matrix4& transform);
+	virtual void		drawEnd();
 	virtual void		renderThis(const Matrix4& transform);
 
 	virtual void		setOrder(int order);
@@ -61,23 +61,26 @@ public:
 
 	virtual void				setVisible(bool visible) { m_isVisible = visible; };
 	virtual bool				isVisible() { return m_isVisible; };
+
+	virtual	void				clearBuffer();//清空绘制内容
 protected:
 	bool						isRedraw();
 	void						doRedraw() { m_bRedraw = true; };
 
-	virtual void				updateBuffer(const Matrix4& transform) {};
+protected:
+	virtual void				updateBuffer(const Matrix4& transform);
 	Matrix4						getTransform(const Matrix4&transform);
 private:
 	void						setParent(Node*node) { m_parent = node; };
 protected:
-	NodeList*	m_listChildren;
-	Node*		m_parent;
-	int			m_tag;
-	int			m_order;		//越小，越在前面
-	Vector3		m_positoin;
-	Vector3		m_scale;
-	Vector3		m_rotate;
-	bool		m_bRedraw;
-	bool		m_isVisible;
+	std::vector<DrawBuffer*>		m_vecBuffer;
+	RefList*						m_listChildren;
+	Node*							m_parent;
+	int								m_order;		//越小，越在前面
+	Vector3							m_positoin;
+	Vector3							m_scale;
+	Vector3							m_rotate;
+	bool							m_bRedraw;
+	bool							m_isVisible;
 };
 

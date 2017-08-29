@@ -1,4 +1,6 @@
 #pragma once
+#include <Box2D\Box2d.h>
+#include "..\config.h"
 
 class Vector2
 {
@@ -19,9 +21,20 @@ public:
 	{
 		*this = pos;
 	}
+	
+	Vector2(const b2Vec2&vec)
+	{
+		x = vec.x * BOX2D_LENTH_RATIO;
+		y = vec.y * BOX2D_LENTH_RATIO;
+	}
 
 	~Vector2()
 	{
+	}
+
+	const b2Vec2 toBox2d() const
+	{
+		return 	b2Vec2(x*BOX2D_LENTH_RATIO_RE, y*BOX2D_LENTH_RATIO_RE);
 	}
 
 	inline void setValue(float x, float y)

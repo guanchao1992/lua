@@ -5,7 +5,7 @@
 #include "..\draw\DrawLayout.h"
 #include "ObjectManager.h"
 #include "..\draw\DrawNode.h"
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 
 #include <D3DX11.h>
 #include <d3dx10async.h>
@@ -21,13 +21,10 @@ SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
 	: m_pDrawGeometryShader(nullptr)
 {
-	m_listVertexLayout = NodeList::create();
-	m_listVertexLayout->retain();
 }
 
 DrawManager::~DrawManager()
 {
-	m_listVertexLayout->release();
 }
 
 void DrawManager::Init()
@@ -70,14 +67,17 @@ void DrawManager::Init()
 		}
 	}
 
-	DrawLayout *dl = createLayout<DrawLayout>(0);
-	addLayout(dl);
-	//dl->addChild(DrawNode::create());
+	DrawLayout *dl = DrawLayout::create(0);
+	addLayout(dl, "DrawManager");
 }
 
 void DrawManager::Cleanup()
 {
-	m_listVertexLayout->Clear();
+	for (auto &it : m_listVertexLayout)
+	{
+		it.second->release();
+	}
+	m_listVertexLayout.clear();
 
 	for (auto it:m_mapID3DBlob)
 	{
@@ -162,31 +162,63 @@ void DrawManager::setShaderType(ShaderType type)
 
 void DrawManager::RenderDraw(const Matrix4& transform)
 {
-	//getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
-	//getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
-	//getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
-
-	for (auto it : m_listVertexLayout->getListNode())
+	for (auto &it : m_listVertexLayout)
 	{
-		DrawLayout*layout = (DrawLayout*)it;
+		DrawLayout*layout = (DrawLayout*)it.second;
 		layout->render(transform);
 	}
 }
 
-template <typename T>
-T* DrawManager::createLayout(int order)
+void DrawManager::addLayout(DrawLayout*layout, const std::string& layoutName)
 {
-	T* layout = T::create();
-	layout->setOrder(order);
-	return layout;
+	for (auto &it : m_listVertexLayout)
+	{
+		if (it.first == layoutName)
+		{
+			LOG_E("´íÎó");
+			return;
+		}
+	}
+	layout->retain();
+	m_listVertexLayout.push_back(std::pair<std::string, DrawLayout*>(layoutName, layout));
+	updateLayoutOrder();
 }
 
-void DrawManager::addLayout(DrawLayout*layout)
+void DrawManager::removeLayout(const std::string&layoutName)
 {
-	m_listVertexLayout->PushBack(layout);
+	for (auto it = m_listVertexLayout.begin(); it != m_listVertexLayout.end(); ++it)
+	{
+		if (it->first == layoutName)
+		{
+			it->second->release();
+			m_listVertexLayout.erase(it);
+			return;
+		}
+	}
 }
 
-DrawLayout* DrawManager::getLayout(int index)
+static bool sort_layout(const std::pair<std::string, DrawLayout*>& a, const std::pair<std::string, DrawLayout*>& b)
 {
-	return dynamic_cast<DrawLayout*>(m_listVertexLayout->getNodeAtIndex(index));
+	if (a.second->getOrder() > b.second->getOrder())
+	{
+		return true;
+	}
+	return false;
+}
+
+void DrawManager::updateLayoutOrder()
+{
+	std::sort(m_listVertexLayout.begin(), m_listVertexLayout.end(), sort_layout);
+}
+
+DrawLayout* DrawManager::getLayout(const std::string&layoutName)
+{
+	for (auto &it : m_listVertexLayout)
+	{
+		if (it.first == layoutName)
+		{
+			return it.second;
+		}
+	}
+	return nullptr;
 }

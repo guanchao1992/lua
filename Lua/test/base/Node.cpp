@@ -1,7 +1,7 @@
 #include "Node.h"
 #include "..\manager\ObjectManager.h"
 #include <assert.h>
-#include "NodeList.h"
+#include "RefList.h"
 #include <wtypes.h>
 #include "..\draw\DrawBuffer.h"
 #include "MyMath.h"
@@ -10,7 +10,6 @@
 Node::Node()
 	: m_parent(nullptr)
 	, m_listChildren(nullptr)
-	, m_tag(0)
 	, m_order(100000)
 	, m_positoin(0.0f, 0.0f, 0.0f)
 	, m_scale(1.0f, 1.0f, 1.0f)
@@ -18,12 +17,13 @@ Node::Node()
 	, m_bRedraw(false)
 	, m_isVisible(true)
 {
-	m_listChildren = NodeList::create();
+	m_listChildren = RefList::create();
 	m_listChildren->retain();
 }
 
 Node::~Node()
 {
+	clearBuffer();
 	removeAllChild();
 	m_listChildren->release();
 }
@@ -46,11 +46,11 @@ void Node::addChild(Node*node, int order)
 
 Node * Node::getChildFromTag(int tag)
 {
-	for (auto it : m_listChildren->getListNode())
+	for (auto it : m_listChildren->getListRef())
 	{
 		if (it->getTag() == tag)
 		{
-			return it;
+			return (Node*)it;
 		}
 	}
 	return nullptr;
@@ -58,7 +58,7 @@ Node * Node::getChildFromTag(int tag)
 
 void Node::removeFromTag(int tag)
 {
-	auto node = m_listChildren->removeFromTag(tag);
+	auto node = (Node*)m_listChildren->removeFromTag(tag);
 	if (node)
 	{
 		node->setParent(nullptr);
@@ -73,15 +73,15 @@ void Node::removeChild(Node*node)
 		return;
 	}
 	node->setParent(nullptr);
-	m_listChildren->removeNode(node);
+	m_listChildren->removeRef(node);
 	m_bRedraw = true;
 }
 
 void Node::removeAllChild()
 {
-	for (auto it : m_listChildren->getListNode())
+	for (auto it : m_listChildren->getListRef())
 	{
-		it->setParent(nullptr);
+		((Node*)it)->setParent(nullptr);
 	}
 	m_listChildren->Clear();
 	m_bRedraw = true;
@@ -107,29 +107,63 @@ void Node::render(const Matrix4& transform)
 	Matrix4 newTransform = getTransform(transform);
 	draw(newTransform);
 	//在底下的
-	for (Node* it : getChildren()->getListNode())
+	for (Ref* it : getChildren()->getListRef())
 	{
-		if (it->getOrder() < 0)
+		Node* node = (Node*)it;
+		if (node->getOrder() < 0)
 		{
-			it->render(newTransform);
+			node->render(newTransform);
 		}
 	}
 	renderThis(newTransform);
-	for (Node* it : getChildren()->getListNode())
+	for (Ref* it : getChildren()->getListRef())
 	{
-		if (it->getOrder() <= 0)
+		Node* node = (Node*)it;
+		if (node->getOrder() <= 0)
 		{
-			it->render(newTransform);
+			node->render(newTransform);
 		}
 	}
+	drawEnd();
+}
+
+void Node::drawEnd()
+{
+	m_bRedraw = false;
+}
+
+void Node::clearBuffer()
+{
+	for (auto it : m_vecBuffer)
+	{
+		delete it;
+	}
+	m_vecBuffer.clear();
 }
 
 void Node::renderThis(const Matrix4& transform)
-{ }
+{
+	for (auto it : m_vecBuffer)
+	{
+		it->render();
+	}
+}
 
 void Node::draw(const Matrix4& transform)
 {
-	m_bRedraw = false;
+	if (m_bRedraw)
+	{
+		updateBuffer(transform);
+	}
+}
+
+static bool sortNode_order(Node*a, Node*b)
+{
+	if (a->getOrder() < b->getOrder())
+	{
+		return true;
+	}
+	return false;
 }
 
 void Node::setOrder(int order)
@@ -138,7 +172,8 @@ void Node::setOrder(int order)
 		return;
 	}
 	m_order = order;
-	m_listChildren->sortNodeByOrder();
+
+	//std::sort(m_listChildren->Begin(), m_listChildren->End(), sortNode_order);
 	m_bRedraw = true;
 }
 
@@ -267,7 +302,6 @@ Matrix4	Node::getTransform(const Matrix4&transform)
 	//旋转
 	Vector3 radian = m_rotate.DegreeRadian();
 
-	UINT i, j, k, p, r, f;
 	const float ti = radian.x;
 	const float tj = radian.y;
 	const float th = radian.z;
@@ -302,3 +336,12 @@ Matrix4	Node::getTransform(const Matrix4&transform)
 
 	return newTransform;
 }
+
+void Node::updateBuffer(const Matrix4& transform)
+{
+	for (auto &it : m_vecBuffer)
+	{
+		it->updateBuffer(transform);
+	}
+}
+

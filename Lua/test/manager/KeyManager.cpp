@@ -1,5 +1,5 @@
 #include "KeyManager.h"
-#include "..\base\NodeList.h"
+#include "..\base\RefList.h"
 
 
 SingletonClaseCpp(KeyManager);
