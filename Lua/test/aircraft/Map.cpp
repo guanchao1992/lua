@@ -104,7 +104,7 @@ namespace aircraft
 
 		Size videoSize = VideoManager::getInstance()->getViewSize();
 		b2BodyDef groundBodyDef1;
-		groundBodyDef1.position.Set((videoSize.getWidth() + 10.0f)* BOX2D_LENTH_RATIO_RE, (videoSize.getHeight() + 10.0f)* BOX2D_LENTH_RATIO_RE);
+		groundBodyDef1.position.Set((1000 + 10) * BOX2D_LENTH_RATIO_RE, (1000 + 10) * BOX2D_LENTH_RATIO_RE);
 
 		b2Body* groundBody1 = m_b2World->CreateBody(&groundBodyDef1);
 		b2PolygonShape groundBox1;

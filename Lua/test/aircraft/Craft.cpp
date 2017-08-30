@@ -13,8 +13,8 @@
 #include "aircraft_config.h"
 #include <Box2D\Dynamics\b2Body.h>
 
-#define LINEARIMPULSE_NUM	5000
-#define ANGULARIMPULSE_NUM	8
+#define LINEARIMPULSE_NUM	8000
+#define ANGULARIMPULSE_NUM	10	
 
 namespace aircraft
 {

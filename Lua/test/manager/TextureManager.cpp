@@ -57,7 +57,7 @@ bool TextureManager::parseImageset(const std::string&dir)
 		}
 
 		// 获取所有名称为node的节点
-		xercesc::DOMRefList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
+		xercesc::DOMNodeList *nodes = root->getElementsByTagName(xercesc::XMLString::transcode("Image"));
 		int number = nodes->getLength();
 		// 遍历所有node节点的信息
 		for (int i = 0; i < number; i++)

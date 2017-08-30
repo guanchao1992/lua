@@ -134,7 +134,7 @@ ID3DBlob* DrawManager::getID3DBlob(const char*entryPoint)
 
 void DrawManager::DrawOne(float x,float y)
 {
-	DrawLayout*layout = getLayout(0);
+	DrawLayout*layout = getLayout("DrawManager");
 	if (layout)
 	{
 		/*
