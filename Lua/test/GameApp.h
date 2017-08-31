@@ -4,6 +4,7 @@
 #include "config.h"
 #include <wtypes.h>
 #include "aircraft\Map.h"
+#include "base\Matrix4.h"
 
 class DrawNode;
 class EventArgs;

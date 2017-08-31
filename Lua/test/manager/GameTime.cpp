@@ -1,5 +1,5 @@
 #include "GameTime.h"
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 #include <directxcolors.h>
 #include <tchar.h>
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"

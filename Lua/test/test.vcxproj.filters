@@ -246,8 +246,17 @@
     <ClCompile Include="aircraft\b2DrawDebug.cpp">
       <Filter>aircraft</Filter>
     </ClCompile>
-    <ClCompile Include="base\RefList.cpp">
+    <ClCompile Include="aircraft\Bullet.cpp">
+      <Filter>aircraft</Filter>
+    </ClCompile>
+    <ClCompile Include="aircraft\ContactListener.cpp">
+      <Filter>aircraft</Filter>
+    </ClCompile>
+    <ClCompile Include="base\RList.h">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="aircraft\MainCraft.cpp">
+      <Filter>aircraft</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -509,10 +518,16 @@
     <ClInclude Include="aircraft\b2DrawDebug.h">
       <Filter>aircraft</Filter>
     </ClInclude>
-    <ClInclude Include="base\RefList.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="aircraft\aircraft_config.h">
+      <Filter>aircraft</Filter>
+    </ClInclude>
+    <ClInclude Include="aircraft\Bullet.h">
+      <Filter>aircraft</Filter>
+    </ClInclude>
+    <ClInclude Include="aircraft\ContactListener.h">
+      <Filter>aircraft</Filter>
+    </ClInclude>
+    <ClInclude Include="aircraft\MainCraft.h">
       <Filter>aircraft</Filter>
     </ClInclude>
   </ItemGroup>

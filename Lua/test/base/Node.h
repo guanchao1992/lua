@@ -5,9 +5,9 @@
 #include "Color4F.h"
 #include "Matrix4.h"
 #include <vector>
+#include "RList.h"
 
 class DrawBuffer;
-class RefList;
 class Node : public Ref
 {
 protected:
@@ -20,7 +20,7 @@ public:
 	void		addChild(Node*node, int order = 0);
 
 	Node*		getParent() { return m_parent; };
-	RefList*	getChildren() { return m_listChildren; };
+	RList<Node>*getChildren() { return m_listChildren; };
 	Node*		getChildFromTag(int tag);
 
 	void		removeFromTag(int tag);
@@ -74,7 +74,7 @@ private:
 	void						setParent(Node*node) { m_parent = node; };
 protected:
 	std::vector<DrawBuffer*>		m_vecBuffer;
-	RefList*						m_listChildren;
+	RList<Node>*					m_listChildren;
 	Node*							m_parent;
 	int								m_order;		//越小，越在前面
 	Vector3							m_positoin;

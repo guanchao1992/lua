@@ -2,7 +2,7 @@
 #include "..\manager\DrawManager.h"
 #include <d3d11.h>
 #include "..\manager\VideoManager.h"
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 #include <d3dcommon.h>
 
 DrawLayout::DrawLayout()
@@ -67,7 +67,7 @@ void DrawLayout::render(const Matrix4& transform)
 	getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
 	renderThis(newTransform);
 
-	for (Ref* it : getChildren()->getListRef())
+	for (Ref* it : getChildren()->getListNode())
 	{
 		Node*node = (Node*)it;
 		node->render(newTransform);

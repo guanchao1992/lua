@@ -12,7 +12,7 @@
 #include "manager\TextureManager.h"
 #include "draw\DrawNode.h"
 #include "draw\DrawLayout.h"
-#include "base\RefList.h"
+#include "base\RList.h"
 #include "base\NodeVector.h"
 #include <D3DX10math.h>
 #include "draw\DrawNode.h"

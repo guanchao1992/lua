@@ -1,7 +1,7 @@
 #include "Node.h"
 #include "..\manager\ObjectManager.h"
 #include <assert.h>
-#include "RefList.h"
+#include "RList.h"
 #include <wtypes.h>
 #include "..\draw\DrawBuffer.h"
 #include "MyMath.h"
@@ -17,7 +17,7 @@ Node::Node()
 	, m_bRedraw(false)
 	, m_isVisible(true)
 {
-	m_listChildren = RefList::create();
+	m_listChildren = RList<Node>::create();
 	m_listChildren->retain();
 }
 
@@ -46,7 +46,7 @@ void Node::addChild(Node*node, int order)
 
 Node * Node::getChildFromTag(int tag)
 {
-	for (auto it : m_listChildren->getListRef())
+	for (auto it : m_listChildren->getListNode())
 	{
 		if (it->getTag() == tag)
 		{
@@ -58,12 +58,12 @@ Node * Node::getChildFromTag(int tag)
 
 void Node::removeFromTag(int tag)
 {
-	auto node = (Node*)m_listChildren->removeFromTag(tag);
+	auto node = m_listChildren->getNodeAtTag(tag);
 	if (node)
 	{
-		node->setParent(nullptr);
+		node->removeFromeParent();
+		m_bRedraw = true;
 	}
-	m_bRedraw = true;
 }
 
 void Node::removeChild(Node*node)
@@ -73,13 +73,13 @@ void Node::removeChild(Node*node)
 		return;
 	}
 	node->setParent(nullptr);
-	m_listChildren->removeRef(node);
+	m_listChildren->removeNode(node);
 	m_bRedraw = true;
 }
 
 void Node::removeAllChild()
 {
-	for (auto it : m_listChildren->getListRef())
+	for (auto it : m_listChildren->getListNode())
 	{
 		((Node*)it)->setParent(nullptr);
 	}
@@ -107,7 +107,7 @@ void Node::render(const Matrix4& transform)
 	Matrix4 newTransform = getTransform(transform);
 	draw(newTransform);
 	//ÔÚµ×ÏÂµÄ
-	for (Ref* it : getChildren()->getListRef())
+	for (Ref* it : getChildren()->getListNode())
 	{
 		Node* node = (Node*)it;
 		if (node->getOrder() < 0)
@@ -116,7 +116,7 @@ void Node::render(const Matrix4& transform)
 		}
 	}
 	renderThis(newTransform);
-	for (Ref* it : getChildren()->getListRef())
+	for (Ref* it : getChildren()->getListNode())
 	{
 		Node* node = (Node*)it;
 		if (node->getOrder() <= 0)

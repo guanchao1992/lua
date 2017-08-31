@@ -21,7 +21,10 @@
   <ItemGroup>
     <ClInclude Include="aircraft\aircraft_config.h" />
     <ClInclude Include="aircraft\b2DrawDebug.h" />
+    <ClInclude Include="aircraft\Bullet.h" />
+    <ClInclude Include="aircraft\ContactListener.h" />
     <ClInclude Include="aircraft\Craft.h" />
+    <ClInclude Include="aircraft\MainCraft.h" />
     <ClInclude Include="aircraft\Map.h" />
     <ClInclude Include="base\baseMath.h" />
     <ClInclude Include="base\Color4F.h" />
@@ -32,7 +35,6 @@
     <ClInclude Include="base\Matrix4.h" />
     <ClInclude Include="base\MyMath.h" />
     <ClInclude Include="base\Node.h" />
-    <ClInclude Include="base\RefList.h" />
     <ClInclude Include="base\NodeVector.h" />
     <ClInclude Include="base\Rect2D.h" />
     <ClInclude Include="base\Ref.h" />
@@ -110,10 +112,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aircraft\b2DrawDebug.cpp" />
+    <ClCompile Include="aircraft\Bullet.cpp" />
+    <ClCompile Include="aircraft\ContactListener.cpp" />
     <ClCompile Include="aircraft\Craft.cpp" />
+    <ClCompile Include="aircraft\MainCraft.cpp" />
     <ClCompile Include="aircraft\Map.cpp" />
     <ClCompile Include="base\Node.cpp" />
-    <ClCompile Include="base\RefList.cpp" />
+    <ClCompile Include="base\RList.h" />
     <ClCompile Include="base\NodeVector.cpp" />
     <ClCompile Include="base\Ref.cpp" />
     <ClCompile Include="base\Singleton.cpp" />

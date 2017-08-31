@@ -14,7 +14,6 @@ struct ID3D11GeometryShader;
 struct ID3D11InputLayout;
 struct ID3D11Buffer;
 struct DrawLayout;
-struct RefList;
 class Matrix4;
 
 

@@ -5,7 +5,7 @@
 #include "..\draw\DrawLayout.h"
 #include "ObjectManager.h"
 #include "..\draw\DrawNode.h"
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 
 #include <D3DX11.h>
 #include <d3dx10async.h>

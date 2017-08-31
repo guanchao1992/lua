@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 #include <D3DX11tex.h>
 #include "..\..\MyTool\tool_log.h"
 #include "VideoManager.h"

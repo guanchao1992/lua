@@ -1,6 +1,6 @@
 #include "Craft.h"
 #include <minwindef.h>
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 #include "..\manager\DrawManager.h"
 #include "..\config.h"
 #include "..\manager\GameTime.h"
@@ -12,15 +12,23 @@
 #include "..\draw\DrawLayout.h"
 #include "aircraft_config.h"
 #include <Box2D\Dynamics\b2Body.h>
+#include <Box2D\Dynamics\b2World.h>
+#include "Bullet.h"
+#include "Map.h"
 
 #define LINEARIMPULSE_NUM	8000
 #define ANGULARIMPULSE_NUM	10	
+#define BULLET_SPEED_NUM	500
 
 namespace aircraft
 {
 
-	Craft::Craft()
-		:m_body(nullptr)
+	Craft::Craft(Map*map)
+		: m_body(nullptr)
+		, m_map(map)
+		, m_funcType(CraftType_Craft)
+		, m_drawNode(nullptr)
+		, m_delete(false)
 	{
 	}
 
@@ -29,30 +37,28 @@ namespace aircraft
 		if (m_body)
 		{
 			m_body->SetUserData(nullptr);
+			delThis();
+		}
+		if (m_drawNode)
+		{
+			m_drawNode->removeFromeParent();
+			m_drawNode = nullptr;
 		}
 	}
 
-	Craft* Craft::create(b2World* world)
+	bool Craft::init()
 	{
-		Craft* ret = new Craft();
-		ret->init(world);
-		ret->autorelease();
-		return ret;
-	}
-
-	bool Craft::init(b2World* world)
-	{
-		initBody(world);
+		initBody();
 		initDraw();
 		return true;
 	}
 
-	void Craft::initBody(b2World* world)
+	void Craft::initBody()
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
 		bodyDef.position.Set(0 * BOX2D_LENTH_RATIO_RE, 0 * BOX2D_LENTH_RATIO_RE);
-		m_body = world->CreateBody(&bodyDef);
+		m_body = m_map->getb2World()->CreateBody(&bodyDef);
 		m_body->SetUserData(this);
 
 		// Define another box shape for our dynamic body.
@@ -63,8 +69,8 @@ namespace aircraft
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
 
-		fixtureDef.filter.categoryBits = 0x0001;
-		fixtureDef.filter.maskBits = 0xFFFF;
+		fixtureDef.filter.categoryBits = CollisionMake_Craft;
+		fixtureDef.filter.maskBits = CollisionMake_ALL;
 		fixtureDef.filter.groupIndex = 0;
 
 		// Set the box density to be non-zero, so it will be dynamic.
@@ -92,6 +98,10 @@ namespace aircraft
 
 	void Craft::updateTime(float t)
 	{
+		if (m_body == nullptr)
+		{
+			return;
+		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_A))
 		{
 			m_body->ApplyForceToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
@@ -122,9 +132,17 @@ namespace aircraft
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
 		{
-			m_body->SetTransform(Vector2(0, 200).toBox2d(), 0);
-			m_body->SetAwake(true);
+			Bullet*bullet = m_map->addCraft<Bullet>(Vector2(m_body->GetPosition()));
+			bullet->setTransform(m_body->GetPosition(), m_body->GetAngle());
+			bullet->m_body->ApplyForceToCenter(Vector2(sin(-m_body->GetAngle()) * BULLET_SPEED_NUM, cos(-m_body->GetAngle())*BULLET_SPEED_NUM).toBox2d(), true);
+			bullet->updateTransform();
 		}
+	}
+
+	void Craft::setTransform(const b2Vec2&pos, float angle)
+	{
+		m_body->SetTransform(pos, angle);
+		m_body->SetAwake(true);
 	}
 
 	void Craft::setPosition(const Vector2&pos)
@@ -145,14 +163,13 @@ namespace aircraft
 		m_drawNode->setRotateZ(-m_body->GetAngle() / D3DX_PI * 180);
 	}
 
-	void Craft::updatePosition()
+	void Craft::delThis()
 	{
-		m_drawNode->setPosition(Vector2(m_body->GetPosition()));
+		if (m_body)
+		{
+			m_body->SetActive(false);
+			m_map->getb2World()->DestroyBody(m_body);
+			m_body = nullptr;
+		}
 	}
-
-	void Craft::updateAngle()
-	{
-		m_drawNode->setRotateZ(-m_body->GetAngle() / D3DX_PI * 180);
-	}
-
 }

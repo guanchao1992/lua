@@ -2,10 +2,9 @@
 #include <wtypes.h>
 #include <vector>
 #include <list>
-#include "..\draw\DrawLayout.h"
-#include "..\draw\DrawNode.h"
-#include "..\manager\GameTime.h"
 #include "Craft.h"
+#include "..\base\RList.h"
+#include "ContactListener.h"
 
 #define BOXSIZE	15.f
 
@@ -29,8 +28,10 @@ namespace aircraft
 		void initBox2D();
 		b2Body* createCircleBox2D(const Vector2& pos, float radius);
 
-		Craft* addCraft(const Vector2& pos);
+		template<class CRAFT>
+		CRAFT* addCraft(const Vector2& pos);
 
+		inline b2World*getb2World() { return m_b2World; }
 	private:
 		bool					m_leftD;
 		bool					m_rightD;
@@ -44,9 +45,21 @@ namespace aircraft
 		DrawNode*				m_bgDraw;
 
 		Craft*					m_controlCraft;
-		RefList*				m_listCraft;
+		RList<Craft>*			m_listCraft;
 
 		b2World*				m_b2World;
 		b2DrawDebug*			m_drawDebug;
+		ContactListener*		m_contactListener;
 	};
+
+	template<class CRAFT>
+	CRAFT* Map::addCraft(const Vector2& pos)
+	{
+		CRAFT* ret = new CRAFT(this);
+		ret->init();
+		ret->autorelease();
+		ret->setPosition(pos);
+		m_listCraft->PushBack(ret);
+		return ret;
+	}
 }

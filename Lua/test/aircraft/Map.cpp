@@ -1,6 +1,6 @@
 #include "Map.h"
 #include <minwindef.h>
-#include "..\base\RefList.h"
+#include "..\base\RList.h"
 #include "..\manager\DrawManager.h"
 #include "..\config.h"
 #include "..\manager\GameTime.h"
@@ -11,6 +11,10 @@
 #include "..\manager\VideoManager.h"
 #include "..\base\Node.h"
 #include "aircraft_config.h"
+#include "..\draw\DrawNode.h"
+#include "..\draw\DrawLayout.h"
+#include "ContactListener.h"
+#include "MainCraft.h"
 
 
 namespace aircraft
@@ -30,7 +34,7 @@ namespace aircraft
 		, m_b2World(nullptr)
 		, m_drawDebug(nullptr)
 	{
-		m_listCraft = RefList::create();
+		m_listCraft = RList<Craft>::create();
 		m_listCraft->retain();
 	}
 
@@ -45,6 +49,11 @@ namespace aircraft
 		{
 			delete m_drawDebug;
 			m_drawDebug = nullptr;
+		}
+		if (m_contactListener)
+		{
+			delete m_contactListener;
+			m_contactListener = nullptr;
 		}
 		m_listCraft->release();
 		DrawManager::getInstance()->removeLayout(Aircraft_Layout);
@@ -67,7 +76,7 @@ namespace aircraft
 		KeyManager::getInstance()->RegKey(VK_S, "aircraft_map_down", KeyManager::KeyEventType::Down);
 		KeyManager::getInstance()->RegKey(VK_W, "aircraft_map_up", KeyManager::KeyEventType::Down);
 
-		m_controlCraft = addCraft(Vector2(0, 300));
+		m_controlCraft = addCraft<MainCraft>(Vector2(0, 300));
 	}
 
 	void Map::initBox2D()
@@ -79,10 +88,11 @@ namespace aircraft
 		// Construct a world object, which will hold and simulate the rigid bodies.
 		m_b2World = new b2World(gravity);
 		m_drawDebug = new b2DrawDebug();
+		m_contactListener = new ContactListener();
+		m_b2World->SetContactListener(m_contactListener);
 		//m_drawDebug->SetFlags(0xffffffff);
-		//m_b2World->SetDebugDraw(m_drawDebug);
-		//m_b2World->setfriction
-		//m_b2World->SetAutoClearForces(true);
+		m_drawDebug->SetFlags(0);
+		m_b2World->SetDebugDraw(m_drawDebug);
 
 		b2BodyDef groundBodyDef;
 		groundBodyDef.position.Set(-10.0f* BOX2D_LENTH_RATIO_RE, -10.0f* BOX2D_LENTH_RATIO_RE);
@@ -101,7 +111,6 @@ namespace aircraft
 		layout->addChild(groundNode);
 		groundBody->SetUserData(groundNode);
 */
-
 		Size videoSize = VideoManager::getInstance()->getViewSize();
 		b2BodyDef groundBodyDef1;
 		groundBodyDef1.position.Set((1000 + 10) * BOX2D_LENTH_RATIO_RE, (1000 + 10) * BOX2D_LENTH_RATIO_RE);
@@ -123,7 +132,7 @@ namespace aircraft
 
 		for (int i = 0; i < 10; ++i)
 		{
-			auto box = Craft::create(m_b2World);
+			auto box = addCraft<Craft>(Vector2(100, 100 + 20 * i));//Craft::create(m_b2World);
 			m_listCraft->PushBack(box);
 		}
 	}
@@ -157,24 +166,10 @@ namespace aircraft
 		return body;
 	}
 
-	Craft* Map::addCraft(const Vector2& pos)
-	{
-		//b2Body *body = createPolygonBox2D(pos, Size(50, 50));
-		auto craft = Craft::create(m_b2World);
-		m_listCraft->PushBack(craft);
-		//m_layout->addChild(craft);
-		return craft;
-	}
 
 	void Map::clearGame()
 	{
 		m_listCraft->Clear();
-		/*
-		if (m_layout == nullptr)
-		{
-			m_layout->removeFromeParent();
-		}
-*/
 		m_startGame = false;
 
 		KeyManager::getInstance()->ClearKey(VK_A, "aircraft_map_left");
@@ -203,11 +198,17 @@ namespace aircraft
 				auto userData = static_cast<Craft*>(bodyTemp->GetUserData());
 				if (userData)
 				{
-					userData->updatePosition();
-					userData->updateAngle();
+					userData->updateTransform();
 				}
 				bodyTemp = bodyTemp->GetNext();
 			}
+			m_listCraft->ergodicFunc([](Craft*craft, bool&outDel, bool&outEnd) {
+				outDel = craft->isDel();
+				if (outDel)
+				{
+					craft->delThis();
+				}
+			});
 			m_b2World->DrawDebugData();
 		}
 		if (m_controlCraft)
