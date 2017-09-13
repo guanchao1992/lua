@@ -38,8 +38,14 @@ namespace aircraft
 		m_body->SetUserData(this);
 
 		// Define another box shape for our dynamic body.
+		/*
 		b2PolygonShape dynamicBox;
 		dynamicBox.SetAsBox(50 / 2 * BOX2D_LENTH_RATIO_RE, 50 / 2 * BOX2D_LENTH_RATIO_RE);
+*/
+
+		b2CircleShape dynamicBox;
+		dynamicBox.m_p = b2Vec2(0, 0);
+		dynamicBox.m_radius = 25 * BOX2D_LENTH_RATIO_RE;
 
 		// Define the dynamic body fixture.
 		b2FixtureDef fixtureDef;
@@ -67,7 +73,8 @@ namespace aircraft
 	void MainCraft::initDraw()
 	{
 		m_drawNode = DrawNode::create();
-		m_drawNode->DrawSolidRect(Rect2D(-50 / 2, -50 / 2, 50, 50), 0x003f32ff);
+		//m_drawNode->DrawSolidRect(Rect2D(-50 / 2, -50 / 2, 50, 50), 0x003f32ff);
+		m_drawNode->DrawSolidCircle(Vector3(0, 0, 0), 25, 0x003f32ff);
 		DrawLayout* layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
 		layout->addChild(m_drawNode);
 	}

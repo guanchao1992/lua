@@ -16,8 +16,8 @@
 #include "Bullet.h"
 #include "Map.h"
 
-#define LINEARIMPULSE_NUM	8000
-#define ANGULARIMPULSE_NUM	10	
+#define LINEARIMPULSE_NUM	10000
+#define ANGULARIMPULSE_NUM	25	
 #define BULLET_SPEED_NUM	500
 
 namespace aircraft
@@ -104,31 +104,24 @@ namespace aircraft
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_A))
 		{
-			m_body->ApplyForceToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
-			//left(t);
+			m_body->ApplyAngularImpulse(ANGULARIMPULSE_NUM * BOX2D_LENTH_RATIO_RE*t, true);
+			//m_body->ApplyForceToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_D))
 		{
-			m_body->ApplyForceToCenter(Vector2(LINEARIMPULSE_NUM* t, 0).toBox2d(), true);
-			//right(t);
+			m_body->ApplyAngularImpulse(-ANGULARIMPULSE_NUM* BOX2D_LENTH_RATIO_RE*t, true);
+			//m_body->ApplyForceToCenter(Vector2(LINEARIMPULSE_NUM* t, 0).toBox2d(), true);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_W))
 		{
-			m_body->ApplyForceToCenter(Vector2(0, LINEARIMPULSE_NUM* t).toBox2d(), true);
+			float angle = m_body->GetAngle();
+			m_body->ApplyForceToCenter(Vector2(sin(-m_body->GetAngle()) * LINEARIMPULSE_NUM * t, cos(-m_body->GetAngle())*LINEARIMPULSE_NUM*t).toBox2d(), true);
 			//up(t);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_S))
 		{
-			m_body->ApplyForceToCenter(Vector2(0, -LINEARIMPULSE_NUM* t).toBox2d(), true);
+			//m_body->ApplyForceToCenter(Vector2(0, -LINEARIMPULSE_NUM* t).toBox2d(), true);
 			//down(t);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_E))
-		{
-			m_body->ApplyAngularImpulse(ANGULARIMPULSE_NUM * BOX2D_LENTH_RATIO_RE*t, true);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_Q))
-		{
-			m_body->ApplyAngularImpulse(-ANGULARIMPULSE_NUM* BOX2D_LENTH_RATIO_RE*t, true);
 		}
 		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
 		{

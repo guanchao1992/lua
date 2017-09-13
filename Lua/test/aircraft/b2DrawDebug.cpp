@@ -2,7 +2,7 @@
 #include "../draw/DrawNode.h"
 #include "../manager/DrawManager.h"
 #include "../draw/DrawLayout.h"
-#include "../manager/b2DrawManager.h"
+#include "b2DrawManager.h"
 
 b2DrawDebug::b2DrawDebug()
 {

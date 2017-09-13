@@ -17,7 +17,6 @@
 #include <D3DX10math.h>
 #include "draw\DrawNode.h"
 #include "manager\KeyManager.h"
-#include "manager\b2DrawManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -66,8 +65,6 @@ HRESULT GameApp::Init(HWND hWnd)
 
 	KeyManager::getInstance()->Init();
 
-	b2DrawManager::getInstance()->Init();
-
 	DrawLayout*layout = DrawLayout::create(0);
 	DrawManager::getInstance()->addLayout(layout, "gameapp_layout");
 
@@ -78,8 +75,6 @@ HRESULT GameApp::Init(HWND hWnd)
 	layout->addChild(m_drawnode);
 	testKeyManager();
 */
-
-	updateCameraTransform();
 
 	m_aircraftMap = new aircraft::Map();
 	m_aircraftMap->startGame();
@@ -128,27 +123,11 @@ void GameApp::Render()
 	VideoManager::getInstance()->ClearTargetView();
 	//pD3DDEV->SetStreamSource
 
-	DrawManager::getInstance()->RenderDraw(m_camera_transform);
+	static const Matrix4 matrix;
+
+	DrawManager::getInstance()->RenderDraw(matrix);
 	VideoManager::getInstance()->Present();
 
-}
-
-void GameApp::updateCameraTransform()
-{
-	Size winSize = VideoManager::getInstance()->getViewSize();
-	m_camera_transform.set(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	);
-	/*
-	auto eye = XMVectorSet(0, 0, -1000, 0);
-	auto at = XMVectorSet(0, 0, 0, 0);
-	auto up = XMVectorSet(0, 1, 0, 0);
-	auto viewMatrix = XMMatrixLookAtLH(eye, at, up);
-	m_camera_transform = viewMatrix;
-*/
 }
 
 void GameApp::Update(float t)

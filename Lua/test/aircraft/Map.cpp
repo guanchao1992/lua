@@ -15,6 +15,7 @@
 #include "..\draw\DrawLayout.h"
 #include "ContactListener.h"
 #include "MainCraft.h"
+#include "b2DrawManager.h"
 
 
 namespace aircraft
@@ -63,6 +64,7 @@ namespace aircraft
 	{
 		if (DrawManager::getInstance()->getLayout(Aircraft_Layout) == nullptr)
 		{
+			b2DrawManager::getInstance()->Init();
 			DrawLayout* layout = DrawLayout::create(0);
 			DrawManager::getInstance()->addLayout(layout, Aircraft_Layout);
 			m_bgDraw = DrawNode::create();
@@ -71,17 +73,18 @@ namespace aircraft
 		m_startGame = true;
 		initBox2D();
 		drawBG();
+		/*
 		KeyManager::getInstance()->RegKey(VK_A, "aircraft_map_left", KeyManager::KeyEventType::Down);
 		KeyManager::getInstance()->RegKey(VK_D, "aircraft_map_right", KeyManager::KeyEventType::Down);
 		KeyManager::getInstance()->RegKey(VK_S, "aircraft_map_down", KeyManager::KeyEventType::Down);
 		KeyManager::getInstance()->RegKey(VK_W, "aircraft_map_up", KeyManager::KeyEventType::Down);
-
+*/
 		m_controlCraft = addCraft<MainCraft>(Vector2(0, 300));
 	}
 
 	void Map::initBox2D()
 	{
-		DrawLayout * layout = DrawManager::getInstance()->getLayout("aircraft_layout");
+		DrawLayout * layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
 		// Define the gravity vector.
 		b2Vec2 gravity(0.0f, 0.0f);
 
@@ -172,10 +175,12 @@ namespace aircraft
 		m_listCraft->Clear();
 		m_startGame = false;
 
+		/*
 		KeyManager::getInstance()->ClearKey(VK_A, "aircraft_map_left");
 		KeyManager::getInstance()->ClearKey(VK_D, "aircraft_map_right");
 		KeyManager::getInstance()->ClearKey(VK_W, "aircraft_map_up");
 		KeyManager::getInstance()->ClearKey(VK_S, "aircraft_map_down");
+*/
 	}
 
 	void Map::updateMap(float t)

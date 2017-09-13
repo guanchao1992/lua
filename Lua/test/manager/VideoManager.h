@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include "..\base\Size.h"
 #include "..\base\Vector2.h"
+#include "..\base\Vector3.h"
 
 struct shaderData
 {
@@ -46,6 +47,8 @@ public:
 	void ClearTargetView();
 	void Present();
 	
+	//鼠标点击对应的绘图坐标
+	Vector3 MouseToDrawPos(const Vector2&pos);
 
 	//将d3d的坐标转换成view坐标
 	Vector2 D3DtoViewPos(const Vector2&pos);

@@ -370,6 +370,67 @@ public:
 		*this = this->multiply(ms);
 	}
 
+	float getDeterminantOf3x3SubMatrix(int i, int j)
+	{
+		const int sj0 = 0 + ((i <= 0) ? 1 : 0);
+		const int sj1 = 1 + ((i <= 1) ? 1 : 0);
+		const int sj2 = 2 + ((i <= 2) ? 1 : 0);
+
+		const int si0 = 0 + ((j <= 0) ? 1 : 0);
+		const int si1 = 1 + ((j <= 1) ? 1 : 0);
+		const int si2 = 2 + ((j <= 2) ? 1 : 0);
+
+		float fDet2 = (
+			(m_Column[si0][sj0] * m_Column[si1][sj1] * m_Column[si2][sj2] +
+				m_Column[si0][sj1] * m_Column[si1][sj2] * m_Column[si2][sj0] +
+				m_Column[si0][sj2] * m_Column[si1][sj0] * m_Column[si2][sj1]) -
+				(m_Column[si2][sj0] * m_Column[si1][sj1] * m_Column[si0][sj2] +
+					m_Column[si2][sj1] * m_Column[si1][sj2] * m_Column[si0][sj0] +
+					m_Column[si2][sj2] * m_Column[si1][sj0] * m_Column[si0][sj1]));
+		return fDet2;
+	}
+
+	//行列式
+	float getDeterminantOf4x4Matrix()
+	{
+		float det = 0.0f;
+
+		det += m_Column[0][0] * getDeterminantOf3x3SubMatrix(0, 0);
+		det += -m_Column[1][0] * getDeterminantOf3x3SubMatrix(0, 1);
+		det += m_Column[2][0] * getDeterminantOf3x3SubMatrix(0, 2);
+		det += -m_Column[3][0] * getDeterminantOf3x3SubMatrix(0, 3);
+		return det;
+	}
+
+	//计算逆矩阵
+	bool invert()
+	{
+		const float fDet = getDeterminantOf4x4Matrix();
+
+		/*
+		if (isZero(fDet))
+		{
+			setIdentity();
+			return false;
+		}
+*/
+
+		Matrix4 Inverse;
+
+		float fOneDivDet = 1.0f / fDet;
+
+		for (int i = 0; i < 4; i++)
+		{
+			Inverse.m_Column[i][0] = getDeterminantOf3x3SubMatrix(i, 0) * fOneDivDet; fOneDivDet = -fOneDivDet;
+			Inverse.m_Column[i][1] = getDeterminantOf3x3SubMatrix(i, 1) * fOneDivDet; fOneDivDet = -fOneDivDet;
+			Inverse.m_Column[i][2] = getDeterminantOf3x3SubMatrix(i, 2) * fOneDivDet; fOneDivDet = -fOneDivDet;
+			Inverse.m_Column[i][3] = getDeterminantOf3x3SubMatrix(i, 3) * fOneDivDet;
+		}
+
+		*this = Inverse;
+		return true;
+	}
+
 	inline Matrix4 operator-(const Matrix4& mat) const
 	{
 		return Matrix4(

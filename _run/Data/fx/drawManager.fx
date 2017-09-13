@@ -57,6 +57,7 @@ float4 posToSurePos(float4 pos)
 	outPos = mul(Model, outPos);
 	outPos = mul(Projection, outPos);
 	outPos = mul(View, outPos);
+	outPos.z = outPos.z * 0.000001;
 	return outPos;
 }
 

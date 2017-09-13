@@ -10,6 +10,8 @@
 #include "..\GameApp.h"
 #include "..\base\MyMath.h"
 #include "KeyManager.h"
+#include "..\draw\DrawNode.h"
+#include "..\draw\DrawLayout.h"
 //#include "d3dx11effect.h"
 
 using namespace DirectX;
@@ -222,6 +224,27 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
+	KeyManager::getInstance()->RegKey(VK_G, "videomanager_camera", KeyManager::KeyEventType::Down, []() {
+		Matrix4 trans;
+		memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mModel, sizeof(Matrix4));
+		trans.transformForRotate(Vector3(-5, 0, 0));
+		memcpy_s(&m_constantBufferData.mModel, sizeof(Matrix4), &trans, sizeof(Matrix4));
+		VideoManager::getInstance()->updateWorldTransform();
+	});
+
+	EventManager::getInstance()->regEvent(EventRegType_Mouse, "点屏幕", [](EventArgs*e) {
+		MouseEventArgs *args = (MouseEventArgs*)e;
+		if (args->mouseType == MouseEventArgs::LBMouseDown)
+		{
+			Vector3 pos = VideoManager::getInstance()->MouseToDrawPos(args->viewPos);
+
+			DrawNode* drawNode = DrawNode::create();
+			drawNode->DrawSolidCircle(pos, 10, 0xffffffff);
+
+			DrawLayout*layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
+			layout->addChild(drawNode);
+		}
+	});
 	return S_OK;
 }
 
@@ -237,7 +260,7 @@ void VideoManager::CreateWindowSizeDependentResources()
 		1 / w, 0, 0, 0,
 		0, 1 / h, 0, 0,
 		0, 0, 1 / w, 0,
-		0, 0, 0.5, 1
+		0, 0, 2, 1
 	);
 
 	m_constantBufferData.mProjection = world_transform0;
@@ -248,6 +271,7 @@ void VideoManager::CreateWindowSizeDependentResources()
 		0, 0, -1, 0,
 		-w / 2, -h / 2, 0, 1
 	);
+
 	Size winSize = VideoManager::getInstance()->getViewSize();
 
 	XMVECTOR eye = XMVectorSet(0.0f, 0.0f, 0.2f, 0.5f);
@@ -279,7 +303,7 @@ void VideoManager::updateGame(float t)
 	return;
 	Matrix4 trans;
 	memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mModel, sizeof(Matrix4));
-	trans.transformForRotate(Vector3(0, 100 * t, 0));
+	trans.transformForRotate(Vector3(100 * t, 0, 0));
 	memcpy_s(&m_constantBufferData.mModel, sizeof(Matrix4), &trans, sizeof(Matrix4));
 	updateWorldTransform();
 }
@@ -337,6 +361,39 @@ void VideoManager::setViewSize(Size size)
 Size VideoManager::getViewSize()
 {
 	return m_viewSize;
+}
+
+Vector3 VideoManager::MouseToDrawPos(const Vector2&pos)
+{
+	Matrix4 mView, mProjection, mModel;
+	memcpy_s(&mView, sizeof(Matrix4), &m_constantBufferData.mView, sizeof(Matrix4));
+	memcpy_s(&mProjection, sizeof(Matrix4), &m_constantBufferData.mProjection, sizeof(Matrix4));
+	memcpy_s(&mModel, sizeof(Matrix4), &m_constantBufferData.mModel, sizeof(Matrix4));
+
+	Matrix4 tempM = mView;
+	mView.invert();
+	mProjection.invert();
+	mModel.invert();
+
+	tempM = mView.multiply(tempM);
+
+	Size size = VideoManager::getInstance()->getViewSize();
+
+	Vector3 tempPos1(pos.x / size.getWidth() * 2 - 1, pos.y / size.getHeight() * 2 - 1, 0.0);
+	Vector3 tempPos2(0, 0, 5);	//这个坐标是怎么得出来的，我至今仍未知道
+
+	tempPos1 = mView.transformPosition(tempPos1);
+	tempPos1 = mProjection.transformPosition(tempPos1);
+	tempPos1 = mModel.transformPosition(tempPos1);
+
+	tempPos2 = mView.transformPosition(tempPos2);
+	tempPos2 = mProjection.transformPosition(tempPos2);
+	tempPos2 = mModel.transformPosition(tempPos2);
+
+	float y = tempPos1.y - (tempPos1.y - tempPos2.y)*tempPos1.z / (tempPos1.z - tempPos2.z);
+	float x = tempPos1.x - (tempPos1.x - tempPos2.x)*tempPos1.z / (tempPos1.z - tempPos2.z);
+	float z = 0;
+	return Vector3(x, y, z);
 }
 
 Vector2 VideoManager::D3DtoViewPos(const Vector2&pos)

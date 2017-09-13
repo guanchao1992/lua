@@ -34,7 +34,5 @@ public:
 	static GameApp* theGameApp;
 	DrawNode*		m_drawnode;
 	aircraft::Map*	m_aircraftMap;
-
-	Matrix4			m_camera_transform;
 };
 

@@ -260,7 +260,7 @@ DrawCircleBuffer::DrawCircleBuffer(const Vector3&center, float radius, const Col
 	float a = XM_2PI / 12;
 	for (int i = 0; i < 12; ++i)
 	{
-		m_OriginalVector3[i] = Vector3(center.x + radius*sin(a*i), center.y + radius*cos(a*i), 0);
+		m_OriginalVector3[i] = Vector3(center.x + radius*sin(a*i), center.y + radius*cos(a*i), center.z);
 	}
 	m_OriginalVector3[12] = m_OriginalVector3[0];
 }
@@ -273,7 +273,7 @@ DrawSolidCircleBuffer::DrawSolidCircleBuffer(const Vector3&center, float radius,
 	float a = XM_2PI / 12;
 	for (int i = 0; i < 12; ++i)
 	{
-		m_OriginalVector3[i] = Vector3(center.x + radius*sin(a*i), center.y + radius*cos(a*i), 0);
+		m_OriginalVector3[i] = Vector3(center.x + radius*sin(a*i), center.y + radius*cos(a*i), center.z);
 	}
 }
 

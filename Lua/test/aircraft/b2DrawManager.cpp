@@ -1,7 +1,7 @@
 #include "b2DrawManager.h"
 #include "..\draw\DrawLayout.h"
 #include "..\draw\DrawNode.h"
-#include "DrawManager.h"
+#include "..\manager\DrawManager.h"
 
 SingletonClaseCpp(b2DrawManager);
 
