@@ -44,6 +44,9 @@ public:
 	void CleanupDevice();
 	struct shaderData *GetShaderByteCode(const char *compiledShader, SIZE_T &outlen);
 
+	void RegAllEvent();
+	void ClearAllEvent();
+
 	void ClearTargetView();
 	void Present();
 	

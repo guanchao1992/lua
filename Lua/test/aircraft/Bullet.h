@@ -14,10 +14,12 @@ namespace aircraft
 		Bullet(Map*map);
 	public:
 		~Bullet();
-		virtual void initBody() override;
+		virtual void initBody(UINT maskBits) override;
 		virtual void initDraw() override;
 		virtual void updateTime(float t) override;
 
 		virtual	void contactCraft(const Craft*other) override;
+	private:
+		float m_remainingTime;
 	};
 }

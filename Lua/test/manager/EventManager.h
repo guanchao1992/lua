@@ -44,6 +44,8 @@ public:
 		LBMouseUp,
 		RBMouseDown,
 		RBMouseUp,
+		MouseMove,
+		MouseLever,
 	};
 	MouseEventArgs(const Vector2& viewPos_, MouseType mouseType_) :
 		EventArgs(EventRegType_Mouse),
@@ -51,7 +53,7 @@ public:
 		mouseType(mouseType_)
 	{ }
 public:
-	Vector2	viewPos;
+	Vector2		viewPos;
 	MouseType	mouseType;
 };
 
@@ -114,3 +116,4 @@ private:
 
 
 #define RegEvent(TYPE,NAME,FUNC,ORDER) EventManager::getInstance()->regEvent(TYPE, NAME, std::bind(&FUNC, this, std::placeholders::_1),ORDER);
+#define ClearEvent(TYPE,NAME) EventManager::getInstance()->clearEvent(TYPE, NAME);

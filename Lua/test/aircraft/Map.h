@@ -28,8 +28,11 @@ namespace aircraft
 		void initBox2D();
 		b2Body* createCircleBox2D(const Vector2& pos, float radius);
 
+		void RegAllEvent();
+		void ClearAllEvent();
+
 		template<class CRAFT>
-		CRAFT* addCraft(const Vector2& pos);
+		CRAFT* addCraft(const Vector2& pos, UINT maskBits);
 
 		inline b2World*getb2World() { return m_b2World; }
 	private:
@@ -53,10 +56,10 @@ namespace aircraft
 	};
 
 	template<class CRAFT>
-	CRAFT* Map::addCraft(const Vector2& pos)
+	CRAFT* Map::addCraft(const Vector2& pos,UINT maskBits)
 	{
 		CRAFT* ret = new CRAFT(this);
-		ret->init();
+		ret->init(maskBits);
 		ret->autorelease();
 		ret->setPosition(pos);
 		m_listCraft->PushBack(ret);

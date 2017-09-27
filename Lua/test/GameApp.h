@@ -25,7 +25,6 @@ public:
 	LRESULT WndProc(HWND hWnd,UINT message, WPARAM wParam, LPARAM lParam);
 
 	void mouseEvent(const EventArgs*args);
-	void keyEvent(const EventArgs*args);
 
 	void updateCameraTransform();
 

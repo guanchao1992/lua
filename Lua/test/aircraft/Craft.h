@@ -11,6 +11,8 @@ class b2World;
 class b2Body;
 class DrawNode;
 
+#define BULLET_SPEED_NUM	20
+
 enum CollisionMake
 {
 	CollisionMake_Craft		= 0x0001,
@@ -29,21 +31,26 @@ namespace aircraft
 		Craft(Map* map);
 	public:
 		~Craft();
-		bool init();
-		virtual void initBody();
+		bool init(UINT maskBits);
+		virtual void initBody(UINT maskBits);
 		virtual void initDraw();
 		virtual void updateTime(float t);
+
+		virtual void bullet(const Vector2&des);
 
 		void setTransform(const b2Vec2&pos, float angle);
 		void setPosition(const Vector2&pos);
 		void setAngle(float angle);//角度
+		void ApplyLinearImpulseToCenter(const Vector2&vec);
+
+		Vector2 getPosition();
 
 		void updateTransform();
 
 		inline CraftType getFuncType() { return m_funcType; }
 
 		//和另一个实体接触
-		virtual	void contactCraft(const Craft*other) {}
+		virtual	void contactCraft(const Craft*other);
 
 		inline void setDel(bool del) { m_delete = del; }
 		inline bool isDel() { return m_delete; }

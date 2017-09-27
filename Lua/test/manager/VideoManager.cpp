@@ -224,6 +224,12 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 	vp.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &vp);
 
+	RegAllEvent();
+	return S_OK;
+}
+
+void VideoManager::RegAllEvent()
+{
 	KeyManager::getInstance()->RegKey(VK_G, "videomanager_camera", KeyManager::KeyEventType::Down, []() {
 		Matrix4 trans;
 		memcpy_s(&trans, sizeof(Matrix4), &m_constantBufferData.mModel, sizeof(Matrix4));
@@ -231,21 +237,11 @@ HRESULT VideoManager::InitDevice(HWND hWnd)
 		memcpy_s(&m_constantBufferData.mModel, sizeof(Matrix4), &trans, sizeof(Matrix4));
 		VideoManager::getInstance()->updateWorldTransform();
 	});
+}
 
-	EventManager::getInstance()->regEvent(EventRegType_Mouse, "µãÆÁÄ»", [](EventArgs*e) {
-		MouseEventArgs *args = (MouseEventArgs*)e;
-		if (args->mouseType == MouseEventArgs::LBMouseDown)
-		{
-			Vector3 pos = VideoManager::getInstance()->MouseToDrawPos(args->viewPos);
-
-			DrawNode* drawNode = DrawNode::create();
-			drawNode->DrawSolidCircle(pos, 10, 0xffffffff);
-
-			DrawLayout*layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
-			layout->addChild(drawNode);
-		}
-	});
-	return S_OK;
+void VideoManager::ClearAllEvent()
+{
+	KeyManager::getInstance()->ClearKey(VK_G, "videomanager_camera");
 }
 
 void VideoManager::CreateWindowSizeDependentResources()
@@ -314,6 +310,7 @@ void VideoManager::updateGame(float t)
 //--------------------------------------------------------------------------------------
 void VideoManager::CleanupDevice()
 {
+	ClearAllEvent();
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 
 	if (m_pRenderTargetView) m_pRenderTargetView->Release();

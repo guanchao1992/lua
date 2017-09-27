@@ -14,10 +14,12 @@ namespace aircraft
 		MainCraft(Map*map);
 	public:
 		~MainCraft();
-		virtual void initBody() override;
+		virtual void initBody(UINT maskBits) override;
 		virtual void initDraw() override;
 		virtual void updateTime(float t) override;
 
 		virtual	void contactCraft(const Craft*other) override;
+
+		virtual void bullet(const Vector2&des) override;
 	};
 }

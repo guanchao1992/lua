@@ -17,6 +17,7 @@
 #include <D3DX10math.h>
 #include "draw\DrawNode.h"
 #include "manager\KeyManager.h"
+#include "manager\MouseManager.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -61,9 +62,9 @@ HRESULT GameApp::Init(HWND hWnd)
 
 	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
-	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
 
 	KeyManager::getInstance()->Init();
+	MouseManager::getInstance()->Init();
 
 	DrawLayout*layout = DrawLayout::create(0);
 	DrawManager::getInstance()->addLayout(layout, "gameapp_layout");
@@ -159,22 +160,28 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_KEYDOWN:
-		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyDown, wParam, LOWORD(lParam), HIWORD(lParam)));
+		KeyManager::getInstance()->keyEvent(KeyEventArgs::KeyDown, wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 	case WM_KEYUP:
-		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
+		KeyManager::getInstance()->keyEvent(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 	case WM_LBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown));
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown);
 		break;
 	case WM_LBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp));
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp);
 		break;
 	case WM_RBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown));
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown);
 		break;
 	case WM_RBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp);
+		break;
+	case WM_MOUSEMOVE:
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove);
+		break;
+	case WM_MOUSELEAVE:
+		MouseManager::getInstance()->mouseEvent(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseLever);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -191,19 +198,5 @@ void GameApp::mouseEvent(const EventArgs*args)
 	if (e->mouseType == MouseEventArgs::LBMouseDown)
 	{
 		DrawManager::getInstance()->DrawOne(e->viewPos.x, e->viewPos.y);
-	}
-}
-
-void GameApp::keyEvent(const EventArgs*args)
-{
-	KeyEventArgs * e = (KeyEventArgs*)args;
-	switch (e->keyType)
-	{
-	case KeyEventArgs::KeyDown:
-		KeyManager::getInstance()->KeyDown(e->key);
-		break;
-	case KeyEventArgs::KeyUp:
-		KeyManager::getInstance()->KeyUp(e->key);
-		break;
 	}
 }

@@ -1,5 +1,6 @@
 #include "KeyManager.h"
 #include "..\base\RList.h"
+#include "EventManager.h"
 
 
 SingletonClaseCpp(KeyManager);
@@ -14,6 +15,13 @@ KeyManager::~KeyManager()
 
 bool KeyManager::Init()
 {
+	/*
+	EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown));
+	EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp));
+	EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown));
+	EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
+	EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove));
+*/
 	return true;
 }
 
@@ -65,6 +73,20 @@ void KeyManager::Update(float t)
 			}
 		}
 	}
+}
+
+void KeyManager::keyEvent(KeyEventArgs::KeyType keyType, UINT key, UINT controlKey, UINT virtualKey)
+{
+	switch (keyType)
+	{
+	case KeyEventArgs::KeyDown:
+		KeyDown(key);
+		break;
+	case KeyEventArgs::KeyUp:
+		KeyUp(key);
+		break;
+	}
+	EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyDown, key, controlKey, virtualKey));
 }
 
 void KeyManager::KeyDown(unsigned int key)

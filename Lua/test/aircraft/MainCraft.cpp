@@ -12,8 +12,9 @@
 #include <Box2D\Dynamics\b2Body.h>
 #include "aircraft_config.h"
 #include "Map.h"
+#include "Bullet.h"
 
-#define LINEARIMPULSE_NUM	8000
+#define LINEARIMPULSE_NUM	80
 #define ANGULARIMPULSE_NUM	10	
 
 namespace aircraft
@@ -29,7 +30,7 @@ namespace aircraft
 	{
 	}
 
-	void MainCraft::initBody()
+	void MainCraft::initBody(UINT maskBits)
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
@@ -51,8 +52,8 @@ namespace aircraft
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
 
-		fixtureDef.filter.categoryBits = 0x0002;
-		fixtureDef.filter.maskBits = CollisionMake_Craft;
+		fixtureDef.filter.categoryBits = CollisionMake_MyCraft;
+		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.filter.groupIndex = 0;
 
 		// Set the box density to be non-zero, so it will be dynamic.
@@ -81,10 +82,40 @@ namespace aircraft
 
 	void MainCraft::updateTime(float t)
 	{
+		if (m_body == nullptr)
+		{
+			return;
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_A))
+		{
+			m_body->ApplyLinearImpulseToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_D))
+		{
+			m_body->ApplyLinearImpulseToCenter(Vector2(LINEARIMPULSE_NUM* t, 0).toBox2d(), true);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_W))
+		{
+			m_body->ApplyLinearImpulseToCenter(Vector2(0, LINEARIMPULSE_NUM* t).toBox2d(), true);
+		}
+		if (KeyManager::getInstance()->IsKeyDown(VK_S))
+		{
+			m_body->ApplyLinearImpulseToCenter(Vector2(0, -LINEARIMPULSE_NUM* t).toBox2d(), true);
+		}
 		Craft::updateTime(t);
 	}
 
 	void MainCraft::contactCraft(const Craft*other)
 	{
+	}
+
+	void MainCraft::bullet(const Vector2&des)
+	{
+		Bullet*bullet = m_map->addCraft<Bullet>(Vector2(m_body->GetPosition()), CollisionMake_Craft);
+		bullet->setTransform(m_body->GetPosition(), m_body->GetAngle());
+		Vector2 toPos = des;
+		toPos.normalization(BULLET_SPEED_NUM);
+		bullet->ApplyLinearImpulseToCenter(toPos);
+		bullet->updateTransform();
 	}
 }

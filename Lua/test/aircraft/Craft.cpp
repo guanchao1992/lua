@@ -16,9 +16,7 @@
 #include "Bullet.h"
 #include "Map.h"
 
-#define LINEARIMPULSE_NUM	10000
 #define ANGULARIMPULSE_NUM	25	
-#define BULLET_SPEED_NUM	500
 
 namespace aircraft
 {
@@ -46,14 +44,14 @@ namespace aircraft
 		}
 	}
 
-	bool Craft::init()
+	bool Craft::init(UINT maskBits)
 	{
-		initBody();
+		initBody(maskBits);
 		initDraw();
 		return true;
 	}
 
-	void Craft::initBody()
+	void Craft::initBody(UINT maskBits)
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
@@ -70,7 +68,7 @@ namespace aircraft
 		fixtureDef.shape = &dynamicBox;
 
 		fixtureDef.filter.categoryBits = CollisionMake_Craft;
-		fixtureDef.filter.maskBits = CollisionMake_ALL;
+		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.filter.groupIndex = 0;
 
 		// Set the box density to be non-zero, so it will be dynamic.
@@ -98,38 +96,16 @@ namespace aircraft
 
 	void Craft::updateTime(float t)
 	{
-		if (m_body == nullptr)
-		{
-			return;
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_A))
-		{
-			m_body->ApplyAngularImpulse(ANGULARIMPULSE_NUM * BOX2D_LENTH_RATIO_RE*t, true);
-			//m_body->ApplyForceToCenter(Vector2(-LINEARIMPULSE_NUM * t, 0).toBox2d(), true);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_D))
-		{
-			m_body->ApplyAngularImpulse(-ANGULARIMPULSE_NUM* BOX2D_LENTH_RATIO_RE*t, true);
-			//m_body->ApplyForceToCenter(Vector2(LINEARIMPULSE_NUM* t, 0).toBox2d(), true);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_W))
-		{
-			float angle = m_body->GetAngle();
-			m_body->ApplyForceToCenter(Vector2(sin(-m_body->GetAngle()) * LINEARIMPULSE_NUM * t, cos(-m_body->GetAngle())*LINEARIMPULSE_NUM*t).toBox2d(), true);
-			//up(t);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_S))
-		{
-			//m_body->ApplyForceToCenter(Vector2(0, -LINEARIMPULSE_NUM* t).toBox2d(), true);
-			//down(t);
-		}
-		if (KeyManager::getInstance()->IsKeyDown(VK_SPACE))
-		{
-			Bullet*bullet = m_map->addCraft<Bullet>(Vector2(m_body->GetPosition()));
-			bullet->setTransform(m_body->GetPosition(), m_body->GetAngle());
-			bullet->m_body->ApplyForceToCenter(Vector2(sin(-m_body->GetAngle()) * BULLET_SPEED_NUM, cos(-m_body->GetAngle())*BULLET_SPEED_NUM).toBox2d(), true);
-			bullet->updateTransform();
-		}
+	}
+
+	void Craft::bullet(const Vector2&des)
+	{
+		Bullet*bullet = m_map->addCraft<Bullet>(Vector2(m_body->GetPosition()), CollisionMake_MyCraft);
+		bullet->setTransform(m_body->GetPosition(), m_body->GetAngle());
+		Vector2 toPos = des;
+		toPos.normalization(BULLET_SPEED_NUM);
+		bullet->ApplyLinearImpulseToCenter(toPos);
+		bullet->updateTransform();
 	}
 
 	void Craft::setTransform(const b2Vec2&pos, float angle)
@@ -140,14 +116,24 @@ namespace aircraft
 
 	void Craft::setPosition(const Vector2&pos)
 	{
-		m_body->SetTransform(Vector2(0, 200).toBox2d(), m_body->GetAngle());
+		m_body->SetTransform(pos.toBox2d(), m_body->GetAngle());
 		m_body->SetAwake(true);
+	}
+
+	Vector2 Craft::getPosition()
+	{
+		return Vector2(m_body->GetPosition());
 	}
 
 	void Craft::setAngle(float angle)
 	{
 		m_body->SetTransform(m_body->GetPosition(), -angle * D3DX_PI / 180);
 		m_body->SetAwake(true);
+	}
+
+	void Craft::ApplyLinearImpulseToCenter(const Vector2&vec)
+	{
+		m_body->ApplyLinearImpulseToCenter(vec.toBox2d(), true);
 	}
 
 	void Craft::updateTransform()
@@ -165,4 +151,10 @@ namespace aircraft
 			m_body = nullptr;
 		}
 	}
+
+	void Craft::contactCraft(const Craft*other)
+	{
+		return;
+	}
 }
+

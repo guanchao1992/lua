@@ -78,6 +78,17 @@ public:
 		this->y += y;
 	}
 
+	inline void normalization(float s)
+	{
+		if (x == 0 && y == 0)
+		{
+			return;
+		}
+		float f = s / pow(x*x + y*y, 0.5);
+		x = x*f;
+		y = y*f;
+	}
+
 	inline Vector2 operator-() const
 	{
 		return Vector2(-this->x, -this->y);

@@ -255,6 +255,9 @@
     <ClCompile Include="aircraft\b2DrawManager.cpp">
       <Filter>aircraft</Filter>
     </ClCompile>
+    <ClCompile Include="manager\MouseManager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aircraft\Craft.h">
@@ -526,6 +529,9 @@
     </ClInclude>
     <ClInclude Include="aircraft\b2DrawManager.h">
       <Filter>aircraft</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\MouseManager.h">
+      <Filter>manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

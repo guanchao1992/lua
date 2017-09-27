@@ -45,9 +45,13 @@ public:
 	bool RegKey(unsigned int key, const std::string&id, UINT keyEventType, KEYMANAGER_FUNC_EVENT functor = nullptr, float span = 1.0f);
 	void ClearKey(unsigned int key, const std::string&id);
 	void Update(float t);
+
+	void keyEvent(KeyEventArgs::KeyType keyType, UINT key, UINT controlKey, UINT virtualKey);
+
 	void KeyDown(unsigned int key);
 	void KeyUp(unsigned int key);
 	bool IsKeyDown(unsigned int key);
+
 private:
-	std::map<unsigned int, KeyMS> m_mapKeyEvent;
+	std::map<unsigned int, KeyMS>	m_mapKeyEvent;
 };

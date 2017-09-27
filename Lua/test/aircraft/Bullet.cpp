@@ -21,7 +21,8 @@ namespace aircraft
 {
 
 	Bullet::Bullet(Map*map)
-		:Craft(map)
+		: Craft(map)
+		, m_remainingTime(5.f)
 	{
 		m_funcType = CraftType_Bullet;
 	}
@@ -30,7 +31,7 @@ namespace aircraft
 	{
 	}
 
-	void Bullet::initBody()
+	void Bullet::initBody(UINT maskBits)
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
@@ -47,8 +48,8 @@ namespace aircraft
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
 
-		fixtureDef.filter.categoryBits = 0x0002;
-		fixtureDef.filter.maskBits = CollisionMake_Craft;
+		fixtureDef.filter.categoryBits = CollisionMake_Bullet;
+		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.filter.groupIndex = 0;
 
 		// Set the box density to be non-zero, so it will be dynamic.
@@ -76,6 +77,15 @@ namespace aircraft
 
 	void Bullet::updateTime(float t)
 	{
+		if (isDel())
+		{
+			return;
+		}
+		m_remainingTime -= t;
+		if (m_remainingTime <= 0)
+		{
+			setDel(true);
+		}
 	}
 
 	void Bullet::contactCraft(const Craft*other)

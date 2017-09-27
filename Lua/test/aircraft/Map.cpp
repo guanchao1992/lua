@@ -16,6 +16,8 @@
 #include "ContactListener.h"
 #include "MainCraft.h"
 #include "b2DrawManager.h"
+#include "..\manager\MouseManager.h"
+#include "Bullet.h"
 
 
 namespace aircraft
@@ -79,7 +81,7 @@ namespace aircraft
 		KeyManager::getInstance()->RegKey(VK_S, "aircraft_map_down", KeyManager::KeyEventType::Down);
 		KeyManager::getInstance()->RegKey(VK_W, "aircraft_map_up", KeyManager::KeyEventType::Down);
 */
-		m_controlCraft = addCraft<MainCraft>(Vector2(0, 300));
+		m_controlCraft = addCraft<MainCraft>(Vector2(0, 300), CollisionMake_Bullet | CollisionMake_MyCraft | CollisionMake_Craft);
 	}
 
 	void Map::initBox2D()
@@ -135,9 +137,11 @@ namespace aircraft
 
 		for (int i = 0; i < 10; ++i)
 		{
-			auto box = addCraft<Craft>(Vector2(100, 100 + 20 * i));//Craft::create(m_b2World);
+			auto box = addCraft<Craft>(Vector2(400 + i * 4, 100 + 10 * i), CollisionMake_Bullet | CollisionMake_MyCraft | CollisionMake_Craft);
 			m_listCraft->PushBack(box);
 		}
+		
+		RegAllEvent();
 	}
 
 	b2Body* Map::createCircleBox2D(const Vector2& pos, float radius)
@@ -172,15 +176,39 @@ namespace aircraft
 
 	void Map::clearGame()
 	{
+		ClearAllEvent();
 		m_listCraft->Clear();
 		m_startGame = false;
+	}
 
-		/*
-		KeyManager::getInstance()->ClearKey(VK_A, "aircraft_map_left");
-		KeyManager::getInstance()->ClearKey(VK_D, "aircraft_map_right");
-		KeyManager::getInstance()->ClearKey(VK_W, "aircraft_map_up");
-		KeyManager::getInstance()->ClearKey(VK_S, "aircraft_map_down");
-*/
+	void Map::RegAllEvent()
+	{
+		EventManager::getInstance()->regEvent(EventRegType_Mouse, "µãÆÁÄ»", [](EventArgs*e) {
+			MouseEventArgs *args = (MouseEventArgs*)e;
+			if (args->mouseType == MouseEventArgs::LBMouseDown)
+			{
+				Vector3 pos = VideoManager::getInstance()->MouseToDrawPos(args->viewPos);
+				DrawNode* drawNode = DrawNode::create();
+				drawNode->DrawSolidCircle(pos, 10, 0xffffffff);
+				DrawLayout*layout = DrawManager::getInstance()->getLayout(Aircraft_Layout);
+				layout->addChild(drawNode);
+			}
+		});
+		GameTime::getInstance()->addTimer("¹¥»÷", 0.1, -1, std::bind([](Map*map, float t) {
+			if (MouseManager::getInstance()->isLBDown())
+			{
+				Vector3 endPos = VideoManager::getInstance()->MouseToDrawPos(MouseManager::getInstance()->getMousePos());
+				Vector2 startPos = map->m_controlCraft->getPosition();
+				Vector2 des(endPos.x - startPos.x, endPos.y - startPos.y);
+				map->m_controlCraft->bullet(des);
+			}
+		}, this, std::placeholders::_1));
+	}
+
+	void Map::ClearAllEvent()
+	{
+		EventManager::getInstance()->clearEvent(EventRegType_Mouse, "µãÆÁÄ»");
+		GameTime::getInstance()->removeTimer("¹¥»÷");
 	}
 
 	void Map::updateMap(float t)
@@ -207,18 +235,18 @@ namespace aircraft
 				}
 				bodyTemp = bodyTemp->GetNext();
 			}
-			m_listCraft->ergodicFunc([](Craft*craft, bool&outDel, bool&outEnd) {
+			m_listCraft->ergodicFunc([=](Craft*craft, bool&outDel, bool&outEnd) {
 				outDel = craft->isDel();
 				if (outDel)
 				{
 					craft->delThis();
 				}
+				else
+				{
+					craft->updateTime(t);
+				}
 			});
 			m_b2World->DrawDebugData();
-		}
-		if (m_controlCraft)
-		{
-			m_controlCraft->updateTime(t);
 		}
 	}
 
