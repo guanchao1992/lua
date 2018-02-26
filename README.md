@@ -1,6 +1,6 @@
 # lua
 这是一个测试项目
-
+请选择Debug x86 运行
 
 Lua-5.3.4
 log4-plus-1.2.1-rc1
