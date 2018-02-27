@@ -28,7 +28,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{1EB103A3-13ED-4A92-8A62-694BD381C3AF}</ProjectGuid>
     <RootNamespace>MyTool</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -80,6 +80,7 @@
     <IntDir>$(SolutionDir)..\_run\obj\obj.$(ProjectName)$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)..\log4cplus-1.2.1-rc1\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\_run\$(Platform)\$(Configuration)\</OutDir>

@@ -53,7 +53,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{152CE948-F659-4206-A50A-1D2B9658EF96}</ProjectGuid>
     <RootNamespace>XercesLib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ICU Release|Win32'" Label="Configuration">

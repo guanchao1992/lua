@@ -22,6 +22,7 @@ enum RegEventType
 	EventRegType_Key,
 
 
+	EventRegType_Custom = 9999,
 	EventRegType_Max,
 };
 
@@ -33,6 +34,16 @@ public:
 	{ }
 public:
 	EventType type;
+};
+class CustomEventArgs :public EventArgs
+{
+public:
+	CustomEventArgs(const string&args) :
+		EventArgs(EventRegType_Custom),
+		param(args)
+	{ }
+public:
+	string param;
 };
 
 class MouseEventArgs :public EventArgs
