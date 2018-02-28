@@ -71,6 +71,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 			continue;
 		}
 		EventManager::getInstance()->runEvent();
+		GameApp::getInstance()->Render();
 
 		DWORD newtime = timeGetTime();
 		float interval = newtime - lasttime;	//执行上面的代码所耗费时间
@@ -91,7 +92,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		{
 			//break;
 		}
-		GameApp::getInstance()->Render();
 
 		GameTime::getInstance()->updateFrameTime(lasttime / 1000.f);
 	}

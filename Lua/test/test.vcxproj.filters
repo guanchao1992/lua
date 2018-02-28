@@ -87,6 +87,9 @@
     <ClCompile Include="base\TextureBuffer.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="game\GameLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="base\TextureBuffer.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="game\GameLayout.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

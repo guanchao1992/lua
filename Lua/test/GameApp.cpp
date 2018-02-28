@@ -11,6 +11,7 @@
 #include "texture\Texture2D.h"
 #include <xercesc\util\PlatformUtils.hpp>
 #include "manager\TextureManager.h"
+#include "game\GameLayout.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -63,6 +64,10 @@ HRESULT GameApp::Init(HWND hWnd)
 		DrawManager::getInstance()->DrawOne(rand() % 1000, rand() % 800);
 	});
 */
+
+	DrawManager::getInstance()->addLayout(GameLayout::create());
+	
+
 }
 
 void GameApp::Close()
@@ -134,6 +139,10 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_RBUTTONUP:
 		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
+		break;
+	case WM_MOUSEMOVE:
+		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove));
+		//EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove));
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
