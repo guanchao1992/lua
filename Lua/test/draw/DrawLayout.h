@@ -5,11 +5,11 @@ class ID3D11InputLayout;
 class ID3D11VertexShader;
 class ID3D11PixelShader;
 
-//尽量不要单独创建
+//创建之后要显示必须通过addLayout添加到DrawManager里
 class DrawLayout :public Node
 {
 	STATIC_NODE_CREATE(DrawLayout);
-private:
+protected:
 	DrawLayout();
 public:
 	virtual ~DrawLayout();

@@ -70,6 +70,17 @@ void EventManager::fireEvent(EventArgs*args)
 	m_listFireEvent.push_back(args);
 }
 
+void EventManager::fireEventImmediately(EventArgs*args)
+{
+	//将消息列表拷贝出来，防止出现消息死循环
+	Events&evs = m_mapEvent[args->type];
+	for (auto ev : evs)
+	{
+		ev.func(args);
+	}
+	delete args;
+}
+
 bool EventManager::runEvent()
 {
 	if (m_listFireEvent.size() == 0)

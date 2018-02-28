@@ -55,6 +55,7 @@ public:
 		LBMouseUp,
 		RBMouseDown,
 		RBMouseUp,
+		MouseMove,
 	};
 	MouseEventArgs(const Position2D& viewPos_, MouseType mouseType_) :
 		EventArgs(EventRegType_Mouse),
@@ -118,6 +119,9 @@ public:
 	//请传入一个new的指针
 	void	fireEvent(EventArgs* args);
 	bool	runEvent();
+
+	//不添加到消息队列，立即执行 
+	void    fireEventImmediately(EventArgs*args);
 private:
 	std::map<EventType, Events> m_mapEvent;
 	std::list<EventArgs*>		m_listFireEvent;
