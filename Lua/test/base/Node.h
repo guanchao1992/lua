@@ -28,7 +28,8 @@ public:
 
 	virtual void		setOrder(int order);
 	virtual int			getOrder() { return m_order; };
-	virtual void		render() {};
+	virtual void		update(float dt) {}
+	virtual void		render();
 	virtual void		redraw() { m_bRedraw = false; };
 
 	virtual void				setPosition(const Position2D&position);

@@ -2,12 +2,14 @@
 #include "..\manager\EventManager.h"
 #include "..\draw\TextureNode.h"
 #include "..\GameApp.h"
+#include "..\manager\GameTime.h"
 
 
 
 GameLayout::GameLayout()
 {
 	RegEvent(EventRegType_Mouse, "GameLayout", GameLayout::mouseEvent, 0);
+	RegEvent(EventRegType_Key, "GameLayout", GameLayout::keyEvent, 0);
 }
 
 GameLayout::~GameLayout()
@@ -33,6 +35,14 @@ void GameLayout::mouseEvent(const EventArgs*args)
 }
 
 void GameLayout::keyEvent(const EventArgs*args)
+{
+	KeyEventArgs *e = (KeyEventArgs*)args;
+	if (e->key)
+	{
+	}
+}
+
+void GameLayout::update(float dt)
 {
 
 }

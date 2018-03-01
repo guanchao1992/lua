@@ -16,7 +16,9 @@ public:
 
 	void mouseEvent(const EventArgs*args);
 	void keyEvent(const EventArgs*args);
+	virtual void update(float dt);
 private:
+public:
 	TextureNode *_node;
 };
 

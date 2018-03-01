@@ -21,13 +21,16 @@ SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
 	: m_pDrawGeometryShader(nullptr)
 {
-	m_listVertexLayout = NodeList::create();
-	m_listVertexLayout->retain();
+	//m_listVertexLayout = NodeList::create();
+	//m_listVertexLayout->retain();
+	m_rootNode = Node::create();
+	m_rootNode->retain();
 }
 
 DrawManager::~DrawManager()
 {
-	m_listVertexLayout->release();
+	//m_listVertexLayout->release();
+	m_rootNode->release();
 }
 
 void DrawManager::Init()
@@ -77,7 +80,8 @@ void DrawManager::Init()
 
 void DrawManager::Cleanup()
 {
-	m_listVertexLayout->Clear();
+	m_rootNode->getChildren()->Clear();
+	//m_listVertexLayout->Clear();
 
 	for (auto it:m_mapID3DBlob)
 	{
@@ -159,17 +163,56 @@ void DrawManager::setShaderType(ShaderType type)
 	}
 }
 
+void DrawManager::Update(float dt)
+{
+	std::list<Node*> leftNode;
+	leftNode.push_back(m_rootNode);
+	std::list<std::list<Node*>::const_iterator> leftIndex;
+	leftIndex.push_back(m_rootNode->getChildren()->getListNode().begin());
+	while (true)
+	{
+		bool sign = false;
+		Node * templist = leftNode.back();
+		//auto it = templist->getChildren()->getListNode().begin();
+		auto it = leftIndex.back();
+		while (it != templist->getChildren()->getListNode().end())
+		{
+			NodeList* templist2 = (*it)->getChildren();
+			if (templist2->getListNode().begin() != templist2->getListNode().end())
+			{
+				leftNode.push_back(*it);
+				leftIndex.back() = it;
+				leftIndex.back()++;
+				leftIndex.push_back((*it)->getChildren()->getListNode().begin());
+				sign = true;
+				(*it)->update(dt);
+				break;
+			}
+			else
+			{
+				(*it)->update(dt);
+				it++;
+			}
+		}
+		if (sign == false)
+		{
+			leftNode.pop_back();
+			leftIndex.pop_back();
+		}
+		if (leftNode.begin()==leftNode.end())
+		{
+			break;
+		}
+	}
+}
+
 void DrawManager::RenderDraw()
 {
 	//getD3DContext()->IASetInputLayout(m_pDrawVertexLayout);
 	//getD3DContext()->VSSetShader(m_pDrawVertexShader, NULL, 0);
 	//getD3DContext()->PSSetShader(m_pDrawPixelShader, NULL, 0);
 
-	for (auto it : m_listVertexLayout->getListNode())
-	{
-		DrawLayout*layout = (DrawLayout*)it;
-		layout->render();
-	}
+	m_rootNode->render();
 }
 
 DrawLayout* DrawManager::createLayout(int order)
@@ -181,10 +224,10 @@ DrawLayout* DrawManager::createLayout(int order)
 
 void DrawManager::addLayout(DrawLayout*layout)
 {
-	m_listVertexLayout->PushBack(layout);
+	m_rootNode->addChild(layout);
 }
 
 DrawLayout* DrawManager::getLayout(int index)
 {
-	return dynamic_cast<DrawLayout*>(m_listVertexLayout->getNodeAtIndex(index));
+	return dynamic_cast<DrawLayout*>(m_rootNode->getChildren()->getNodeAtIndex(index));
 }

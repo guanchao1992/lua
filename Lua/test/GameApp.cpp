@@ -12,6 +12,7 @@
 #include <xercesc\util\PlatformUtils.hpp>
 #include "manager\TextureManager.h"
 #include "game\GameLayout.h"
+#include "draw\TextureNode.h"
 
 SingletonClaseCpp(GameApp);
 GameApp* GameApp::theGameApp = NULL;
@@ -65,9 +66,9 @@ HRESULT GameApp::Init(HWND hWnd)
 	});
 */
 
-	DrawManager::getInstance()->addLayout(GameLayout::create());
+	_gl = GameLayout::create();
+	DrawManager::getInstance()->addLayout(_gl);
 	
-
 }
 
 void GameApp::Close()
@@ -87,6 +88,7 @@ void GameApp::Close()
 
 void GameApp::Render()
 {
+	Update(GameTime::getInstance()->getElapsedTime());
 	VideoManager::getInstance()->ClearTargetView();
 	DrawManager::getInstance()->RenderDraw();
 	VideoManager::getInstance()->Present();
@@ -104,6 +106,7 @@ static clock_t t2 = 0;
 void GameApp::Update(float t)
 {
 	ObjectManager::getInstance()->checkDelete();
+	DrawManager::getInstance()->Update(t);
 }
 
 Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
@@ -123,26 +126,31 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_KEYDOWN:
-		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyDown, wParam, LOWORD(lParam), HIWORD(lParam)));
+		EventManager::getInstance()->fireEventImmediately(new KeyEventArgs(KeyEventArgs::KeyDown, wParam, LOWORD(lParam), HIWORD(lParam)));
 		break;
 	case WM_KEYUP:
-		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
+		EventManager::getInstance()->fireEventImmediately(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
 		break;
 	case WM_LBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown));
+		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseDown));
 		break;
 	case WM_LBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp));
+		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::LBMouseUp));
 		break;
 	case WM_RBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown));
+		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseDown));
 		break;
 	case WM_RBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
+		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::RBMouseUp));
 		break;
 	case WM_MOUSEMOVE:
 		EventManager::getInstance()->fireEventImmediately(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove));
 		//EventManager::getInstance()->fireEvent(new MouseEventArgs(VideoManager::getInstance()->mousetoViewPos(lParam), MouseEventArgs::MouseMove));
+		//theGameApp->_gl->_node->setPosition(VideoManager::getInstance()->mousetoViewPos(lParam));
+		/*
+		DrawManager::getInstance()->RenderDraw();
+		VideoManager::getInstance()->Present();
+*/
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

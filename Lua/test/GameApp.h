@@ -5,6 +5,8 @@
 #include <wtypes.h>
 
 class EventArgs;
+class GameLayout;
+
 class GameApp
 {
 	SingletonClase(GameApp);
@@ -25,5 +27,6 @@ public:
 	void keyEvent(const EventArgs*args);
 public:
 	static GameApp* theGameApp;
+	GameLayout* _gl;
 };
 

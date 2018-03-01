@@ -4,6 +4,7 @@
 #include "..\manager\VideoManager.h"
 #include "..\base\NodeList.h"
 #include <d3dcommon.h>
+#include "..\manager\GameTime.h"
 
 DrawLayout::DrawLayout()
 	: m_pDrawVertexLayout(nullptr)
@@ -56,3 +57,4 @@ void DrawLayout::render()
 		it->render();
 	}
 }
+

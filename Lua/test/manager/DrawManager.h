@@ -15,6 +15,7 @@ class ID3D11InputLayout;
 class ID3D11Buffer;
 class DrawLayout;
 class NodeList;
+class Node;
 
 class DrawManager
 {
@@ -36,9 +37,12 @@ public:
 	void addLayout(DrawLayout*layout);
 	DrawLayout* getLayout(int index);
 
+
+	void Update(float dt);
 	void RenderDraw();
 private:
-	NodeList*									m_listVertexLayout;
+	//NodeList*									m_listVertexLayout;
+	Node * m_rootNode;
 	std::map<const char*, ID3DBlob*>			m_mapID3DBlob;
 	std::map<ShaderType, ID3D11VertexShader*>	m_mapVertexShader;
 	std::map<ShaderType, ID3D11PixelShader*>	m_mapPixelShader;

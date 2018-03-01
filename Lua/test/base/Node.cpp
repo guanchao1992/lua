@@ -108,3 +108,15 @@ Position2D Node::getSurePosition()
 	}
 	return pos;
 }
+
+void Node::render()
+{
+	if (isRedraw())
+	{
+		redraw();
+	}
+	for (Node* it : getChildren()->getListNode())
+	{
+		it->render();
+	}
+}
