@@ -93,3 +93,5 @@ extern "C" DLL_SAMPLE_API void log_fatal_f(const char*loop, const char*format, .
 	LOG4CPLUS_FATAL(Logger::getRoot(), outbuf);
 	LogLog::getLogLog()->debug(outbuf);
 }
+
+
