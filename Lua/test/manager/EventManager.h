@@ -11,7 +11,7 @@ extern "C" {
 #include "..\..\MyTool\tool_log.h"
 #include <list>
 #include <functional>
-#include "..\base\Position2D.h"
+#include "..\base\Vector2.h"
 
 typedef unsigned long EventType;
 
@@ -45,13 +45,13 @@ public:
 		RBMouseDown,
 		RBMouseUp,
 	};
-	MouseEventArgs(const Position2D& viewPos_, MouseType mouseType_) :
+	MouseEventArgs(const Vector2& viewPos_, MouseType mouseType_) :
 		EventArgs(EventRegType_Mouse),
 		viewPos(viewPos_),
 		mouseType(mouseType_)
 	{ }
 public:
-	Position2D	viewPos;
+	Vector2	viewPos;
 	MouseType	mouseType;
 };
 

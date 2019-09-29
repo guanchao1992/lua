@@ -33,7 +33,7 @@ namespace log4cplus { namespace helpers {
 namespace
 {
 
-static tchar const PREFIX[] = LOG4CPLUS_TEXT("log4cplus: ");
+static tchar const PREFIX[] = LOG4CPLUS_TEXT("	log4:");
 static tchar const WARN_PREFIX[] = LOG4CPLUS_TEXT("log4cplus:WARN ");
 static tchar const ERR_PREFIX[] = LOG4CPLUS_TEXT("log4cplus:ERROR ");
 

@@ -37,7 +37,7 @@ void ScriptsManager::doFile(const std::string&file)
 	std::string filePath = m_rootPath + file;
 	int error = luaL_dofile(getLuaState(),filePath.c_str());
 	if (error != 0)
-	{
-		LOG_D_F("ScriptsManager","dofile '%s' error.errno %d.",filePath.c_str(),error);
+	{		
+		LOG_D_F("ScriptsManager","dofile '%s' error.code %d. error:\n%s",filePath.c_str(),error, lua_tostring(GetLuaState(), -1));
 	}
 }

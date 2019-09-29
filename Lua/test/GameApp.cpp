@@ -20,7 +20,7 @@ GameApp::~GameApp()
 
 int test_regFunc()
 {
-	LOG_D_F("main", "register ctolua function <testF>");
+	LOG_F_F("main", "register ctolua function <testF>");
 	lua_State*L = GetLuaState();
 	RegLuaFunctionStart(L, "testF");
 	cout << "--------------" << lua_get<int>(GetLuaState(), 1) << endl;
@@ -44,6 +44,7 @@ HRESULT GameApp::Init(HWND hWnd)
 	regAllClass();
 
 	ScriptsManager::getInstance()->doFile("init.lua");
+	test_regFunc();
 
 	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
@@ -66,12 +67,12 @@ void GameApp::Render()
 	DrawManager::getInstance()->RenderDraw();
 }
 
-Position2D GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
+Vector2 GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
 {
 	UINT x = LOWORD(lParam);
 	UINT y = HIWORD(lParam);
 	const Size &size= VideoManager::getInstance()->getViewSize();
-	Position2D pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
+	Vector2 pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
 	return pos;
 }
 

@@ -51,6 +51,9 @@
     <ClCompile Include="manager\EventManager.cpp">
       <Filter>manager</Filter>
     </ClCompile>
+    <ClCompile Include="base\DrawNode.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -80,12 +83,6 @@
     <ClInclude Include="base\Size.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\Position3D.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\Position2D.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="manager\ScriptsManager.h">
       <Filter>manager</Filter>
     </ClInclude>
@@ -98,10 +95,27 @@
     <ClInclude Include="manager\EventManager.h">
       <Filter>manager</Filter>
     </ClInclude>
+    <ClInclude Include="base\DrawNode.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Vector2.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Vector3.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="fx\Squance.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\drawManager.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

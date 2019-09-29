@@ -223,6 +223,7 @@ void ctolua_registerclass_func(lua_State*L, const MapClassFunc& mapFunc)
 template<class T>
 void ctolua_registerclass(lua_State* L, const MapClassFunc& mapFunc)
 {
+
 	lua_pushcfunction(L, ctolua_constructor<T>);
 	lua_setglobal(L, "newFoo");
 
@@ -243,6 +244,44 @@ void ctolua_registerclass(lua_State* L, const MapClassFunc& mapFunc)
 
 	lua_pop(L, -1);
 }
+
+
+//这是一个测试用的类
+class Foo
+{
+public:
+	Foo(int value)
+	{
+		_value = value;
+		printf("Foo Constructor! value=%d\n", _value);
+		LOG_D("foo ctr.");
+	}
+	~Foo()
+	{
+		printf("Foo Destructor! value=%d\n", _value);
+		LOG_D("foo ~");
+	}
+	int add(int a, int b)
+	{
+		printf("Foo add! value=%d\n", _value);
+		LOG_D("foo add");
+		return  a + b;
+	}
+	void setV(int value)
+	{
+		LOG_D("foo setV");
+		printf("Foo setV!\n");
+		_value = value;
+	}
+	int getV()
+	{
+		LOG_D("foo getV");
+		printf("Foo getV!\n");
+		return _value;
+	}
+	int _value;
+};
+
 
 MapClassFunc s_Foo_luafuncs;
 void register_lua_Foo_func()

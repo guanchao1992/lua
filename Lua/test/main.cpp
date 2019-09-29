@@ -44,6 +44,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
+	AllocConsole();
+
+	FILE*streamout;
+
+	freopen_s(&streamout, "CONIN$", "r", stdin);
+	freopen_s(&streamout, "CONOUT$", "w", stdout);
+	freopen_s(&streamout, "CONOUT$", "w", stderr);
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;

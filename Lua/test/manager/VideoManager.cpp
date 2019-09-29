@@ -190,14 +190,15 @@ void VideoManager::LoadContent()
 	ID3DBlob* pErrorBlob = NULL;
 
 	HRESULT result = 0;
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "VS_Main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
+	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.hlsl").c_str(), NULL, NULL, "VS_Main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
 	if (FAILED(result))
 	{
 		if (pErrorBlob != 0)
 		{
 			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			assert((char*)pErrorBlob->GetBufferPointer());
 			pErrorBlob->Release();
-		}
+		}		
 		return;
 	}
 
@@ -223,7 +224,7 @@ void VideoManager::LoadContent()
 	pVSBlob->Release();
 
 
-	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.fx").c_str(), NULL, NULL, "PS_Main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
+	result = D3DCompileFromFile(getAccuratePathW(L"fx\\Squance.hlsl").c_str(), NULL, NULL, "PS_Main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, NULL, &pVSBlob, &pErrorBlob);
 	if (FAILED(result))
 	{
 		if (pErrorBlob != 0)
@@ -242,16 +243,7 @@ void VideoManager::LoadContent()
 	pVSBlob->Release();
 
 	// Create vertex buffer
-	SimpleVertex vertices[] =
-	{
-		XMFLOAT3(0.7f, 0.7f, 0.5f),
-		XMFLOAT3(0.7f, 0.0f, 0.5f),
-		XMFLOAT3(0.0f, 0.7f, 0.5f),
-
-		XMFLOAT3(-0.7f, -0.7f, 0.5f),
-		XMFLOAT3(-0.7f, 0.0f, 0.5f),
-		XMFLOAT3(0.0f, -0.7f, 0.5f),
-	};
+	SimpleVertex vertices[6];
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -264,6 +256,29 @@ void VideoManager::LoadContent()
 	InitData.pSysMem = vertices;
 
 	result = m_pd3dDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer);
+
+
+	SimpleVertex verticeschange[] =
+	{
+		XMFLOAT3(0.7f, 0.7f, 0.5f),
+		XMFLOAT3(0.7f, 0.0f, 0.5f),
+		XMFLOAT3(0.0f, 0.7f, 0.5f),
+
+		XMFLOAT3(-0.8f, -0.7f, 0.5f),
+		XMFLOAT3(-0.7f, 0.0f, 0.5f),
+		XMFLOAT3(0.0f, -0.7f, 0.5f)
+	};
+	//
+	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, nullptr, verticeschange, 0, 0);
+
+	SimpleVertex verticeschange1[] =
+	{
+		XMFLOAT3(0.9f, 0.9f, 0.5f),
+		XMFLOAT3(0.7f, 0.0f, 0.5f),
+		XMFLOAT3(0.0f, 0.7f, 0.5f)
+	};
+	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, nullptr, verticeschange1, 0, 1);
+
 	if (FAILED(result))
 	{
 		return;
@@ -291,8 +306,6 @@ void VideoManager::CleanupDevice()
 //--------------------------------------------------------------------------------------
 void VideoManager::Render()
 {
-	// Just clear the backbuffer
-	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
 
 	//m_pImmediateContext->PSSetShaderResources(0, 1, &colorMap_);
 	//m_pImmediateContext->PSSetSamplers(0, 1, &colorMapSampler_);
@@ -302,10 +315,18 @@ void VideoManager::Render()
 
 	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	//m_pImmediateContext->PSSetConstantBuffers
+
+
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+
+
+	// Just clear the backbuffer
+	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, Colors::Black);
+
 
 	m_pImmediateContext->Draw(6, 0);
 

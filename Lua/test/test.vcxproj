@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base\DrawNode.h" />
     <ClInclude Include="base\lua_get.h" />
-    <ClInclude Include="base\Position2D.h" />
-    <ClInclude Include="base\Position3D.h" />
+    <ClInclude Include="base\Vector2.h" />
+    <ClInclude Include="base\Vector3.h" />
     <ClInclude Include="base\Singleton.h" />
     <ClInclude Include="base\Size.h" />
     <ClInclude Include="ClassToLua.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="base\DrawNode.cpp" />
     <ClCompile Include="base\Singleton.cpp" />
     <ClCompile Include="ClassToLua.cpp" />
     <ClCompile Include="config.cpp" />
@@ -50,6 +52,10 @@
   <ItemGroup>
     <ResourceCompile Include="test.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="fx\drawManager.hlsl" />
+    <FxCompile Include="fx\Squance.hlsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BD158740-1021-42D4-AED9-4771D7297F5C}</ProjectGuid>
@@ -61,7 +67,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -135,11 +141,16 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>MyTool.lib;log4cplusD.lib;Lua-5.3.4.lib;MyLua.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /d /Y $(SolutionDir)test\fx $(TargetDir)..\..\Data\fx</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
