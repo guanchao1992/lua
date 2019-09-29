@@ -21,3 +21,6 @@
 *.log
 *.filters
 *.idb
+/Lua/Lua.VC.VC.opendb
+/Lua/Lua.VC.db
+/_run/Win32/Debug
