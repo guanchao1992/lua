@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ____ScriptsManager_H____
+#define ____ScriptsManager_H____
 
 extern "C" {
 #include "lua.h"
@@ -52,3 +53,4 @@ public:
 	}
 };
 
+#endif

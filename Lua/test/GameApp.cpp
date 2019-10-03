@@ -46,6 +46,8 @@ HRESULT GameApp::Init(HWND hWnd)
 	ScriptsManager::getInstance()->doFile("init.lua");
 	test_regFunc();
 
+	
+
 	//EventManager::getInstance()->regEvent(EventRegType_Mouse, "gameapp", std::bind(&GameApp::mouseEvent, this, std::placeholders::_1));
 	RegEvent(EventRegType_Mouse, "gameapp", GameApp::mouseEvent, 0);
 	RegEvent(EventRegType_Key, "gameapp", GameApp::keyEvent, 0);
@@ -67,15 +69,6 @@ void GameApp::Render()
 	DrawManager::getInstance()->RenderDraw();
 }
 
-Vector2 GameApp::pos2fPos(HWND hWnd,LONG_PTR lParam)
-{
-	UINT x = LOWORD(lParam);
-	UINT y = HIWORD(lParam);
-	const Size &size= VideoManager::getInstance()->getViewSize();
-	Vector2 pos((x / size.getWidth() - 0.5f) * 2, (0.5f - (y / size.getHeight())) * 2);
-	return pos;
-}
-
 LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
@@ -90,19 +83,21 @@ LRESULT GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EventManager::getInstance()->fireEvent(new KeyEventArgs(KeyEventArgs::KeyUp, wParam, LOWORD(lParam), HIWORD(lParam)));
 		break;
 	case WM_LBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseDown));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(Vector2(LOWORD(lParam), HIWORD(lParam)), MouseEventArgs::LBMouseDown));
 		break;
 	case WM_LBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::LBMouseUp));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(Vector2(LOWORD(lParam), HIWORD(lParam)), MouseEventArgs::LBMouseUp));
 		break;
 	case WM_RBUTTONDOWN:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseDown));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(Vector2(LOWORD(lParam), HIWORD(lParam)), MouseEventArgs::RBMouseDown));
 		break;
 	case WM_RBUTTONUP:
-		EventManager::getInstance()->fireEvent(new MouseEventArgs(pos2fPos(hWnd, lParam), MouseEventArgs::RBMouseUp));
+		EventManager::getInstance()->fireEvent(new MouseEventArgs(Vector2(LOWORD(lParam), HIWORD(lParam)), MouseEventArgs::RBMouseUp));
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		break;
+	case WM_TIMER:
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -126,4 +121,9 @@ void GameApp::keyEvent(const EventArgs*args)
 	{
 		VideoManager::getInstance()->setViewSize(Size(1000, 800));
 	}
+}
+
+void GameApp::OnEnter()
+{
+
 }

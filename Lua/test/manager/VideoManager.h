@@ -41,6 +41,12 @@ public:
 	
 	void setViewSize(Size size);
 	Size getViewSize();
+
+	//屏幕像素坐标转换成窗口相对坐标
+	Vector2 pos2fPos(LONG_PTR lParam);
+	Vector2 pos2fPos(int x, int y);
+	Vector3 pos2fPos(int x, int y, int z);
+	Vector3 pos2fPos(const Vector3& vec3);
 private:
 	ID3D11Device*			m_pd3dDevice;
 	ID3D11DeviceContext*    m_pImmediateContext;

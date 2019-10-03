@@ -6,8 +6,17 @@
 #include <windows.h>
 #include "VideoManager.h"
 #include "..\config.h"
+#include "../base/DrawNode.h"
 
 using namespace DirectX;
+
+// A constant buffer that stores the three basic column-major matrices for composing geometry.
+__declspec(align(16)) struct  ModelViewProjectionConstantBuffer
+{
+	XMFLOAT4X4 model;
+	XMFLOAT4X4 view;
+	XMFLOAT4X4 projection;
+};
 
 SingletonClaseCpp(DrawManager);
 DrawManager::DrawManager()
@@ -41,7 +50,8 @@ void DrawManager::Init()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "ORIGIN" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "SCALE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "ROTATEEE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "ROTATEEE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -77,6 +87,49 @@ void DrawManager::Init()
 	}
 
 	pVSBlob->Release();
+
+
+	//绑定常量
+	ID3D11Buffer *pBuffer = nullptr;
+	CD3D11_BUFFER_DESC constantBufferDesc(sizeof(ModelViewProjectionConstantBuffer), D3D11_BIND_CONSTANT_BUFFER);
+	getD3DDevice()->CreateBuffer(&constantBufferDesc, nullptr, &pBuffer);
+	getD3DContext()->VSSetConstantBuffers(0, 1, &pBuffer);
+
+	auto vsize = VideoManager::getInstance()->getViewSize();
+	ModelViewProjectionConstantBuffer constantBufferData;
+	constantBufferData.model = XMFLOAT4X4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1);
+	constantBufferData.view = XMFLOAT4X4(
+		2 / vsize.getWidth(), 0, 0, -1,
+		0, -2 / vsize.getHeight(), 0, 1,
+		0, 0, 0.1 / vsize.getWidth(), 0,
+		0, 0, 0, 1);
+
+	/*
+	constantBufferData.view = XMFLOAT4X4(
+		0.002, 0, 0, 0,
+		0, 0.002, 0, 0,
+		0, 0, 0.002, 0,
+		0, 0, 0, 1);
+*/
+	constantBufferData.projection = XMFLOAT4X4(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1);
+
+	getD3DContext()->UpdateSubresource(
+		pBuffer,
+		0,
+		NULL,
+		&constantBufferData,
+		0,
+		0
+	);//刷新数据
+
 }
 
 void DrawManager::Cleanup()
@@ -92,13 +145,13 @@ struct SimpleVertex
 	XMFLOAT3 origin;  // origin
 	XMFLOAT3 scale;  // scale
 	XMFLOAT3 rotate;  // rotate
+	XMFLOAT3 color;	//color
 };
 
 void DrawManager::DrawOne(float x,float y)
 {
-	const Size& viewSize = VideoManager::getInstance()->getViewSize();
-	float fx = 50.f / viewSize.getWidth();
-	float fy = 50.f / viewSize.getHeight();
+	float fx = 50.f;
+	float fy = 50.f;
 	
 	SimpleVertex vertices[] =
 	{
@@ -127,11 +180,15 @@ void DrawManager::DrawOne(float x,float y)
 	ID3D11Buffer *pVertexBuffer = nullptr;
 	HRESULT result = getD3DDevice()->CreateBuffer(&bd, &InitData, &pVertexBuffer);
 	//getD3DDevice()->
+
 	if (FAILED(result))
 	{
 		return;
 	}
 	m_vecDrawBuffer.push_back(pVertexBuffer);
+
+	auto dn = DrawNode::create(Vector3(x, y, 500), Size(100, 100));
+	m_vecNode.push_back(dn);
 }
 
 void DrawManager::RenderDraw()
@@ -140,12 +197,19 @@ void DrawManager::RenderDraw()
 	context->IASetInputLayout(m_pDrawVertexLayout);
 	context->VSSetShader(m_pDrawVertexShader, NULL, 0);
 	context->PSSetShader(m_pDrawPixelShader, NULL, 0);
-
+	
+/*
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	for (auto it: m_vecDrawBuffer)
 	{
 		context->IASetVertexBuffers(0, 1, &it, &stride, &offset);
 		context->Draw(6, 0);
+	}
+*/
+	for (auto it : m_vecNode)
+	{
+		it->redraw();
+		it->reader(context);
 	}
 }

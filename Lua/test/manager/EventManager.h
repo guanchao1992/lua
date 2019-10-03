@@ -1,4 +1,11 @@
-#pragma once
+#ifndef ____EventManager_H____
+#define ____EventManager_H____
+
+#include "EventBase.h"
+
+#include "..\base\Singleton.h"
+#include <string>
+#include "..\..\MyTool\tool_log.h"
 
 extern "C" {
 #include "lua.h"
@@ -6,87 +13,15 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "..\base\Singleton.h"
-#include <string>
-#include "..\..\MyTool\tool_log.h"
-#include <list>
-#include <functional>
-#include "..\base\Vector2.h"
-
-typedef unsigned long EventType;
-
-enum RegEventType
-{
-	EventRegType_Null = 0,
-	EventRegType_Mouse,
-	EventRegType_Key,
-
-
-	EventRegType_Max,
-};
-
-class EventArgs
-{
-public:
-	EventArgs(EventType type_) 
-		:type(type_)
-	{ }
-public:
-	EventType type;
-};
-
-class MouseEventArgs :public EventArgs
-{
-public:
-	enum MouseType
-	{
-		LBMouseDown,
-		LBMouseUp,
-		RBMouseDown,
-		RBMouseUp,
-	};
-	MouseEventArgs(const Vector2& viewPos_, MouseType mouseType_) :
-		EventArgs(EventRegType_Mouse),
-		viewPos(viewPos_),
-		mouseType(mouseType_)
-	{ }
-public:
-	Vector2	viewPos;
-	MouseType	mouseType;
-};
-
-class KeyEventArgs :public EventArgs
-{
-public:
-	enum KeyType
-	{
-		KeyDown,
-		KeyUp,
-	};
-	KeyEventArgs(KeyType keyType_,unsigned int key_, unsigned int controlKey_, unsigned int virtualKey_) :
-		EventArgs(EventRegType_Key),
-		keyType(keyType_),
-		key(key_),
-		controlKey(controlKey_),
-		virtualKey(virtualKey_)
-	{ }
-public:
-	unsigned int key;
-	unsigned int keyType;
-	unsigned int controlKey;	// VK_SHIFT;
-	unsigned int virtualKey;
-};
 
 typedef std::function<void(EventArgs*)> EventFunc;
-
 struct Event
 {
 	EventType		type;		//事件类型
 	std::string		name;		//事件标识
-	EventFunc		func;	
+	EventFunc		func;
 	int				order;		//在type相同时生效，越小越先响应
 };
-
 typedef std::list<Event> Events;
 
 class EventManager
@@ -114,3 +49,5 @@ private:
 
 
 #define RegEvent(TYPE,NAME,FUNC,ORDER) EventManager::getInstance()->regEvent(TYPE, NAME, std::bind(&FUNC, this, std::placeholders::_1),ORDER);
+
+#endif

@@ -39,32 +39,32 @@ public:
 		*this = pos;
 	}
 
-	inline void setPositionX(float x)
+	inline void setX(float x)
 	{
 		m_x = x;
 	}
 
-	inline void setPositionY(float y)
+	inline void setY(float y)
 	{
 		m_y = y;
 	}
 
-	inline void setPositionZ(float z)
+	inline void setZ(float z)
 	{
 		m_z = z;
 	}
 
-	inline float getPositionX() const
+	inline float getX() const
 	{
 		return m_x;
 	}
 
-	inline float getPositionY() const
+	inline float getY() const
 	{
 		return m_y;
 	}
 
-	inline float getPositionZ() const
+	inline float getZ() const
 	{
 		return m_z;
 	}
@@ -96,7 +96,7 @@ public:
 	{
 		return (this->m_x == pos.m_x && this->m_y == pos.m_y&& this->m_z == this->m_z);
 	}
-
+	
 private:
 	float m_x;
 	float m_y;

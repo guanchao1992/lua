@@ -22,6 +22,7 @@
 #include "..\..\log4cplus-1.2.1-rc1\include\log4cplus\helpers\sleep.h"
 #include <time.h>
 #include "manager\EventManager.h"
+#include "manager\TimerManager.h"
 
 using namespace DirectX;
 
@@ -91,7 +92,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 				offInter = tempInterval - tempIntervalDWORD;
 				Sleep(tempIntervalDWORD);
 			}
+			TimerManager::getInstance()->update((newtime - lasttime) / 1000.f);
 			lasttime = newtime;
+
 		}
 	}
 	GameApp::getInstance()->Close();

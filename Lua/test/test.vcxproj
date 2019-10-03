@@ -29,8 +29,10 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="manager\DrawManager.h" />
+    <ClInclude Include="manager\EventBase.h" />
     <ClInclude Include="manager\EventManager.h" />
     <ClInclude Include="manager\ScriptsManager.h" />
+    <ClInclude Include="manager\TimerManager.h" />
     <ClInclude Include="manager\VideoManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
@@ -46,6 +48,7 @@
     <ClCompile Include="manager\DrawManager.cpp" />
     <ClCompile Include="manager\EventManager.cpp" />
     <ClCompile Include="manager\ScriptsManager.cpp" />
+    <ClCompile Include="manager\TimerManager.cpp" />
     <ClCompile Include="manager\VideoManager.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>

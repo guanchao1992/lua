@@ -15,6 +15,8 @@ using namespace DirectX;
 D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 
+//D3DXHANDLE;
+
 SingletonClaseCpp(VideoManager);
 
 ID3D11Device*getD3DDevice()
@@ -349,4 +351,27 @@ void VideoManager::setViewSize(Size size)
 Size VideoManager::getViewSize()
 {
 	return m_viewSize;
+}
+
+Vector2 VideoManager::pos2fPos(LONG_PTR lParam)
+{
+	return pos2fPos(LOWORD(lParam), HIWORD(lParam));
+}
+
+Vector2 VideoManager::pos2fPos(int x, int y)
+{
+	Vector2 pos((x / m_viewSize.getWidth() - 0.5f) * 2, (0.5f - (y / m_viewSize.getHeight())) * 2);
+	return pos;
+}
+
+Vector3 VideoManager::pos2fPos(int x, int y, int z)
+{
+	Vector3 pos((x / m_viewSize.getWidth() - 0.5f) * 2, (0.5f - (y / m_viewSize.getHeight())) * 2, z / m_viewSize.getWidth());
+	return pos;
+}
+
+Vector3 VideoManager::pos2fPos(const Vector3& vec3)
+{
+	Vector3 pos((vec3.getX() / m_viewSize.getWidth() - 0.5f) * 2, (0.5f - (vec3.getY() / m_viewSize.getHeight())) * 2, vec3.getZ() / m_viewSize.getWidth());
+	return pos;
 }

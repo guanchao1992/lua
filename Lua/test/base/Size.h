@@ -82,7 +82,7 @@ public:
 	{
 		return (this->m_width == size.m_width && this->m_height == size.m_height);
 	}
-private:
+public:
 	float m_width;
 	float m_height;
 };
