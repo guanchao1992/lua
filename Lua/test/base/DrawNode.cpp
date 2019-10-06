@@ -63,13 +63,13 @@ void DrawNode::redraw()
 	auto viewSize = VideoManager::getInstance()->getViewSize();
 	SimpleVertex vertices[] =
 	{
-		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(250,0,20),
-		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(0,70,20),
-		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(0,0,20),
+		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),XMFLOAT3(1,0,0),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
+		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),XMFLOAT3(0,1,0),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
+		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),XMFLOAT3(1,0,1),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
 
-		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(0,250,20),
-		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(0,250,20),
-		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),	XMFLOAT3(0,250,20),
+		XMFLOAT3(origin.getX() + size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),XMFLOAT3(1,0,0),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
+		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() + size.getHeight() / 2, origin.getZ()),XMFLOAT3(0,0,1),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
+		XMFLOAT3(origin.getX() - size.getWidth() / 2, origin.getY() - size.getHeight() / 2, origin.getZ()),XMFLOAT3(0,1,0),		XMFLOAT3(origin.getX(),origin.getY(),origin.getZ()),		XMFLOAT3(scale.getX(),scale.getY(),scale.getZ()),	XMFLOAT3(0,0,0),
 	};
 	//	re += 1;
 

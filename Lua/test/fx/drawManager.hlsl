@@ -8,19 +8,22 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
 	matrix projection;
 };
 
-struct VS_Input
+struct VS_INPUT
 {
     float3 pos : POSITION;
+	float3 color : COLOR;
     float3 origin : ORIGIN;
     float3 scale : SCALE;
 	float3 rotate : ROTATEEE;
-	float3 color:COLOR;
 };
 
 struct VS_OUTPUT
 {
 	float4 pos : SV_POSITION;
-	float4 target : COLOR;
+	float4 origin : ORIGIN;
+	float4 color : COLOR;
+	float3 p :POSS;
+	float l : LEN;
 };
 
 struct Pixel
@@ -43,7 +46,7 @@ float3 readPixel(int x, int y)
 }
 
 
-VS_OUTPUT VS_Main( VS_Input vx ) 
+VS_OUTPUT VS_Main( VS_INPUT vx ) 
 {
 	float3 pv = float3(
 		(vx.pos.x - vx.origin.x ),
@@ -82,20 +85,45 @@ VS_OUTPUT VS_Main( VS_Input vx )
 	output.pos = mul(output.pos, view);
 	output.pos = mul(output.pos, projection);
 
-	output.target = float4(vx.color, 1);
+	output.origin = float4(vx.origin, 0);
+	output.color = float4(vx.color, 1);
+	output.l = l;
+	output.p = vx.pos - vx.origin;
 
 	return output;
 }  
-  
-float4 PS_Main(VS_OUTPUT vp) : SV_TARGET
-{  
-	
-	readPixel(vp.pos.x,vp.pos.y);
-	return vp.target;
-} 
 
-float4 main(float4 pos : POSITION) : SV_POSITION
+struct PS_INPUT
 {
-	return pos;
+	float3 pos : POSITION;
+	float3 color:COLOR;
+	float3 origin : ORIGIN;
+	float3 scale : SCALE;
+	float3 rotate : ROTATEEE;
+};
+
+struct PS_OUTPUT
+{
+	float3 target : SV_TARGET;
+};
+
+float4 PS_Main(VS_OUTPUT vso) : SV_TARGET
+{
+	return vso.color;
 }
 
+
+struct FS_INPUT
+{
+
+};
+
+struct FS_OUTPUT
+{
+
+};
+
+void FS_Main()
+{
+
+}

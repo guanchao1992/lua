@@ -1,14 +1,27 @@
-float4 VS_Main( float4 pos : POSITION ) : SV_POSITION
+
+struct VS_IN
 {
-    return pos;  
+	float3 pos:POSITION;
+	float3 color:COLOR;
+};
+struct VS_OUT
+{
+	float4 svpos: SV_POSITION;
+	float4 color : COLOR;
+};
+
+VS_OUT VS_Main(VS_IN vs)
+{
+	VS_OUT vsout = (VS_OUT)0;
+	vsout.svpos = float4(vs.pos, 1);
+	vsout.color = float4(vs.color, 1);
+
+    return vsout;  
 }  
   
-float4 PS_Main( float4 pos : SV_POSITION ) : SV_TARGET  
+float4 PS_Main(VS_OUT vso) : SV_TARGET
 {  
-	if (pos.x < 450)
-    	return float4( pos.x % 255 / 255 * 0.5f, 0.0f, 0.2f, 0.0f );  
-	else
-    	return float4( 0.0f, 0.0f, 0.4f, 0.0f );  
+	return vso.color;
 } 
 
 float4 main(float4 pos : POSITION) : SV_POSITION

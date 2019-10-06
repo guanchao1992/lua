@@ -48,10 +48,10 @@ void DrawManager::Init()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "ORIGIN" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "SCALE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "ROTATEEE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "ROTATEEE" ,0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -142,10 +142,10 @@ void DrawManager::Cleanup()
 struct SimpleVertex
 {
 	XMFLOAT3 pos;  // Position
+	XMFLOAT3 color;	//color
 	XMFLOAT3 origin;  // origin
 	XMFLOAT3 scale;  // scale
 	XMFLOAT3 rotate;  // rotate
-	XMFLOAT3 color;	//color
 };
 
 void DrawManager::DrawOne(float x,float y)
@@ -194,6 +194,7 @@ void DrawManager::DrawOne(float x,float y)
 void DrawManager::RenderDraw()
 {
 	auto context = getD3DContext();
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	context->IASetInputLayout(m_pDrawVertexLayout);
 	context->VSSetShader(m_pDrawVertexShader, NULL, 0);
 	context->PSSetShader(m_pDrawPixelShader, NULL, 0);
